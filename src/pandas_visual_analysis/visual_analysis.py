@@ -1,14 +1,14 @@
+import typing
 import warnings
 
+from pandas import DataFrame
 from traitlets import HasTraits, Instance, Tuple, Int, Float, TraitError, validate
 from traitlets.config import Config
-from pandas import DataFrame
-import typing
 
 from pandas_visual_analysis.data_source import DataSource
 from pandas_visual_analysis.layout import AnalysisLayout
-from tests import sample_dataframes
 from pandas_visual_analysis.utils.util import hex_to_rgb
+from tests import sample_dataframes
 
 
 class VisualAnalysis(HasTraits):

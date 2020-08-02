@@ -1,5 +1,6 @@
-from pandas_visual_analysis import DataSource
 from abc import ABC, abstractmethod
+
+from pandas_visual_analysis import DataSource
 
 
 class BaseWidget(ABC):

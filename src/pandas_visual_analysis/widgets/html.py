@@ -1,6 +1,7 @@
+from ipywidgets import widgets
+
 from pandas_visual_analysis.data_source import DataSource
 from pandas_visual_analysis.widgets.base_widget import BaseWidget
-from ipywidgets import widgets
 
 
 class HTMLWidget(BaseWidget):
