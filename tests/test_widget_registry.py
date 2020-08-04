@@ -1,7 +1,9 @@
 import pytest
 
 # from pandas_visual_analysis.widgets.base_widget import BaseWidget
+from pandas_visual_analysis import VisualAnalysis
 from pandas_visual_analysis.widgets.registry import WidgetClassRegistry, register_widget
+from tests import sample_dataframes
 
 
 @pytest.fixture
@@ -55,3 +57,8 @@ def test_widget_class_registry_get_class(empty_registry):
 
     assert obj.__class__ == obj_normal.__class__
 
+
+def test_widget_class_registry_normal_behaviour():
+    small_df = sample_dataframes.small_df()
+    VisualAnalysis(small_df)
+    assert len(WidgetClassRegistry().widget_list) > 0

@@ -27,3 +27,6 @@ class HTMLWidget(BaseWidget):
 
     def observe_brush_data_change(self, change):
         pass
+
+    def set_observers(self):
+        pass

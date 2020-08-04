@@ -1,12 +1,17 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
+
+from traitlets import Instance, HasTraits
 
 from pandas_visual_analysis import DataSource
 
 
-class BaseWidget(ABC):
+class BaseWidget(HasTraits):
+
+    data_source = Instance(DataSource)
 
     def __init__(self, data_source: DataSource, row: int, index: int):
-        self.layout: DataSource = data_source
+        super().__init__()
+        self.data_source = data_source
         self.row: int = row
         self.index: int = index
 
@@ -41,3 +46,6 @@ class BaseWidget(ABC):
         pass
 
 
+    @abstractmethod
+    def set_observers(self):
+        pass

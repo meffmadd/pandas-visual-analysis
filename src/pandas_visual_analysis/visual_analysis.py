@@ -3,12 +3,11 @@ import warnings
 
 from pandas import DataFrame
 from traitlets import HasTraits, Instance, Tuple, Int, Float, TraitError, validate
-from traitlets.config import Config
 
 from pandas_visual_analysis.data_source import DataSource
 from pandas_visual_analysis.layout import AnalysisLayout
+from pandas_visual_analysis.utils.config import Config
 from pandas_visual_analysis.utils.util import hex_to_rgb
-from tests import sample_dataframes
 
 
 class VisualAnalysis(HasTraits):
@@ -25,9 +24,9 @@ class VisualAnalysis(HasTraits):
                  sample: typing.Union[float, int, None] = None,
                  select_color: typing.Union[str, typing.Tuple[int, int, int]] = '#323EEC',
                  deselect_color: typing.Union[str, typing.Tuple[int, int, int]] = '#8A8C93',
-                 alpha: float = 0.75,
-                 *args, **kwargs):
-        super().__init__(*args, **kwargs)
+                 alpha: float = 0.75
+                 ):
+        super().__init__()
         if sample is None:
             self.df = df
         else:
@@ -76,6 +75,13 @@ class VisualAnalysis(HasTraits):
         else:
             self.few_num_cols = False
 
+    def _ipython_display_(self):
+        from IPython.core.display import display
+        from ipywidgets import widgets
+        root_widget: widgets.Widget = self.layout.build()
+        display(root_widget)
+        # return self.layout.build()
+
     @validate('alpha')
     def _validate_alpha(self, proposal):
         value = proposal['value']
@@ -100,6 +106,3 @@ class VisualAnalysis(HasTraits):
         return list(found_plots)
 
 
-if __name__ == '__main__':
-    small_df = sample_dataframes.small_df()
-    VisualAnalysis(small_df)

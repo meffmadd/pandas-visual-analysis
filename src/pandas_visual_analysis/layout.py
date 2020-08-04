@@ -3,6 +3,7 @@ import typing
 from ipywidgets import widgets
 
 from pandas_visual_analysis.data_source import DataSource
+from pandas_visual_analysis.widgets import BaseWidget
 from pandas_visual_analysis.widgets.registry import WidgetClassRegistry
 
 
@@ -25,7 +26,6 @@ class AnalysisLayout:
                                  % str(self.predefined_layouts.keys()))
             self.layout_spec = self.predefined_layouts[layout]
         elif isinstance(layout, list):
-            # todo: check if strings in the list of lists are valid widget names
             self.layout_spec = layout
             valid_widgets = WidgetClassRegistry().widget_set
             for row in self.layout_spec:
@@ -40,8 +40,18 @@ class AnalysisLayout:
         self.data_source = data_source
 
     def build(self) -> widgets.Widget:
-        self.root_widget = widgets.VBox()
         # todo: add widgets to root widget based on self.layout_spec
+        wcr = WidgetClassRegistry()
+        rows = []
+        for r, row in enumerate(self.layout_spec):
+            row_widgets = []
+            for i, widget_name in enumerate(row):
+                widget_cls: BaseWidget.__class__ = wcr.get_widget_class(widget_name)
+                widget = widget_cls(self.data_source, r, i)
+                row_widgets.append(widget.build())
+            h_box = widgets.HBox(row_widgets)
+            rows.append(h_box)
+        self.root_widget = widgets.VBox(rows)
         return self.root_widget
 
 

@@ -1,7 +1,7 @@
 import pytest
 from traitlets import TraitError
 
-from pandas_visual_analysis.visual_analysis import VisualAnalysis
+from pandas_visual_analysis import VisualAnalysis
 from tests import sample_dataframes
 
 
@@ -87,3 +87,9 @@ def test_visual_analysis_sample_frac_large_error(int_df):
 def test_visual_analysis_sample_input_error(int_df):
     with pytest.raises(TypeError):
         VisualAnalysis(int_df, sample="asdfa")
+
+
+def test_visual_analysis_display_system(int_df):
+    va = VisualAnalysis(int_df, None, [['Scatter']])
+    from IPython.core.display import display
+    display((va,))
