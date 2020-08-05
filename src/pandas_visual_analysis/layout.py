@@ -28,19 +28,18 @@ class AnalysisLayout:
         elif isinstance(layout, list):
             self.layout_spec = layout
             valid_widgets = WidgetClassRegistry().widget_set
-            for row in self.layout_spec:
-                for el in row:
-                    if el not in valid_widgets:
-                        raise ValueError("The widget name '%s' is not valid. "
-                                         "Only the following widgets can be included in a layout specification: %s" %
-                                         (el, str(valid_widgets)))
+
+            if any([el not in valid_widgets for row in self.layout_spec for el in row]):
+                raise ValueError("Some widget names are not valid. "
+                                 "Only the following widgets can be included in a layout specification: %s" %
+                                 (str(valid_widgets)))
+
         else:
             raise TypeError("The layout specification either has to be a string or a list of list of strings.")
 
         self.data_source = data_source
 
     def build(self) -> widgets.Widget:
-        # todo: add widgets to root widget based on self.layout_spec
         wcr = WidgetClassRegistry()
         rows = []
         for r, row in enumerate(self.layout_spec):

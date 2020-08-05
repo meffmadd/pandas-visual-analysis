@@ -4,11 +4,10 @@ from pandas_visual_analysis.data_source import DataSource
 from pandas_visual_analysis.widgets.base_widget import BaseWidget
 
 
-class HTMLWidget(BaseWidget):
+class HTMLWidget:
 
-    def __init__(self, data_source: DataSource, row: int, index: int):
-        super().__init__(data_source, row, index)
-        self.html_content = ""
+    def __init__(self, content: str):
+        self.html_content = content
 
     @property
     def content(self):

@@ -32,11 +32,6 @@ def randint_df():
     return sample_dataframes.randint_df(df_size)
 
 
-def test_analysis_layout_one_column_df(small_df):
-    with pytest.raises(ValueError):
-        AnalysisLayout([['ParallelCoordinates']], DataSource(small_df, None))
-
-
 # todo: update when ParallelCoordinatesWidget exists
 # def test_analysis_layout_warns_one_num_col(small_df):
 #     with pytest.warns(UserWarning):

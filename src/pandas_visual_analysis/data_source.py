@@ -36,17 +36,23 @@ class DataSource(HasTraits):
 
         self._length = len(df)
         self._indices = list(range(self._length))
-        self._brushed_indices = self._indices
+        self.reset_selection()
+
+        if len(self.columns) < 2:
+            raise ValueError("The passed DataFrame only has %d column, which is insufficient for analysis." %
+                             len(self.columns))
+
+        self.few_num_cols = len(self.numerical_columns) < 2
 
     def reset_selection(self):
         self._brushed_indices = self._indices
 
     @property
-    def len(self):
+    def len(self) -> int:
         return self._length
 
     @property
-    def brushed_indices(self):
+    def brushed_indices(self) -> typing.List[int]:
         return self._brushed_indices
 
     @brushed_indices.setter
@@ -54,11 +60,11 @@ class DataSource(HasTraits):
         self._brushed_indices = indices
 
     @property
-    def indices(self):
+    def indices(self) -> typing.List[int]:
         return self._indices
 
     @property
-    def data(self):
+    def data(self) -> DataFrame:
         return self._df
 
     @observe('_brushed_indices')

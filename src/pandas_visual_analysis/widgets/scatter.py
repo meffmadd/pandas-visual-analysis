@@ -24,19 +24,22 @@ class ScatterWidget(BaseWidget):
         self.x_selection = widgets.Dropdown(
             options=self.data_source.columns,
             value=self.initial_x,
-            description='x-Axis:'
+            description='x:',
+            style={"description_width": "20px"},
         )
 
         self.y_selection = widgets.Dropdown(
             options=self.data_source.columns,
-            value=self.initial_x,
-            description='y-Axis:'
+            value=self.initial_y,
+            description='y:',
+            style={"description_width": "20px"},
         )
 
         self.size_selection = widgets.Dropdown(
             options=["None"] + self.data_source.columns,
             value="None",
-            description='Size:'
+            description='Size:',
+            style={"description_width": "40px"},
         )
 
         self.x_selection.observe(handler=self.on_axis_change, names='value')
@@ -46,10 +49,20 @@ class ScatterWidget(BaseWidget):
         self.trace: go.Scattergl = self._get_scatter()
 
         self.figure_widget: go.FigureWidget = go.FigureWidget(data=[self.trace], layout=go.Layout(
-            dragmode='lasso'
+            dragmode='lasso',
+            margin=dict(
+                l=7,
+                r=7,
+                b=7,
+                t=7,
+                pad=5
+            ),
         ))
         self.figure_widget.data[0].on_selection(callback=self.on_selection)
+        self.figure_widget.data[0].on_deselect(callback=self.on_deselection)
         self.set_observers()
+        # initially set brush to state of data_source (for start-up where everything is deselected by default)
+        self.observe_brush_indices_change(change={'new': self.data_source.brushed_indices})
 
     def _get_scatter(self):
         config = Config()
@@ -64,7 +77,6 @@ class ScatterWidget(BaseWidget):
     def build(self):
         return widgets.VBox([self._get_controls(), self.figure_widget])
 
-    # @observe('self.data_source._brushed_indices')
     def observe_brush_indices_change(self, change):
         # print("data_source._brushed_indices changed in Scatter(%d,%d)" % (self.row, self.index))
         new_indices = change['new']
@@ -81,12 +93,16 @@ class ScatterWidget(BaseWidget):
         # print("selection in Scatter(%d,%d)" % (self.row, self.index))
         self.data_source._brushed_indices = points.point_inds
 
+    def on_deselection(self, trace, points):
+        self.data_source.reset_selection()
+
     def on_axis_change(self, change):
         # print("axis change in Scatter(%d,%d)" % (self.row, self.index))
         self._redraw_plot()
 
     def _get_controls(self):
-        return widgets.HBox([self.x_selection, self.y_selection, self.size_selection])
+        return widgets.HBox([self.x_selection, self.y_selection, self.size_selection],
+                            layout=widgets.Layout(max_width='100%'))
 
     def _redraw_plot(self):
         self.figure_widget.data[0].x = self.data_source.data[self.x_selection.value]

@@ -34,7 +34,7 @@ def test_visual_analysis_object_creation_color(small_df):
 
 # noinspection PyTypeChecker
 def test_visual_analysis_object_creation_color_error(small_df):
-    with pytest.raises(TraitError):
+    with pytest.raises(ValueError):
         VisualAnalysis(small_df, select_color=(0, 0))
 
 
@@ -44,12 +44,12 @@ def test_visual_analysis_object_creation_color_error2(small_df):
 
 
 def test_visual_analysis_alpha_error(small_df):
-    with pytest.raises(TraitError):
+    with pytest.raises(ValueError):
         VisualAnalysis(small_df, alpha=1.4)
 
 
 def test_visual_analysis_color_trait_error(small_df):
-    with pytest.raises(TraitError):
+    with pytest.raises(ValueError):
         VisualAnalysis(small_df, select_color=(500, 0, 0))
 
 

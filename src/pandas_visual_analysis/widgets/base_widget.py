@@ -45,7 +45,14 @@ class BaseWidget(HasTraits):
         """
         pass
 
-
     @abstractmethod
     def set_observers(self):
+        pass
+
+    @abstractmethod
+    def on_selection(self, trace, points, state):
+        pass
+
+    @abstractmethod
+    def on_deselection(self, trace, points):
         pass

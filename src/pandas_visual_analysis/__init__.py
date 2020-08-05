@@ -7,7 +7,7 @@ def import_widgets():
     """
     Import Widgets so that they get registered
     """
-    from pandas_visual_analysis.widgets import ScatterWidget
+    from pandas_visual_analysis.widgets import ScatterWidget, ParallelCoordinatesWidget
 
 
 import_widgets()
