@@ -54,6 +54,11 @@ class WidgetClassRegistry(object, metaclass=Singleton):
 
 
 def register_widget(cls):
+    """
+    Adds a widget class to the registry.
+    :param cls: The class to add. The class name has to end in 'Widget'
+    :return: The widget class.
+    """
     WidgetClassRegistry().add(cls)
     return cls
 

@@ -5,6 +5,7 @@ from traitlets import HasTraits, List, observe
 from pandas_visual_analysis.utils import debounce
 
 
+# inspired by: https://gist.github.com/MattJBritton/9dc26109acb4dfe17820cf72d82f1e6f
 class MultiSelectWidget(HasTraits):
 
     selected_options = List()

@@ -8,6 +8,10 @@ from pandas_visual_analysis.widgets.registry import WidgetClassRegistry
 
 
 class AnalysisLayout:
+    """
+    :param layout: the layout specification
+    :param data_source: the :class:`pandas_visual_analysis.data_source.DataSource` object passed to the widgets
+    """
 
     root_widget = None
 
@@ -40,6 +44,11 @@ class AnalysisLayout:
         self.data_source = data_source
 
     def build(self) -> widgets.Widget:
+        """
+        Generates widgets from layout and returns the root widget for this layout.
+        Rows are in a VBox while plots in the rows are in HBox widgets.
+        :return: self.root_widget
+        """
         wcr = WidgetClassRegistry()
         rows = []
         for r, row in enumerate(self.layout_spec):

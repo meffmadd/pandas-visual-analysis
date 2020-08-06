@@ -11,6 +11,19 @@ from pandas_visual_analysis.utils.util import hex_to_rgb
 
 
 class VisualAnalysis:
+    """
+    Generate linked plots that support brushing from a pandas.DataFrame and display them in Jupyter notebooks.
+
+    :param df: the pandas.DataFrame object
+    :param categorical_columns: if given, specifies which columns are to be interpreted as categorical
+    :param layout: layout specification name or explicit definition of plot in rows
+    :param sample: int or float specifying if the DataFrame should be sub-sampled.
+        When an int is given, the DataFrame will be limited to that number of rows given by the value.
+        When a float is given, the DataFrame will include the fraction of rows given by the value.
+    :param select_color: RGB tuple or hex color specifying the color display selected data points
+    :param deselect_color: RGB tuple or hex color specifying the color display deselected data points
+    :param alpha: opacity of data points
+    """
 
     def __init__(self, df: DataFrame, categorical_columns: typing.Union[typing.List[str], None] = None,
                  layout: typing.Union[str, typing.List[typing.List[str]]] = 'default',

@@ -7,6 +7,10 @@ from pandas_visual_analysis.utils.util import compare_lists
 
 
 class DataSource(HasTraits):
+    """
+    :param df: the the pandas.DataFrame object
+    :param categorical_columns: if given, specifies which columns are to be interpreted as categorical
+    """
     _df = Instance(klass=DataFrame)
     _length = Int()
     _brushed_indices = List()
@@ -49,22 +53,38 @@ class DataSource(HasTraits):
 
     @property
     def len(self) -> int:
+        """
+        :return: Returns the length of the DataFrame
+        """
         return self._length
 
     @property
     def brushed_indices(self) -> typing.List[int]:
+        """
+        :return: Returns the selected indices.
+        """
         return self._brushed_indices
 
     @brushed_indices.setter
     def brushed_indices(self, indices: typing.List[int]):
+        """
+        Selects specified indices in the DataFrame
+        :param indices: indices of data points that are brushed
+        """
         self._brushed_indices = indices
 
     @property
     def indices(self) -> typing.List[int]:
+        """
+        :return: Returns all indices of the data frame. This is a list from 0 to len-1.
+        """
         return self._indices
 
     @property
     def data(self) -> DataFrame:
+        """
+        :return: The DataFrame for this :class:`pandas_visual_analysis.data_source.DataSource` object.
+        """
         return self._df
 
     @observe('_brushed_indices')
