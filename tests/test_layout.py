@@ -32,12 +32,6 @@ def randint_df():
     return sample_dataframes.randint_df(df_size)
 
 
-# todo: update when ParallelCoordinatesWidget exists
-# def test_analysis_layout_warns_one_num_col(small_df):
-#     with pytest.warns(UserWarning):
-#         AnalysisLayout(small_df[['a', 'b', 'd', 'e']], None, [['ParallelCoordinates']], (0, 0, 0), (0, 0, 0), 0.75)
-
-
 def test_analysis_layout_one_num_col_no_warning(small_df):
     assert AnalysisLayout([['Scatter']], DataSource(small_df, None))
 
@@ -59,3 +53,12 @@ def test_analysis_layout_build(small_df, populated_config):
     assert len(children[0].children) == 1
     assert len(children[1].children) == 1
 
+
+def test_analysis_layout_wrong_predefined_layout_error(small_df):
+    with pytest.raises(ValueError):
+        AnalysisLayout("some_unknown_layout", DataSource(small_df, None))
+
+
+def test_analysis_layout_wrong_layout_type_error(small_df):
+    with pytest.raises(TypeError):
+        AnalysisLayout(set(['A', 'B']), DataSource(small_df, None))

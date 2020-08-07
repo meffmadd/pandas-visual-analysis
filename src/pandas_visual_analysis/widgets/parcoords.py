@@ -1,3 +1,4 @@
+import numbers
 from typing import List
 
 import pandas as pd
@@ -13,6 +14,15 @@ from pandas_visual_analysis.widgets import BaseWidget, register_widget
 
 @register_widget
 class ParallelCoordinatesWidget(BaseWidget):
+    """
+    Parallel Coordinates plot for high dimensional data with brushing.
+    Only displays numerical columns.
+    Displays a multi column selection if there are more than 10 numerical columns.
+
+    :param data_source: :class:`pandas_visual_analysis.data_source.DataSource` for the widget.
+    :param row: The row the widget is in.
+    :param index: Index of the row the widget is in.
+    """
 
     def __init__(self, data_source: DataSource, row: int, index: int):
         super().__init__(data_source, row, index)
@@ -92,7 +102,7 @@ class ParallelCoordinatesWidget(BaseWidget):
         mask: np.array = np.full(self.data_source.len, fill_value=True, dtype=bool)
         for col in cols:
             range_tuple = constraint_ranges[col]
-            if all(isinstance(x, float) for x in range_tuple):
+            if all(isinstance(x, numbers.Number) for x in range_tuple):
                 range_tuple = (range_tuple,)
             intermediate_mask: np.array = np.full(self.data_source.len, fill_value=False, dtype=bool)
             for ranges in range_tuple:
@@ -101,7 +111,6 @@ class ParallelCoordinatesWidget(BaseWidget):
         return mask
 
     def on_deselection(self, trace, points):
-        print("on_deselection")
         self.data_source.reset_selection()
 
     def _get_par_coords(self) -> go.Parcoords:

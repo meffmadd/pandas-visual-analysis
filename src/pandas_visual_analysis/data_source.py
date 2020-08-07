@@ -8,6 +8,7 @@ from pandas_visual_analysis.utils.util import compare_lists
 
 class DataSource(HasTraits):
     """
+
     :param df: the the pandas.DataFrame object
     :param categorical_columns: if given, specifies which columns are to be interpreted as categorical
     """
@@ -30,6 +31,7 @@ class DataSource(HasTraits):
             time_cols = list(self._df.select_dtypes(include=['datetime', 'timedelta', 'datetimetz']).columns.values)
             self.time_columns = list(set(time_cols).difference(set(self.categorical_columns)))
             self.numerical_columns = list(set(self.columns).difference(set(self.categorical_columns).union(set(self.time_columns))))
+            self._df[self.categorical_columns].select_dtypes(exclude=['category', object]).astype(dtype='category')
         elif categorical_columns is None:
             self.categorical_columns = list(self._df.select_dtypes(exclude=['number', 'datetime', 'timedelta', 'datetimetz']).columns.values)
             self.time_columns = list(self._df.select_dtypes(include=['datetime', 'timedelta', 'datetimetz']).columns.values)
@@ -90,6 +92,4 @@ class DataSource(HasTraits):
     @observe('_brushed_indices')
     def _observe_indices(self, change):
         indices = change['new']
-        if compare_lists(indices, change['old']):  # todo: is this necessary or too much overhead? (mostly len check)
-            return
         self._brushed_data = self._df.iloc[indices, :]

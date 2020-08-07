@@ -21,8 +21,9 @@ def randint_df(size: int):
     return pd.DataFrame(np.random.randint(0, size, size=(size, 4)), columns=list('ABCD'))
 
 
-def random_float_df(size: int):
-    return pd.DataFrame(np.random.uniform(low=0.5, high=13.3, size=(size,4)), columns=list('ABCD'))
+def random_float_df(size: int, num_cols: int):
+    return pd.DataFrame(np.random.uniform(low=0.5, high=13.3, size=(size, num_cols)),
+                        columns=list('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz')[0:num_cols])
 
 
 def random_df(size: int):
@@ -32,7 +33,21 @@ def random_df(size: int):
                          'd': np.random.randint(0, 10000, size),
                          'e': np.random.choice([True, False], size),
                          'f': np.random.uniform(low=0.5, high=13.3, size=(size,)),
+                         'g': random_date_generator('2018-01-01 00:00:01', 100, size),
+                         'h': random_date_generator('2018-01-01 00:00:01', 100, size)
                          })
+
+
+def random_datetime_df(size: int, num_cols: int):
+    return pd.DataFrame(random_date_generator('2018-01-01 00:00:01', 200, (size, num_cols)),
+                        columns=list('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz')[0:num_cols])
+
+
+def random_date_generator(start_date, range_in_days, size):
+    days_to_add = np.arange(0, range_in_days)
+    dates = np.full(size, fill_value=np.datetime64(start_date))
+    random_dates = dates + np.random.choice(days_to_add, size)
+    return random_dates
 
 
 def random_df_with_nan(size: int):

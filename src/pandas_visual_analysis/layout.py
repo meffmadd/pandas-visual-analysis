@@ -9,6 +9,7 @@ from pandas_visual_analysis.widgets.registry import WidgetClassRegistry
 
 class AnalysisLayout:
     """
+
     :param layout: the layout specification
     :param data_source: the :class:`pandas_visual_analysis.data_source.DataSource` object passed to the widgets
     """

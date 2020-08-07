@@ -22,10 +22,6 @@ class BaseWidget(HasTraits):
         self.row: int = row
         self.index: int = index
 
-    @property
-    def root(self):
-        return self.root
-
     @abstractmethod
     def build(self) -> widgets.Widget:
         """

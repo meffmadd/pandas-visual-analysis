@@ -62,3 +62,13 @@ def test_widget_class_registry_normal_behaviour():
     small_df = sample_dataframes.small_df()
     VisualAnalysis(small_df)
     assert len(WidgetClassRegistry().widget_list) > 0
+
+
+def test_widget_class_registry_no_widget_end(empty_registry):
+    wcr = empty_registry
+
+    class Test1(object):
+        pass
+
+    with pytest.raises(ValueError):
+        wcr.add(Test1)

@@ -38,6 +38,36 @@ def test_visual_analysis_object_creation_color_error(small_df):
         VisualAnalysis(small_df, select_color=(0, 0))
 
 
+# noinspection PyTypeChecker
+def test_visual_analysis_object_creation_deselect_color_error(small_df):
+    with pytest.raises(ValueError):
+        VisualAnalysis(small_df, deselect_color=(0, 0))
+
+
+# noinspection PyTypeChecker
+def test_visual_analysis_object_creation_color_high_value_error(small_df):
+    with pytest.raises(ValueError):
+        VisualAnalysis(small_df, deselect_color=(0, 0, 500))
+
+
+# noinspection PyTypeChecker
+def test_visual_analysis_object_creation_select_color_type_error(small_df):
+    with pytest.raises(TypeError):
+        VisualAnalysis(small_df, select_color=set([0,0,0]))
+
+
+# noinspection PyTypeChecker
+def test_visual_analysis_object_creation_deselect_color_type_error(small_df):
+    with pytest.raises(TypeError):
+        VisualAnalysis(small_df, deselect_color=set([0,0,0]))
+
+
+# noinspection PyTypeChecker
+def test_visual_analysis_object_creation_alpha_type_error(small_df):
+    with pytest.raises(TypeError):
+        VisualAnalysis(small_df, alpha=[0.5])
+
+
 def test_visual_analysis_object_creation_color_error2(small_df):
     with pytest.raises(ValueError):
         VisualAnalysis(small_df, select_color="#asdfasdfa")
@@ -93,3 +123,9 @@ def test_visual_analysis_display_system(int_df):
     va = VisualAnalysis(int_df, None, [['Scatter']])
     from IPython.core.display import display
     display((va,))
+
+
+def test_visual_analysis_warn_num_cols(small_df):
+    small_df.drop(columns=['c'], inplace=True)
+    with pytest.warns(UserWarning):
+        VisualAnalysis(small_df, layout=[['ParallelCoordinates']])

@@ -10,6 +10,14 @@ from pandas_visual_analysis.widgets.registry import register_widget
 
 @register_widget
 class ScatterWidget(BaseWidget):
+    """
+    Scatter plot to plot 2 columns against each other.
+    It is possible to select x- and y-axis in addition to the size.
+
+    :param data_source: :class:`pandas_visual_analysis.data_source.DataSource` for the widget.
+    :param row: The row the widget is in.
+    :param index: Index of the row the widget is in.
+    """
 
     def __init__(self, data_source: DataSource, row: int, index: int):
         super().__init__(data_source, row, index)
@@ -36,7 +44,7 @@ class ScatterWidget(BaseWidget):
         )
 
         self.size_selection = widgets.Dropdown(
-            options=["None"] + self.data_source.columns,
+            options=["None"] + self.data_source.numerical_columns,
             value="None",
             description='Size:',
             style={"description_width": "40px"},
@@ -97,17 +105,22 @@ class ScatterWidget(BaseWidget):
         self.data_source.reset_selection()
 
     def on_axis_change(self, change):
-        # print("axis change in Scatter(%d,%d)" % (self.row, self.index))
-        self._redraw_plot()
+        description = change['owner'].description.replace(':', '')
+        self._redraw_plot(axis=[description.lower()])
 
     def _get_controls(self):
         return widgets.HBox([self.x_selection, self.y_selection, self.size_selection],
                             layout=widgets.Layout(max_width='100%'))
 
-    def _redraw_plot(self):
-        self.figure_widget.data[0].x = self.data_source.data[self.x_selection.value]
-        self.figure_widget.data[0].y = self.data_source.data[self.y_selection.value]
-        if self.size_selection.value != "None":
-            self.figure_widget.data[0].marker['size'] = self.data_source.data[self.size_selection.value]
-        else:
-            self.figure_widget.data[0].marker['size'] = None
+    def _redraw_plot(self, axis=None):
+        if axis is None:  # fix warning: default argument is mutable
+            axis = ['x', 'y', 'size']
+        if 'x' in axis:
+            self.figure_widget.data[0].x = self.data_source.data[self.x_selection.value]
+        if 'y' in axis:
+            self.figure_widget.data[0].y = self.data_source.data[self.y_selection.value]
+        if 'size' in axis:
+            if self.size_selection.value != "None":
+                self.figure_widget.data[0].marker['size'] = self.data_source.data[self.size_selection.value]
+            else:
+                self.figure_widget.data[0].marker['size'] = None
