@@ -17,6 +17,7 @@ class VisualAnalysis:
     :param df: the pandas.DataFrame object
     :param categorical_columns: if given, specifies which columns are to be interpreted as categorical
     :param layout: layout specification name or explicit definition of plot in rows
+    :param row_height: height in pixels each row and consequently each plot should have
     :param sample: int or float specifying if the DataFrame should be sub-sampled.
         When an int is given, the DataFrame will be limited to that number of rows given by the value.
         When a float is given, the DataFrame will include the fraction of rows given by the value.
@@ -27,12 +28,18 @@ class VisualAnalysis:
 
     def __init__(self, df: DataFrame, categorical_columns: typing.Union[typing.List[str], None] = None,
                  layout: typing.Union[str, typing.List[typing.List[str]]] = 'default',
+                 row_height: int = 400,
                  sample: typing.Union[float, int, None] = None,
                  select_color: typing.Union[str, typing.Tuple[int, int, int]] = '#323EEC',
                  deselect_color: typing.Union[str, typing.Tuple[int, int, int]] = '#8A8C93',
                  alpha: float = 0.75
                  ):
         super().__init__()
+
+        if not isinstance(row_height, int):
+            raise TypeError("The value for row_height has to be an integer.")
+        if row_height < 0:
+            raise ValueError("The value for row_height has to be larger than 0. Invalid Value: %d" % row_height)
 
         if not isinstance(alpha, float) or isinstance(alpha, int):
             raise TypeError("Alpha has to be a floating point value, not %s", str(type(alpha)))
@@ -90,7 +97,7 @@ class VisualAnalysis:
         config['color_scale'] = self.color_scale
 
         self.data_source = DataSource(df=df, categorical_columns=categorical_columns)
-        self.layout = AnalysisLayout(layout=layout, data_source=self.data_source)
+        self.layout = AnalysisLayout(layout=layout, row_height=row_height, data_source=self.data_source)
 
         if self.data_source.few_num_cols and len(self._check_numerical_plots()) != 0:
             warnings.warn("The passed DataFrame only has %d NUMERICAL column, which is insufficient for some plots "

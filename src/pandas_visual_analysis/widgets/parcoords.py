@@ -25,10 +25,11 @@ class ParallelCoordinatesWidget(BaseWidget):
     :param row: The row the widget is in.
     :param index: Index of the row the widget is in.
     :param relative_size: The space the widget has in a row which is then converted to the width. (e.g. 0.33 => 33%)
+    :param max_height: height in pixels the plot has to have
     """
 
-    def __init__(self, data_source: DataSource, row: int, index: int, relative_size: float):
-        super().__init__(data_source, row, index, relative_size)
+    def __init__(self, data_source: DataSource, row: int, index: int, relative_size: float, max_height: int):
+        super().__init__(data_source, row, index, relative_size, max_height)
 
         self.columns: List[str] = data_source.numerical_columns
         self.selected_columns = self.columns
@@ -42,7 +43,7 @@ class ParallelCoordinatesWidget(BaseWidget):
             self.multi_select_toggle.on_click(callback=self._toggle_multi_select)
             self.multi_select: MultiSelectWidget = MultiSelectWidget(options=self.columns,
                                                                      selection=self.columns[0:self.select_threshold],
-                                                                     max_height=450,
+                                                                     max_height=self.max_height,
                                                                      )
             self.multi_select_widget = self.multi_select.build()
             self.selected_columns = self.multi_select.selected_options
@@ -73,6 +74,8 @@ class ParallelCoordinatesWidget(BaseWidget):
     def build(self):
         self.root.layout.min_width = str(self.relative_size * 100) + "%"
         self.root.layout.max_width = str(self.relative_size * 100) + "%"
+        self.root.layout.max_height = "%dpx" % self.max_height
+        self.root.layout.min_height = "%dpx" % self.max_height
         return self.root
 
     def observe_brush_indices_change(self, change):
@@ -92,9 +95,6 @@ class ParallelCoordinatesWidget(BaseWidget):
         new_color[new_indices] = 1
         with self.figure_widget.batch_update():
             self.figure_widget.data[0].line.color = new_color
-
-    def observe_brush_data_change(self, change):
-        pass
 
     def set_observers(self):
         HasTraits.observe(self.data_source, handler=self.observe_brush_indices_change, names='_brushed_indices')

@@ -15,7 +15,6 @@ class DataSource(HasTraits):
     _df = Instance(klass=DataFrame)
     _length = Int()
     _brushed_indices = List()
-    _brushed_data = Instance(klass=DataFrame)
     _indices = None
 
     def __init__(self, df: DataFrame, categorical_columns: typing.Union[typing.List[str], None], *args, **kwargs):
@@ -28,6 +27,12 @@ class DataSource(HasTraits):
                 raise ValueError("All categorical columns have to be present in the DataFrame. Invalid columns: "
                                  + str(list(set(categorical_columns).difference(set(self.columns)))))
             self.categorical_columns = categorical_columns
+            diff = set(self._df.select_dtypes(
+                exclude=['number', 'datetime', 'timedelta', 'datetimetz']
+            ).columns.values).difference(set(self.categorical_columns))
+            if len(diff) != 0:
+                raise ValueError("Categorical columns have to include all columns with dtype object, bool or category. "
+                                 + "The following columns were not included in those: %s" % str(list(diff)))
             time_cols = list(self._df.select_dtypes(include=['datetime', 'timedelta', 'datetimetz']).columns.values)
             self.time_columns = list(set(time_cols).difference(set(self.categorical_columns)))
             self.numerical_columns = list(set(self.columns).difference(set(self.categorical_columns).union(set(self.time_columns))))
@@ -43,6 +48,9 @@ class DataSource(HasTraits):
         self._length = len(df)
         self._indices = list(range(self._length))
         self.reset_selection()
+
+        self.brushed_data_invalidated = True
+        self._brushed_data = None
 
         if len(self.columns) < 2:
             raise ValueError("The passed DataFrame only has %d column, which is insufficient for analysis." %
@@ -76,6 +84,18 @@ class DataSource(HasTraits):
         self._brushed_indices = indices
 
     @property
+    def brushed_data(self) -> DataFrame:
+        """
+        Property of brushed data. Only selects brushed data if it was invalidated and only if actually accessed.
+        This gives more efficiency if only the brushed indices are needed and not the brushed data.
+        :return: Returns the selected data.
+        """
+        if self.brushed_data_invalidated:
+            self._brushed_data = self._df.iloc[self._brushed_indices, :]
+            self.brushed_data_invalidated = False
+        return self._brushed_data
+
+    @property
     def indices(self) -> typing.List[int]:
         """
         :return: Returns all indices of the data frame. This is a list from 0 to len-1.
@@ -91,5 +111,4 @@ class DataSource(HasTraits):
 
     @observe('_brushed_indices')
     def _observe_indices(self, change):
-        indices = change['new']
-        self._brushed_data = self._df.iloc[indices, :]
+        self.brushed_data_invalidated = True

@@ -91,7 +91,7 @@ def test_brush_selection_data(small_df):
 
 def test_brush_selection_brushed_indices_and_data(small_df_index):
     bs = DataSource(small_df_index, None)
-    assert len(bs._brushed_indices) == len(bs._brushed_data)
+    assert len(bs.brushed_indices) == len(bs.brushed_data)
 
 
 def test_brush_selection_observe_brushed_indices(small_df_index):
@@ -129,9 +129,16 @@ def test_data_source_too_few_cols_error(small_df):
 
 def test_data_source_date_time_as_category(small_df):
     assert 'datetime64' in str(small_df['d'].dtype)
-    DataSource(small_df, categorical_columns=['d'])
+    DataSource(small_df, categorical_columns=['b', 'd', 'e'])
 
 
-def test_data_source_bool_as_category(small_df):
+def test_data_source_string_col_not_in_cat_cols(small_df):
+    assert 'object' in str(small_df['b'].dtype)
+    with pytest.raises(ValueError):
+        DataSource(small_df, categorical_columns=['a'])
+
+
+def test_data_source_bool_col_not_in_cat_cols(small_df):
     assert 'bool' in str(small_df['e'].dtype)
-    DataSource(small_df, categorical_columns=['e'])
+    with pytest.raises(ValueError):
+        DataSource(small_df, categorical_columns=['b'])

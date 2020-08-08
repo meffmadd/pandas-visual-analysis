@@ -20,10 +20,11 @@ class ScatterWidget(BaseWidget):
     :param row: The row the widget is in.
     :param index: Index of the row the widget is in.
     :param relative_size: The space the widget has in a row which is then converted to the width. (e.g. 0.33 => 33%)
+    :param max_height: height in pixels the plot has to have
     """
 
-    def __init__(self, data_source: DataSource, row: int, index: int, relative_size: float):
-        super().__init__(data_source, row, index, relative_size)
+    def __init__(self, data_source: DataSource, row: int, index: int, relative_size: float, max_height: int):
+        super().__init__(data_source, row, index, relative_size, max_height)
 
         all_columns = self.data_source.numerical_columns + \
                       self.data_source.time_columns + \
@@ -89,16 +90,14 @@ class ScatterWidget(BaseWidget):
         root = widgets.VBox([self._get_controls(), self.figure_widget])
         root.layout.min_width = str(self.relative_size * 100) + "%"
         root.layout.max_width = str(self.relative_size * 100) + "%"
+        root.layout.max_height = "%dpx" % self.max_height
+        root.layout.min_height = "%dpx" % self.max_height
         return root
 
     def observe_brush_indices_change(self, change):
         new_indices = change['new']
         # noinspection SpellCheckingInspection
         self.figure_widget.data[0].selectedpoints = new_indices
-
-
-    def observe_brush_data_change(self, change):
-        pass
 
     def set_observers(self):
         HasTraits.observe(self.data_source, handler=self.observe_brush_indices_change, names='_brushed_indices')

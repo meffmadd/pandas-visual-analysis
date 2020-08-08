@@ -39,7 +39,7 @@ class MultiSelectWidget(HasTraits):
 
         self.options_layout = widgets.Layout(
             overflow='auto',
-            max_height='100%' if max_height is None else '%dpx' % (self.max_height - 120),
+            max_height='100%' if max_height is None else '%dpx' % (self.max_height - 100),
             flex_flow='column',
             display='flex'
         )

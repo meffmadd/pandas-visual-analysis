@@ -11,6 +11,7 @@ class AnalysisLayout:
     """
 
     :param layout: the layout specification
+    :param row_height: height in pixels each row and consequently each plot should have
     :param data_source: the :class:`pandas_visual_analysis.data_source.DataSource` object passed to the widgets
     """
 
@@ -21,6 +22,7 @@ class AnalysisLayout:
     }
 
     def __init__(self, layout: typing.Union[str, typing.List[typing.List[str]]],
+                 row_height: int,
                  data_source: DataSource,
                  *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -43,6 +45,7 @@ class AnalysisLayout:
             raise TypeError("The layout specification either has to be a string or a list of list of strings.")
 
         self.data_source = data_source
+        self.row_height = row_height
 
     def build(self) -> widgets.Widget:
         """
@@ -56,7 +59,7 @@ class AnalysisLayout:
             row_widgets = []
             for i, widget_name in enumerate(row):
                 widget_cls: BaseWidget.__class__ = wcr.get_widget_class(widget_name)
-                widget = widget_cls(self.data_source, r, i, 1.0/len(row))
+                widget = widget_cls(self.data_source, r, i, 1.0/len(row), self.row_height)
                 row_widgets.append(widget.build())
             h_box = widgets.HBox(row_widgets)
             rows.append(h_box)

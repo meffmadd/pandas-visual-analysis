@@ -10,19 +10,21 @@ class BaseWidget(HasTraits):
 
     data_source = Instance(DataSource)
 
-    def __init__(self, data_source: DataSource, row: int, index: int, relative_size: float):
+    def __init__(self, data_source: DataSource, row: int, index: int, relative_size: float, max_height: int):
         """
         Instantiates the base class of the widgets.
         :param data_source: Every widget will observe changes to the changes in the DataSource.
         :param row: The row the widget is in.
         :param index: Index of the row the widget is in.
         :param relative_size: ratio of the row the widget is allowed to take up
+        :param max_height: height in pixels the plot has to have
 """
         super().__init__()
         self.data_source = data_source
         self.row: int = row
         self.index: int = index
         self.relative_size = relative_size
+        self.max_height = max_height
 
     @abstractmethod
     def build(self) -> widgets.Widget:
@@ -35,15 +37,6 @@ class BaseWidget(HasTraits):
     def observe_brush_indices_change(self, change):
         """
         This method observes the changes in the brush selection.
-        In order to actually observe changes it has to be registered in :meth:`set_observers`
-        :param change: Value containing the new and old values that can be accessed with change['new'] or change['old'].
-        """
-        pass
-
-    @abstractmethod
-    def observe_brush_data_change(self, change):
-        """
-        This method observes the changes in the selected data from the brush selection.
         In order to actually observe changes it has to be registered in :meth:`set_observers`
         :param change: Value containing the new and old values that can be accessed with change['new'] or change['old'].
         """
