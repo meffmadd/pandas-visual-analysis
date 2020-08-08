@@ -56,7 +56,7 @@ class AnalysisLayout:
             row_widgets = []
             for i, widget_name in enumerate(row):
                 widget_cls: BaseWidget.__class__ = wcr.get_widget_class(widget_name)
-                widget = widget_cls(self.data_source, r, i)
+                widget = widget_cls(self.data_source, r, i, 1.0/len(row))
                 row_widgets.append(widget.build())
             h_box = widgets.HBox(row_widgets)
             rows.append(h_box)

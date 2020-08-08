@@ -1,3 +1,5 @@
+import datetime
+
 import ipywidgets as widgets
 import plotly.graph_objs as go
 from traitlets import HasTraits
@@ -17,10 +19,11 @@ class ScatterWidget(BaseWidget):
     :param data_source: :class:`pandas_visual_analysis.data_source.DataSource` for the widget.
     :param row: The row the widget is in.
     :param index: Index of the row the widget is in.
+    :param relative_size: The space the widget has in a row which is then converted to the width. (e.g. 0.33 => 33%)
     """
 
-    def __init__(self, data_source: DataSource, row: int, index: int):
-        super().__init__(data_source, row, index)
+    def __init__(self, data_source: DataSource, row: int, index: int, relative_size: float):
+        super().__init__(data_source, row, index, relative_size)
 
         all_columns = self.data_source.numerical_columns + \
                       self.data_source.time_columns + \
@@ -83,13 +86,16 @@ class ScatterWidget(BaseWidget):
                             unselected={'marker': {'opacity': config.alpha / 2}})
 
     def build(self):
-        return widgets.VBox([self._get_controls(), self.figure_widget])
+        root = widgets.VBox([self._get_controls(), self.figure_widget])
+        root.layout.min_width = str(self.relative_size * 100) + "%"
+        root.layout.max_width = str(self.relative_size * 100) + "%"
+        return root
 
     def observe_brush_indices_change(self, change):
-        # print("data_source._brushed_indices changed in Scatter(%d,%d)" % (self.row, self.index))
         new_indices = change['new']
         # noinspection SpellCheckingInspection
         self.figure_widget.data[0].selectedpoints = new_indices
+
 
     def observe_brush_data_change(self, change):
         pass
@@ -115,12 +121,13 @@ class ScatterWidget(BaseWidget):
     def _redraw_plot(self, axis=None):
         if axis is None:  # fix warning: default argument is mutable
             axis = ['x', 'y', 'size']
-        if 'x' in axis:
-            self.figure_widget.data[0].x = self.data_source.data[self.x_selection.value]
-        if 'y' in axis:
-            self.figure_widget.data[0].y = self.data_source.data[self.y_selection.value]
-        if 'size' in axis:
-            if self.size_selection.value != "None":
-                self.figure_widget.data[0].marker['size'] = self.data_source.data[self.size_selection.value]
-            else:
-                self.figure_widget.data[0].marker['size'] = None
+        with self.figure_widget.batch_update():
+            if 'x' in axis:
+                self.figure_widget.data[0].x = self.data_source.data[self.x_selection.value]
+            if 'y' in axis:
+                self.figure_widget.data[0].y = self.data_source.data[self.y_selection.value]
+            if 'size' in axis:
+                if self.size_selection.value != "None":
+                    self.figure_widget.data[0].marker['size'] = self.data_source.data[self.size_selection.value]
+                else:
+                    self.figure_widget.data[0].marker['size'] = None

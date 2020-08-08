@@ -10,17 +10,19 @@ class BaseWidget(HasTraits):
 
     data_source = Instance(DataSource)
 
-    def __init__(self, data_source: DataSource, row: int, index: int):
+    def __init__(self, data_source: DataSource, row: int, index: int, relative_size: float):
         """
         Instantiates the base class of the widgets.
         :param data_source: Every widget will observe changes to the changes in the DataSource.
         :param row: The row the widget is in.
         :param index: Index of the row the widget is in.
-        """
+        :param relative_size: ratio of the row the widget is allowed to take up
+"""
         super().__init__()
         self.data_source = data_source
         self.row: int = row
         self.index: int = index
+        self.relative_size = relative_size
 
     @abstractmethod
     def build(self) -> widgets.Widget:

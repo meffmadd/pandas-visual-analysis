@@ -10,27 +10,36 @@ class MultiSelectWidget(HasTraits):
 
     selected_options = List()
 
-    def __init__(self, options: typing.List[str], width: int = 200, max_height: int = 300):
+    def __init__(self,
+                 options: typing.List[str],
+                 selection=None,
+                 relative_size: float = 0.3,
+                 max_height: typing.Optional[int] = 300):
         super().__init__()
 
+        if selection is None:
+            num = min(len(options), 5)
+            selection = [options[i] for i in range(num)]
+
+        if not set(selection).issubset(set(options)):
+            raise ValueError("Selection can only contain values in options.")
+
         self.options = options
-        self.width = width
         self.max_height = max_height
 
         self.options_widgets = [
             widgets.Checkbox(
                 description=option,
-                value=(i < 5),
+                value=option in selection,
                 style={"description_width": "0px"},
-                layout=widgets.Layout(min_height='28px', max_width='%dpx' % (self.width - 20))
+                layout=widgets.Layout(min_height='28px', max_width="90%")  # , max_width='%dpx' % (self.width - 20))
             )
             for i, option in enumerate(self.options)
         ]
 
         self.options_layout = widgets.Layout(
             overflow='auto',
-            max_width='%dpx' % self.width,
-            max_height='100%' if max_height is None else '%dpx' % (self.max_height - 30),
+            max_height='100%' if max_height is None else '%dpx' % (self.max_height - 120),
             flex_flow='column',
             display='flex'
         )
@@ -48,12 +57,13 @@ class MultiSelectWidget(HasTraits):
         )
 
         self.info_label = widgets.Label(value="%d of %d selected" % (len(self.selected_options), len(self.options)))
-        search_widget = widgets.Text(layout=widgets.Layout(max_width='%dpx' % self.width))
+        search_widget = widgets.Text(
+            layout=widgets.Layout(max_width="80%")
+        )
 
         self.options_widget = widgets.VBox(children=self.options_widgets, layout=self.options_layout)
         multi_select = widgets.VBox([search_widget, self.options_widget])
-        buttons = widgets.HBox([self.select_all, self.deselect_all],
-                               layout=widgets.Layout(max_width='%dpx' % self.width))
+        buttons = widgets.HBox([self.select_all, self.deselect_all])
 
         self.selected_options = [option.description for option in self.options_widgets if option.value]
         self.info_label.value = "%d of %d selected" % (len(self.selected_options), len(self.options))
@@ -61,8 +71,9 @@ class MultiSelectWidget(HasTraits):
         self.root = widgets.VBox([buttons, multi_select, self.info_label],
                                  layout=widgets.Layout(
                                      border='1px solid black',
-                                     max_width='%dpx' % (self.width + 10),
-                                     # max_height='%dpx' % self.max_height
+                                     max_height='100%' if max_height is None else '%dpx' % self.max_height,
+                                     display='block',
+                                     max_width=str(relative_size * 100) + "%"
                                  ))
 
         for checkbox in self.options_widgets:
@@ -84,17 +95,15 @@ class MultiSelectWidget(HasTraits):
                 self.selected_options = self.selected_options + [selected_recipe]
         else:
             self.selected_options = [value for value in self.selected_options if value != selected_recipe]
-
         self.info_label.value = "%d of %d selected" % (len(self.selected_options), len(self.options))
 
     def on_text_change(self, change):
         search_input = change['new']
         if search_input == '':
             # Reset search field
-            new_options = sorted(self.options_widgets, key=lambda x: x.value, reverse=True)
+            # new_options = sorted(self.options_widgets, key=lambda x: x.value, reverse=True)
+            new_options = self.options_widgets
         else:
-            # Filter by search field using difflib.
-            # close_matches = difflib.get_close_matches(search_input, list(options_dict.keys()), cutoff=0.0)
             close_matches = [x for x in self.options if str.lower(search_input.strip('')) in str.lower(x)]
             new_options = sorted(
                 [x for x in self.options_widgets if x.description in close_matches],
@@ -111,4 +120,5 @@ class MultiSelectWidget(HasTraits):
         for checkbox in self.options_widgets:
             checkbox.value = False
         self.selected_options = []
+
 

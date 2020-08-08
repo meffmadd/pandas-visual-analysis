@@ -29,20 +29,18 @@ def fill_sample_constraint_range(dimensions, col, constraint_range):
     return dimensions
 
 
-
-
 class TestInit:
 
     def test_object_creation(self, small_df, populated_config):
         ds = DataSource(small_df, None)
-        ParallelCoordinatesWidget(ds, 0, 0)
+        ParallelCoordinatesWidget(ds, 0, 0, 1.0)
 
 
 class TestBuild:
 
     def test_normal_build(self, small_df, populated_config):
         ds = DataSource(small_df, None)
-        ps = ParallelCoordinatesWidget(ds, 0, 0)
+        ps = ParallelCoordinatesWidget(ds, 0, 0, 1.0)
         root_widget = ps.build()
         assert isinstance(root_widget, widgets.HBox)
 
@@ -61,7 +59,7 @@ class TestOnSelectionHelper:
             assert 0 not in points
 
         ds = DataSource(small_df, None)
-        ps = ParallelCoordinatesWidget(ds, 0, 0)
+        ps = ParallelCoordinatesWidget(ds, 0, 0, 1.0)
         dimensions = ps.figure_widget.data[0].dimensions
         assert len(dimensions) != 0
         dimensions = fill_sample_constraint_range(dimensions, 'a', [2, 5])
@@ -78,7 +76,7 @@ class TestOnSelectionHelper:
             assert 0 not in points
 
         ds = DataSource(small_df, None)
-        ps = ParallelCoordinatesWidget(ds, 0, 0)
+        ps = ParallelCoordinatesWidget(ds, 0, 0, 1.0)
         dimensions = ps.figure_widget.data[0].dimensions
         assert len(dimensions) != 0
         dimensions = fill_sample_constraint_range(dimensions, 'a', [1.5, 5])
@@ -89,7 +87,7 @@ class TestOnSelectionHelper:
 
     def test_on_selection_helper_no_ranges_deselect(self, small_df, populated_config):
         ds = DataSource(small_df, None)
-        ps = ParallelCoordinatesWidget(ds, 0, 0)
+        ps = ParallelCoordinatesWidget(ds, 0, 0, 1.0)
         ds.brushed_indices = [1, 2]
 
         dimensions = ps.figure_widget.data[0].dimensions  # no constraint ranges
@@ -104,7 +102,7 @@ class TestOnSelection:
 
     def test_on_selection(self, small_df, populated_config):
         ds = DataSource(small_df, None)
-        ps = ParallelCoordinatesWidget(ds, 0, 0)
+        ps = ParallelCoordinatesWidget(ds, 0, 0, 1.0)
 
         points = [1, 2, 3]
         ps.on_selection(None, points, None)
@@ -117,7 +115,7 @@ class TestBrushIndicesChange:
 
     def test_brush_indices_change(self,small_df, populated_config):
         ds = DataSource(small_df, None)
-        ps = ParallelCoordinatesWidget(ds, 0, 0)
+        ps = ParallelCoordinatesWidget(ds, 0, 0, 1.0)
 
         dimensions = ps.figure_widget.data[0].dimensions
         assert len(dimensions) != 0
