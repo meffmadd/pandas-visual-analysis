@@ -1,9 +1,8 @@
+import time
 import typing
 
 from pandas import DataFrame
-from traitlets import HasTraits, Instance, Int, List, observe
-
-from pandas_visual_analysis.utils.util import compare_lists
+from traitlets import HasTraits, Instance, List, observe
 
 
 class DataSource(HasTraits):
@@ -13,9 +12,7 @@ class DataSource(HasTraits):
     :param categorical_columns: if given, specifies which columns are to be interpreted as categorical
     """
     _df = Instance(klass=DataFrame)
-    _length = Int()
     _brushed_indices = List()
-    _indices = None
 
     def __init__(self, df: DataFrame, categorical_columns: typing.Union[typing.List[str], None], *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -86,9 +83,9 @@ class DataSource(HasTraits):
     @property
     def brushed_data(self) -> DataFrame:
         """
-        Property of brushed data. Only selects brushed data if it was invalidated and only if actually accessed.
+        Only determines brushed data if it was invalidated by new selected indices.
         This gives more efficiency if only the brushed indices are needed and not the brushed data.
-        :return: Returns the selected data.
+        :return: Returns the selected data corresponding to the indices.
         """
         if self.brushed_data_invalidated:
             self._brushed_data = self._df.iloc[self._brushed_indices, :]

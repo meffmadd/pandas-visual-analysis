@@ -124,7 +124,7 @@ class TestBrushIndicesChange:
 
         ps.change_initiated = False
 
-        ds._brushed_indices = [1, 2, 3]
+        ds.brushed_indices = [1, 2, 3]
 
         assert sum(list(ps.figure_widget.data[0].line.color)) == 3
         dimensions = ps.figure_widget.data[0].dimensions

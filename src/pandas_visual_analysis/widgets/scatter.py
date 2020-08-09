@@ -6,6 +6,7 @@ from traitlets import HasTraits
 
 from pandas_visual_analysis import DataSource
 from pandas_visual_analysis.utils.config import Config
+from pandas_visual_analysis.utils.util import Timer, timing
 from pandas_visual_analysis.widgets.base_widget import BaseWidget
 from pandas_visual_analysis.widgets.registry import register_widget
 
@@ -104,7 +105,7 @@ class ScatterWidget(BaseWidget):
 
     def on_selection(self, trace, points, state):
         # print("selection in Scatter(%d,%d)" % (self.row, self.index))
-        self.data_source._brushed_indices = points.point_inds
+        self.data_source.brushed_indices = points.point_inds
 
     def on_deselection(self, trace, points):
         self.data_source.reset_selection()

@@ -10,6 +10,7 @@ import ipywidgets as widgets
 
 from pandas_visual_analysis import DataSource
 from pandas_visual_analysis.utils.config import Config
+from pandas_visual_analysis.utils.util import timing, Timer
 from pandas_visual_analysis.widgets import BaseWidget, register_widget
 from pandas_visual_analysis.widgets.helpers.multi_select import MultiSelectWidget
 
@@ -82,7 +83,7 @@ class ParallelCoordinatesWidget(BaseWidget):
         if not self.change_initiated:
             # shortly disable selection behaviour to reset constraint ranges
             self.figure_widget.data[0].on_change(self.pass_func, 'dimensions')
-            with self.figure_widget.batch_update():
+            with self.figure_widget.batch_update(), self.figure_widget.hold_trait_notifications():
                 for dimension in self.figure_widget.data[0].dimensions:
                     dimension['constraintrange'] = None
             self.figure_widget.data[0].on_change(self._on_selection_helper, 'dimensions')
@@ -93,7 +94,7 @@ class ParallelCoordinatesWidget(BaseWidget):
 
         new_color = np.zeros(self.data_source.len, dtype='uint8')
         new_color[new_indices] = 1
-        with self.figure_widget.batch_update():
+        with self.figure_widget.batch_update(), self.figure_widget.hold_trait_notifications():
             self.figure_widget.data[0].line.color = new_color
 
     def set_observers(self):
@@ -106,10 +107,10 @@ class ParallelCoordinatesWidget(BaseWidget):
 
         new_color = np.zeros(self.data_source.len, dtype='uint8')
         new_color[points] = 1
-        with self.figure_widget.batch_update():
+        with self.figure_widget.batch_update(), self.figure_widget.hold_trait_notifications():
             self.figure_widget.data[0].line.color = new_color
 
-        self.data_source._brushed_indices = points
+        self.data_source.brushed_indices = points
 
     def _on_selection_helper(self, obj, dimensions):
         constraint_ranges = {dim['label']: dim['constraintrange'] for dim in dimensions if dim['constraintrange']}
@@ -194,7 +195,7 @@ class ParallelCoordinatesWidget(BaseWidget):
 
         old_constraint_ranges = {dim['label']: dim['constraintrange']
                                  for dim in self.figure_widget.data[0].dimensions if dim['constraintrange']}
-        with self.figure_widget.batch_update():
+        with self.figure_widget.batch_update(), self.figure_widget.hold_trait_notifications():
             self.figure_widget.data[0].dimensions = [self._get_dimension_dict(col) for col in self.selected_columns]
             for dim in self.figure_widget.data[0].dimensions:
                 if dim['label'] in old_constraint_ranges.keys():

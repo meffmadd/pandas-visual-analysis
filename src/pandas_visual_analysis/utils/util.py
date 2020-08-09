@@ -1,3 +1,4 @@
+import time
 from collections import Counter
 from typing import Tuple
 
@@ -41,3 +42,25 @@ class Singleton(type):
             cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
         return cls._instances[cls]
 
+
+def timing(f):
+    def wrap(*args, **kwargs):
+        time1 = time.time()
+        ret = f(*args, **kwargs)
+        time2 = time.time()
+        print('{:s} function took {:.3f} ms'.format(f.__name__, (time2-time1)*1000.0))
+
+        return ret
+    return wrap
+
+
+class Timer:
+
+    def __init__(self, name: str = "Default Time"):
+        self.end_time = None
+        self.name = name
+        self.start_time = time.time()
+
+    def stop(self):
+        self.end_time = time.time()
+        print('Timer: {:s} took {:.3f} ms'.format(self.name, (self.end_time - self.start_time) * 1000.0))
