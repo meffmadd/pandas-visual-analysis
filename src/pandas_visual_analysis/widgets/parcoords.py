@@ -73,11 +73,7 @@ class ParallelCoordinatesWidget(BaseWidget):
             pass  # todo: implement behaviour for few numerical columns (HTML message)
 
     def build(self):
-        self.root.layout.min_width = str(self.relative_size * 100) + "%"
-        self.root.layout.max_width = str(self.relative_size * 100) + "%"
-        self.root.layout.max_height = "%dpx" % self.max_height
-        self.root.layout.min_height = "%dpx" % self.max_height
-        return self.root
+        return self.apply_size_constraints(self.root)
 
     def observe_brush_indices_change(self, change):
         if not self.change_initiated:

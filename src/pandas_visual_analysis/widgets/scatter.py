@@ -89,11 +89,7 @@ class ScatterWidget(BaseWidget):
 
     def build(self):
         root = widgets.VBox([self._get_controls(), self.figure_widget])
-        root.layout.min_width = str(self.relative_size * 100) + "%"
-        root.layout.max_width = str(self.relative_size * 100) + "%"
-        root.layout.max_height = "%dpx" % self.max_height
-        root.layout.min_height = "%dpx" % self.max_height
-        return root
+        return self.apply_size_constraints(root)
 
     def observe_brush_indices_change(self, change):
         new_indices = change['new']

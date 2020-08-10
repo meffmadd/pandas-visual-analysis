@@ -65,6 +65,9 @@ class DataSource(HasTraits):
         """
         return self._length
 
+    def __len__(self):
+        return self._length
+
     @property
     def brushed_indices(self) -> typing.List[int]:
         """

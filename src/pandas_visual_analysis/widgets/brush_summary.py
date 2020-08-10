@@ -46,11 +46,9 @@ class BrushSummaryWidget(BaseWidget):
         self.set_observers()
 
     def build(self) -> widgets.Widget:
-        return widgets.VBox([self.metric_select, self.grid],
-                            layout=widgets.Layout(max_width=str(self.relative_size * 100) + "%",
-                                                  max_height="%dpx" % self.max_height,
-                                                  min_height="%dpx" % self.max_height,
-                                                  overflow='auto'))
+        root = widgets.VBox([self.metric_select, self.grid],
+                            layout=widgets.Layout(overflow='auto'))
+        return self.apply_size_constraints(root)
 
     def observe_brush_indices_change(self, change):
         self.brushed_metrics = self._get_brushed_metrics()

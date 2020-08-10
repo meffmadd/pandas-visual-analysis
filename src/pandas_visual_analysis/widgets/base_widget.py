@@ -4,6 +4,7 @@ from traitlets import Instance, HasTraits
 import ipywidgets as widgets
 
 from pandas_visual_analysis import DataSource
+from pandas_visual_analysis.utils.config import Config
 
 
 class BaseWidget(HasTraits):
@@ -32,6 +33,20 @@ class BaseWidget(HasTraits):
         This method returns an IPython Widget containing all the children of the widget.
         """
         pass
+
+    def apply_size_constraints(self, widget):
+        with widget.hold_trait_notifications():
+            margin = 5
+            num_widgets_in_row = int(round(1/self.relative_size)) - 1
+            size_mod = 2 * num_widgets_in_row  # because a border is added to each widget we have to subtract that (2px)
+            widget.layout.min_width = "calc(" + str(self.relative_size * 100) + "%" + " - %dpx)" % (margin + size_mod)
+            widget.layout.max_width = "calc(" + str(self.relative_size * 100) + "%" + " - %dpx)" % (margin + size_mod)
+            widget.layout.max_height = "%dpx" % self.max_height
+            widget.layout.min_height = "%dpx" % self.max_height
+            widget.layout.margin = "%dpx %dpx %dpx %dpx" % (margin, margin, margin, margin)
+            widget.layout.padding = "%dpx %dpx %dpx %dpx" % (margin, margin, margin, margin)
+            widget.layout.border = "2px solid rgb(%d,%d,%d)" % Config().select_color
+        return widget
 
     @abstractmethod
     def observe_brush_indices_change(self, change):
