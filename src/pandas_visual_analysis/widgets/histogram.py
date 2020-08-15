@@ -25,6 +25,7 @@ class HistogramWidget(BaseWidget):
         self.set_observers()
         self.column_select.observe(handler=self._on_column_change, names='value')
         self.normalize.observe(handler=self._on_normalize_change, names='value')
+        self.figure_widget.data[0].on_deselect(callback=self.on_deselection)
 
     def build(self) -> widgets.Widget:
         root = widgets.VBox([widgets.HBox([self.column_select, self.normalize]), self.figure_widget])
@@ -37,6 +38,7 @@ class HistogramWidget(BaseWidget):
         else:
             self.figure_widget.data[0].visible = True
 
+        self.figure_widget.data[0].selectedpoints = change['new']  # set selected points so that double click works
         self._redraw_plot()
 
     def set_observers(self):
@@ -47,7 +49,7 @@ class HistogramWidget(BaseWidget):
         pass
 
     def on_deselection(self, trace, points):
-        pass
+        self.data_source.reset_selection()
 
     def _on_column_change(self, change):
         self._redraw_plot(only_brushed=False)
@@ -75,8 +77,8 @@ class HistogramWidget(BaseWidget):
         fig.add_trace(go.Histogram(x=self.data[col],
                                    opacity=max(config.alpha, 0.75),
                                    marker={'color': 'rgb(%d,%d,%d)' % config.deselect_color},
-                                   selected={'marker': {'color': 'rgb(%d,%d,%d)' % config.select_color}},
-                                   unselected={'marker': {'opacity': 0.5}},
+                                   selected={'marker': {'color': 'rgb(%d,%d,%d)' % config.deselect_color}},
+                                   unselected={'marker': {'opacity': 0.4}},
                                    hoverinfo='skip', histnorm=''))
         fig.add_trace(go.Histogram(x=self.brushed_data[col],
                                    opacity=1.0,
@@ -85,7 +87,7 @@ class HistogramWidget(BaseWidget):
                                    selected={'marker': {'color': 'rgb(%d,%d,%d)' % config.select_color}},
                                    unselected={'marker': {'opacity': 1.0}},
                                    hoverinfo='skip', histnorm=''))
-        fig.update_layout(barmode='overlay', showlegend=False)
+        fig.update_layout(barmode='overlay', showlegend=False, dragmode='select')
         return fig
 
     def _redraw_plot(self, only_brushed=True):

@@ -16,6 +16,9 @@ class BrushSummaryWidget(BaseWidget):
         super().__init__(data_source, row, index, relative_size, max_height)
 
         self.columns = self.data_source.numerical_columns  # + self.data_source.time_columns
+        if len(self.columns) < 1:
+            raise ValueError("The data contains too few numerical columns to display the brush summary."
+                             "Remove the widget from the layout!")
 
         self.metric_select = widgets.Dropdown(
             options=[('Mean', 'mean'), ('Minimum', 'min'), ('1st Quartile', '25%'), ('Median', '50%'),

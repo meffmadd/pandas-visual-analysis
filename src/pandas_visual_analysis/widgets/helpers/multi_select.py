@@ -5,6 +5,29 @@ from traitlets import HasTraits, List, observe
 from pandas_visual_analysis.utils import debounce
 
 
+class HasMultiSelect:
+
+    def __init__(self, columns, relative_size, max_height):
+        self.columns: List[str] = columns
+        self.selected_columns = columns
+
+        self.select_threshold = int(10 * relative_size)
+        self.use_multi_select = len(columns) > self.select_threshold
+
+        if self.use_multi_select:
+            self.show_multi_select = True
+            self.multi_select: MultiSelectWidget = MultiSelectWidget(options=columns,
+                                                                     selection=columns[0:self.select_threshold],
+                                                                     max_height=max_height,
+                                                                     )
+            self.multi_select_widget = self.multi_select.build()
+            self.selected_columns = self.multi_select.selected_options
+        else:
+            self.show_multi_select = False
+            self.multi_select_toggle = False
+            self.multi_select = None
+
+
 # inspired by: https://gist.github.com/MattJBritton/9dc26109acb4dfe17820cf72d82f1e6f
 class MultiSelectWidget(HasTraits):
 

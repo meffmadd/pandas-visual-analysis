@@ -12,11 +12,11 @@ from pandas_visual_analysis import DataSource
 from pandas_visual_analysis.utils.config import Config
 from pandas_visual_analysis.utils.util import timing, Timer
 from pandas_visual_analysis.widgets import BaseWidget, register_widget
-from pandas_visual_analysis.widgets.helpers.multi_select import MultiSelectWidget
+from pandas_visual_analysis.widgets.helpers.multi_select import MultiSelectWidget, HasMultiSelect
 
 
 @register_widget
-class ParallelCoordinatesWidget(BaseWidget):
+class ParallelCoordinatesWidget(BaseWidget, HasMultiSelect):
     """
     Parallel Coordinates plot for high dimensional data with brushing.
     Only displays numerical columns.
@@ -31,27 +31,14 @@ class ParallelCoordinatesWidget(BaseWidget):
 
     def __init__(self, data_source: DataSource, row: int, index: int, relative_size: float, max_height: int):
         super().__init__(data_source, row, index, relative_size, max_height)
-
-        self.columns: List[str] = data_source.numerical_columns
-        self.selected_columns = self.columns
-
-        self.select_threshold = int(10 * relative_size)
-        self.use_multi_select = len(self.columns) > self.select_threshold
+        super(BaseWidget, self).__init__(self.data_source.numerical_columns, relative_size, max_height)
+        if len(self.columns) < 1:
+            raise ValueError("The data contains too few numerical columns to display a parallel coordinates plot."
+                             "Remove the widget from the layout!")
 
         if self.use_multi_select:
-            self.show_multi_select = True
             self.multi_select_toggle: widgets.Button = widgets.Button(description="Hide Selection")
             self.multi_select_toggle.on_click(callback=self._toggle_multi_select)
-            self.multi_select: MultiSelectWidget = MultiSelectWidget(options=self.columns,
-                                                                     selection=self.columns[0:self.select_threshold],
-                                                                     max_height=self.max_height,
-                                                                     )
-            self.multi_select_widget = self.multi_select.build()
-            self.selected_columns = self.multi_select.selected_options
-        else:
-            self.show_multi_select = False
-            self.multi_select_toggle = False
-            self.multi_select = None
 
         self.trace, self.figure_widget = self._get_figure_widget()
 
