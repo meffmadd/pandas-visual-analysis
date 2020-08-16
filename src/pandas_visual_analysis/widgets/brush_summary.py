@@ -11,6 +11,18 @@ from pandas_visual_analysis.widgets import BaseWidget, register_widget
 
 @register_widget
 class BrushSummaryWidget(BaseWidget):
+    """
+    The BrushSummaryWidget displays how a metric changes for the selection compared to the whole data.
+    It shows all of the data as the baseline and displays the change in absolute values and as a percentage value.
+    In addition it also displays arrows indicating the change with both color and direction.
+    The magnitude of the change is illustrated as the size of the arrow to see the sensitivity at a glance.
+
+    :param data_source: :class:`pandas_visual_analysis.data_source.DataSource` for the widget.
+    :param row: The row the widget is in.
+    :param index: Index of the row the widget is in.
+    :param relative_size: The space the widget has in a row which is then converted to the width. (e.g. 0.33 => 33%)
+    :param max_height: height in pixels the plot has to have
+    """
 
     def __init__(self, data_source: DataSource, row: int, index: int, relative_size: float, max_height: int):
         super().__init__(data_source, row, index, relative_size, max_height)

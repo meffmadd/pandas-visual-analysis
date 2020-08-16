@@ -11,7 +11,7 @@ class HasMultiSelect:
         self.columns: List[str] = columns
         self.selected_columns = columns
 
-        self.select_threshold = int(10 * relative_size)
+        self.select_threshold = int(15 * relative_size)
         self.use_multi_select = len(columns) > self.select_threshold
 
         if self.use_multi_select:

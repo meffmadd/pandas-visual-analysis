@@ -11,6 +11,17 @@ from pandas_visual_analysis.widgets.helpers.multi_select import HasMultiSelect
 
 @register_widget
 class ParallelCategoriesWidget(BaseWidget, HasMultiSelect):
+    """
+    The ParallelCategoriesWidget is useful for high dimensional data and supports brushing.
+    Only displays categorical columns.
+    Displays a multi column selection if there are a lot of columns.
+
+    :param data_source: :class:`pandas_visual_analysis.data_source.DataSource` for the widget.
+    :param row: The row the widget is in.
+    :param index: Index of the row the widget is in.
+    :param relative_size: The space the widget has in a row which is then converted to the width. (e.g. 0.33 => 33%)
+    :param max_height: height in pixels the plot has to have
+    """
 
     def __init__(self, data_source: DataSource, row: int, index: int, relative_size: float, max_height: int):
         super().__init__(data_source, row, index, relative_size, max_height)

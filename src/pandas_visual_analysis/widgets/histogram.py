@@ -9,6 +9,17 @@ from pandas_visual_analysis.widgets import BaseWidget, register_widget
 
 @register_widget
 class HistogramWidget(BaseWidget):
+    """
+    The HistogramWidget displays a single column of the data as a histogram where the selection is overlaid to see
+    both the underlying distribution and the selection.
+
+    :param data_source: :class:`pandas_visual_analysis.data_source.DataSource` for the widget.
+    :param row: The row the widget is in.
+    :param index: Index of the row the widget is in.
+    :param relative_size: The space the widget has in a row which is then converted to the width. (e.g. 0.33 => 33%)
+    :param max_height: height in pixels the plot has to have
+    """
+
     def __init__(self, data_source: DataSource, row: int, index: int, relative_size: float, max_height: int):
         super().__init__(data_source, row, index, relative_size, max_height)
 
@@ -38,7 +49,7 @@ class HistogramWidget(BaseWidget):
         else:
             self.figure_widget.data[0].visible = True
 
-        self.figure_widget.data[0].selectedpoints = change['new']  # set selected points so that double click works
+        self.figure_widget.data[1].selectedpoints = change['new']  # set selected points so that double click works
         self._redraw_plot()
 
     def set_observers(self):
