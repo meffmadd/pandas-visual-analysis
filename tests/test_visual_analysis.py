@@ -129,3 +129,18 @@ def test_visual_analysis_warn_num_cols(small_df):
     small_df.drop(columns=['c'], inplace=True)
     with pytest.warns(UserWarning):
         VisualAnalysis(small_df, layout=[['ParallelCoordinates']])
+
+
+def test_visual_analysis_row_height_type_error(small_df):
+    with pytest.raises(TypeError):
+        VisualAnalysis(small_df, row_height="100px")
+
+
+def test_visual_analysis_row_height_neg_error(small_df):
+    with pytest.raises(ValueError):
+        VisualAnalysis(small_df, row_height=-10)
+
+
+def test_ipython_display(small_df):
+    va = VisualAnalysis(small_df)
+    va._ipython_display_()

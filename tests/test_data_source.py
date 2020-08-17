@@ -142,3 +142,8 @@ def test_data_source_bool_col_not_in_cat_cols(small_df):
     assert 'bool' in str(small_df['e'].dtype)
     with pytest.raises(ValueError):
         DataSource(small_df, categorical_columns=['b'])
+
+
+def test_data_source_len_method(small_df):
+    ds = DataSource(small_df, None)
+    assert len(ds) == len(small_df)

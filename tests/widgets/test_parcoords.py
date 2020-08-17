@@ -13,6 +13,11 @@ def small_df():
 
 
 @pytest.fixture(scope="module")
+def rand_float_df():
+    return sample_dataframes.random_float_df(1000, 10)
+
+
+@pytest.fixture(scope="module")
 def populated_config():
     config = Config()
     config.alpha = 0.75
@@ -35,6 +40,12 @@ class TestInit:
         ds = DataSource(small_df, None)
         ParallelCoordinatesWidget(ds, 0, 0, 1.0, 400)
 
+    def test_normal_few_cols_html(self, small_df, populated_config):
+        df = small_df.drop(columns=["a", "c"])
+        ds = DataSource(df, None)
+        with pytest.raises(ValueError):
+            ParallelCoordinatesWidget(ds, 0, 0, 1.0, 400)
+
 
 class TestBuild:
 
@@ -43,10 +54,6 @@ class TestBuild:
         ps = ParallelCoordinatesWidget(ds, 0, 0, 1.0, 400)
         root_widget = ps.build()
         assert isinstance(root_widget, widgets.HBox)
-
-    # todo: test html message when implemented
-    def test_normal_few_cols_html(self, small_df, populated_config):
-        pass
 
 
 class TestOnSelectionHelper:
@@ -96,8 +103,6 @@ class TestOnSelectionHelper:
         assert len(ds.brushed_indices) == ds.len
 
 
-
-
 class TestOnSelection:
 
     def test_on_selection(self, small_df, populated_config):
@@ -133,3 +138,14 @@ class TestBrushIndicesChange:
                 assert dimension['constraintrange'] is None
                 break
 
+
+class TestMultiSelect:
+
+    def test_basic_multi_select(self, rand_float_df, populated_config):
+        ds = DataSource(rand_float_df, None)
+        ParallelCoordinatesWidget(ds, 0, 0, 0.2, 400)
+
+    def test_multi_select(self, rand_float_df, populated_config):
+        ds = DataSource(rand_float_df, None)
+        ps = ParallelCoordinatesWidget(ds, 0, 0, 0.2, 400)
+        ps.multi_select.selected_options = ['A', 'B']

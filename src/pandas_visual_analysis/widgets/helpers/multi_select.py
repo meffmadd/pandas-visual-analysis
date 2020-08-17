@@ -2,8 +2,6 @@ import typing
 import ipywidgets as widgets
 from traitlets import HasTraits, List, observe
 
-from pandas_visual_analysis.utils import debounce
-
 
 class HasMultiSelect:
 
@@ -80,12 +78,12 @@ class MultiSelectWidget(HasTraits):
         )
 
         self.info_label = widgets.Label(value="%d of %d selected" % (len(self.selected_options), len(self.options)))
-        search_widget = widgets.Text(
+        self.search_widget = widgets.Text(
             layout=widgets.Layout(max_width="80%")
         )
 
         self.options_widget = widgets.VBox(children=self.options_widgets, layout=self.options_layout)
-        multi_select = widgets.VBox([search_widget, self.options_widget])
+        multi_select = widgets.VBox([self.search_widget, self.options_widget])
         buttons = widgets.HBox([self.select_all, self.deselect_all])
 
         self.selected_options = [option.description for option in self.options_widgets if option.value]
@@ -99,20 +97,21 @@ class MultiSelectWidget(HasTraits):
                                      max_width=str(relative_size * 100) + "%"
                                  ))
 
+        self.enable_selection_change = True
         for checkbox in self.options_widgets:
             checkbox.observe(self.on_checkbox_change, names="value")
-        search_widget.observe(self.on_text_change, names='value')
+        self.search_widget.observe(self.on_text_change, names='value')
         self.select_all.on_click(self.on_select_all)
         self.deselect_all.on_click(self.on_deselect_all)
 
     def build(self):
         return self.root
 
-    @debounce(0.2)
     def on_checkbox_change(self, change):
         selected_recipe = change["owner"].description
-
         checked = change['new']
+        if not self.enable_selection_change:
+            return
         if checked:
             if selected_recipe not in self.selected_options:
                 self.selected_options = self.selected_options + [selected_recipe]
@@ -135,13 +134,17 @@ class MultiSelectWidget(HasTraits):
         self.options_widget.children = new_options
 
     def on_select_all(self, b):
+        self.enable_selection_change = False
         for checkbox in self.options_widgets:
             checkbox.value = True
+        self.enable_selection_change = True
         self.selected_options = self.options
 
     def on_deselect_all(self, b):
+        self.enable_selection_change = False
         for checkbox in self.options_widgets:
             checkbox.value = False
+        self.enable_selection_change = True
         self.selected_options = []
 
 

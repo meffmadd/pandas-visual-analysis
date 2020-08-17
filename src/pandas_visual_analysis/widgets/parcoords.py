@@ -38,7 +38,7 @@ class ParallelCoordinatesWidget(BaseWidget, HasMultiSelect):
 
         if self.use_multi_select:
             self.multi_select_toggle: widgets.Button = widgets.Button(description="Hide Selection")
-            self.multi_select_toggle.on_click(callback=self._toggle_multi_select)
+            # self.multi_select_toggle.on_click(callback=self._toggle_multi_select)
 
         self.trace, self.figure_widget = self._get_figure_widget()
 
@@ -156,17 +156,17 @@ class ParallelCoordinatesWidget(BaseWidget, HasMultiSelect):
             values=series
         )
 
-    def _toggle_multi_select(self, obj):
-        if self.multi_select:
-            self.show_multi_select = not self.show_multi_select
-            button_description = "Hide" if self.show_multi_select else "Show"
-            self.multi_select_toggle.description = button_description + " Selection"
-
-            if self.show_multi_select:
-                children = (self.figure_widget, self.multi_select_widget)
-            else:
-                children = (self.figure_widget,)
-            self.root.children = (self.multi_select_toggle, widgets.HBox(children))
+    # def _toggle_multi_select(self, obj):
+    #     if self.multi_select:
+    #         self.show_multi_select = not self.show_multi_select
+    #         button_description = "Hide" if self.show_multi_select else "Show"
+    #         self.multi_select_toggle.description = button_description + " Selection"
+    #
+    #         if self.show_multi_select:
+    #             children = (self.figure_widget, self.multi_select_widget)
+    #         else:
+    #             children = (self.figure_widget,)
+    #         self.root.children = (self.multi_select_toggle, widgets.HBox(children))
 
     def _on_selected_columns_changed(self, change):
         self.selected_columns = change['new']

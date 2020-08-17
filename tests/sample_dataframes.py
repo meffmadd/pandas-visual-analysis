@@ -58,9 +58,15 @@ def random_df_with_nan(size: int):
 
 
 def random_float_df_with_nan(size: int):
-    df = random_float_df(size)
+    df = random_float_df(size, 4)
     rand_ind = np.random.randint(1, size, int(size / 4))
     df['A'][rand_ind] = np.nan
     rand_ind = np.random.randint(1, size, int(size / 4))
     df['C'][rand_ind] = np.nan
     return df
+
+
+def random_cat_df(size: int, num_cols: int):
+    return pd.DataFrame(np.random.choice(["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"],
+                                         size=(size, num_cols)),
+                        columns=list('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz')[0:num_cols])

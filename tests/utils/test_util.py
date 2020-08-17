@@ -1,6 +1,8 @@
+import time
+
 import pytest
 
-from pandas_visual_analysis.utils.util import hex_to_rgb, compare_lists
+from pandas_visual_analysis.utils.util import hex_to_rgb, compare_lists, timing, Timer
 
 
 def test_hex_to_rgb():
@@ -56,3 +58,23 @@ def test_compare_lists_none():
 
 def test_compare_lists_some_value():
     assert (compare_lists("str", [1, 4]) is False)
+
+
+def test_timing(capsys):
+
+    @timing
+    def to_time():
+        time.sleep(1)
+
+    to_time()
+    captured = capsys.readouterr()
+    string: str = captured.out
+    assert "to_time" in string
+
+
+def test_timer():
+    timer = Timer()
+    time.sleep(1)
+    timer.stop()
+
+    assert ((timer.end_time - timer.start_time) * 1000.0) - 1000 < 10  # ms
