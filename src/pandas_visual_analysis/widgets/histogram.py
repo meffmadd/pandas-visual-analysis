@@ -10,8 +10,8 @@ from pandas_visual_analysis.widgets import BaseWidget, register_widget
 @register_widget
 class HistogramWidget(BaseWidget):
     """
-    The HistogramWidget displays a single column of the data as a histogram where the selection is overlaid to see
-    both the underlying distribution and the selection.
+    The HistogramWidget displays a single dimension of the data as a histogram where the brush selection
+    is overlaid to see the distribution of both the underlying data and the selection.
 
     :param data_source: :class:`pandas_visual_analysis.data_source.DataSource` for the widget.
     :param row: The row the widget is in.

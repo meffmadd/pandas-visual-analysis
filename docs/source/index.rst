@@ -1,13 +1,37 @@
-.. pandas-visual-analysis documentation master file, created by
-   sphinx-quickstart on Thu Aug  6 12:51:27 2020.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
 
+"""""""""""""""""""""""
+Pandas Visual Analysis
+"""""""""""""""""""""""
+
+......................................................................
+Interactive visual analysis in Jupyter notebooks.
+......................................................................
+
+
+Installation
+=============
+
+.. toctree::
+   :caption: Installation
+   :hidden:
 
 .. include:: ../../README.rst
+   :start-after: installation-start
+   :end-before: installation-end
+
+Usage
+=============
+
+.. toctree::
+   :caption: Usage
+   :hidden:
+
+.. include:: ../../README.rst
+   :start-after: usage-start
+   :end-before: usage-end
 
 Documentation
------------------------------
+================
 
 .. toctree::
    :maxdepth: 4

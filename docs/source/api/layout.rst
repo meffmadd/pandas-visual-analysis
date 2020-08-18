@@ -1,4 +1,4 @@
-layout
+AnalysisLayout
 =========================================
 
 .. currentmodule:: pandas_visual_analysis

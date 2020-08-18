@@ -1,4 +1,4 @@
-Subpackages
+Module
 -----------
 
 .. toctree::
@@ -7,12 +7,9 @@ Subpackages
     api/visual_analysis
     api/layout
     api/data_source
+
+.. toctree::
+    :maxdepth: 2
+
     api/widgets
 
-Module contents
----------------
-
-.. automodule:: pandas_visual_analysis
-   :members:
-   :undoc-members:
-   :show-inheritance:

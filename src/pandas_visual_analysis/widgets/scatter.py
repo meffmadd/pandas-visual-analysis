@@ -14,8 +14,9 @@ from pandas_visual_analysis.widgets.registry import register_widget
 @register_widget
 class ScatterWidget(BaseWidget):
     """
-    Scatter plot to plot 2 columns against each other.
-    It is possible to select x- and y-axis in addition to the size.
+    The ScatterWidget displays a scatter plot to highlight the relation
+    between two numerical, time-based or categorical dimensions.
+    In addition to selecting the x- and y-axis, it is also possible show an additional dimension as the size.
 
     :param data_source: :class:`pandas_visual_analysis.data_source.DataSource` for the widget.
     :param row: The row the widget is in.

@@ -1,4 +1,4 @@
-data_source
+DataSource
 =========================================
 
 .. currentmodule:: pandas_visual_analysis

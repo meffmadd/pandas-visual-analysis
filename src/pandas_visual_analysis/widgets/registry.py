@@ -11,6 +11,7 @@ class WidgetClassRegistry(object, metaclass=Singleton):
     @property
     def widget_set(self) -> Set[str]:
         """
+
         :return: Returns the set of names of all widgets registered in this object.
         """
         return set(self.registry.keys())
@@ -18,6 +19,7 @@ class WidgetClassRegistry(object, metaclass=Singleton):
     @property
     def widget_list(self) -> List[str]:
         """
+
         :return: Returns the list of names of all widgets registered in this object.
         """
         return list(self.registry.keys())
@@ -25,6 +27,7 @@ class WidgetClassRegistry(object, metaclass=Singleton):
     def has_widget(self, name: str) -> bool:
         """
         Checks if a widget has been registered by name.
+
         :param name: Class name of the widget.
         :return: Returns True iff the widget name is contained in the registry, False otherwise.
         """
@@ -33,8 +36,9 @@ class WidgetClassRegistry(object, metaclass=Singleton):
     def get_widget_class(self, name: str):
         """
         Gets the class of a widget that has been registered.
-        :param name: Class name of the widget.
-        :raises KeyError if the name was not registered.
+
+        :param name: Class name of the widget without the 'Widget'-suffix.
+        :raises KeyError: if the name was not registered.
         :return: Returns the class of the widget.
         """
         return self.registry[name]
@@ -44,6 +48,7 @@ class WidgetClassRegistry(object, metaclass=Singleton):
         Adds a widget to the registry.
         The class has to end with 'Widget' in order to be registered, which is then removed from the name.
         This means 'TestWidget' will be registered as 'Test'.
+
         :param cls: Widget to add.
         :raises ValueError: if class name does not end with 'Widget'
         """
@@ -55,7 +60,8 @@ class WidgetClassRegistry(object, metaclass=Singleton):
 
 def register_widget(cls):
     """
-    Adds a widget class to the registry.
+    Class decorator to add a widget class to the widget registry.
+
     :param cls: The class to add. The class name has to end in 'Widget'
     :return: The widget class.
     """

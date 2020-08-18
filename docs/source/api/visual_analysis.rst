@@ -1,4 +1,4 @@
-visual_analysis
+VisualAnalysis
 =========================================
 
 .. currentmodule:: pandas_visual_analysis
