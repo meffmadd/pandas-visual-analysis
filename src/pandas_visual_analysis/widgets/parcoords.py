@@ -142,7 +142,8 @@ class ParallelCoordinatesWidget(BaseWidget, HasMultiSelect):
             autosize=True,
             xaxis=dict(
                 automargin=True
-            )
+            ),
+            showlegend=False
         ))
         figure_widget.data[0].on_change(self._on_selection_helper, 'dimensions')
 

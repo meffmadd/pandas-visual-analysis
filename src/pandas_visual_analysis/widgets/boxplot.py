@@ -73,8 +73,11 @@ class BoxPlotWidget(BaseWidget):
                        boxmean='sd',
                        boxpoints=self.box_point_select.value, jitter=0.5, pointpos=-1.8, hoverinfo='skip',
                        marker={'color': 'rgb(%d,%d,%d)' % config.select_color},
-                       selected={'marker': {'color': 'rgb(%d,%d,%d)' % config.select_color, 'opacity': config.alpha}},
-                       unselected={'marker': {'opacity': config.alpha / 2}})
+                       selected={'marker': {'color': 'rgb(%d,%d,%d)' % config.select_color,
+                                            'opacity': config.alpha}},
+                       unselected={'marker': {'color': 'rgb(%d,%d,%d)' % config.deselect_color,
+                                              'opacity': config.alpha / 2}},
+                       showlegend=False)
 
         figure_widget = go.FigureWidget(data=[trace], layout=go.Layout(dragmode="select",
                                                                        margin=dict(l=15, r=15, b=15, t=15, pad=2),

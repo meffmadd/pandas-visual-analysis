@@ -87,7 +87,7 @@ class ParallelCategoriesWidget(BaseWidget, HasMultiSelect):
                 t=20,
                 pad=5
             ),
-            autosize=True,))
+            autosize=True, showlegend=False))
 
         figure_widget.data[0].on_click(self.on_selection)
         return trace, figure_widget

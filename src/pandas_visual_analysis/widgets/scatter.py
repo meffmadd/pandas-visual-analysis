@@ -60,7 +60,7 @@ class ScatterWidget(BaseWidget):
         self.y_selection.observe(handler=self.on_axis_change, names='value')
         self.size_selection.observe(handler=self.on_axis_change, names='value')
 
-        self.trace: go.Scattergl = self._get_scatter()
+        self.trace: go.Scatter = self._get_scatter()
 
         self.figure_widget: go.FigureWidget = go.FigureWidget(data=[self.trace], layout=go.Layout(
             dragmode='lasso',
@@ -80,13 +80,14 @@ class ScatterWidget(BaseWidget):
 
     def _get_scatter(self):
         config = Config()
-        return go.Scattergl(x=self.data_source.data[self.x_selection.value],
-                            y=self.data_source.data[self.y_selection.value],
-                            opacity=config.alpha,
-                            mode='markers',
-                            marker={'color': 'rgb(%d,%d,%d)' % config.deselect_color},
-                            selected={'marker': {'color': 'rgb(%d,%d,%d)' % config.select_color}},
-                            unselected={'marker': {'opacity': config.alpha / 2}})
+        return go.Scatter(x=self.data_source.data[self.x_selection.value],
+                          y=self.data_source.data[self.y_selection.value],
+                          opacity=config.alpha,
+                          mode='markers',
+                          marker={'color': 'rgb(%d,%d,%d)' % config.deselect_color},
+                          selected={'marker': {'color': 'rgb(%d,%d,%d)' % config.select_color}},
+                          unselected={'marker': {'opacity': config.alpha / 2}},
+                          showlegend=False)
 
     def build(self):
         root = widgets.VBox([self._get_controls(), self.figure_widget])
