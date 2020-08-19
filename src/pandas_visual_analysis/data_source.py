@@ -1,8 +1,9 @@
-import time
 import typing
 
 from pandas import DataFrame
 from traitlets import HasTraits, Instance, List, observe
+
+import pandas_visual_analysis.utils.validation as validate
 
 
 class DataSource(HasTraits):
@@ -14,9 +15,26 @@ class DataSource(HasTraits):
     _df = Instance(klass=DataFrame)
     _brushed_indices = List()
 
-    def __init__(self, df: DataFrame, categorical_columns: typing.Union[typing.List[str], None], *args, **kwargs):
+    def __init__(self, df: DataFrame,
+                 categorical_columns: typing.Union[typing.List[str], None],
+                 sample: typing.Union[float, int, None] = None,
+                 *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self._df = df
+        validate.validate_data_frame(df)
+        validate.validate_sample(sample)
+
+        if sample is None:
+            self._df = df
+        else:
+            if isinstance(sample, float):
+                if sample < 0.0 or sample > 1.0:
+                    raise ValueError("Sample has to be between 0.0 and 1.0. Invalid value : %d" % sample)
+                self._df = df.sample(frac=sample)
+            else:
+                if sample < 0 or sample > len(df):
+                    raise ValueError("Sample has to be between 0 and the length of the DataFrame (%d). Invalid value: "
+                                     "%d" % (len(df), sample))
+                self._df = df.sample(n=sample)
         self.columns = list(self._df.columns.values)
 
         if isinstance(categorical_columns, list):
@@ -54,6 +72,7 @@ class DataSource(HasTraits):
                              len(self.columns))
 
         self.few_num_cols = len(self.numerical_columns) < 2
+        self.few_cat_cols = len(self.categorical_columns) < 2
 
     def reset_selection(self):
         self._brushed_indices = self._indices

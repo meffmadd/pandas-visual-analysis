@@ -2,19 +2,19 @@ import typing
 import warnings
 
 from pandas import DataFrame
-from traitlets import HasTraits, Instance, Tuple, Int, Float, TraitError, validate
 
 from pandas_visual_analysis.data_source import DataSource
 from pandas_visual_analysis.layout import AnalysisLayout
 from pandas_visual_analysis.utils.config import Config
 from pandas_visual_analysis.utils.util import hex_to_rgb
+import pandas_visual_analysis.utils.validation as validate
 
 
 class VisualAnalysis:
     """
     Generate linked plots that support brushing from a pandas.DataFrame and display them in Jupyter notebooks.
 
-    :param df: the pandas.DataFrame object
+    :param data: the pandas.DataFrame object or a :class:`DataSource`
     :param categorical_columns: if given, specifies which columns are to be interpreted as categorical
     :param layout: layout specification name or explicit definition of plot in rows
     :param row_height: height in pixels each row and consequently each plot should have
@@ -26,7 +26,7 @@ class VisualAnalysis:
     :param alpha: opacity of data points
     """
 
-    def __init__(self, df: DataFrame, categorical_columns: typing.Union[typing.List[str], None] = None,
+    def __init__(self, data: typing.Union[DataFrame, DataSource], categorical_columns: typing.Union[typing.List[str], None] = None,
                  layout: typing.Union[str, typing.List[typing.List[str]]] = 'default',
                  row_height: int = 400,
                  sample: typing.Union[float, int, None] = None,
@@ -36,56 +36,20 @@ class VisualAnalysis:
                  ):
         super().__init__()
 
-        if not isinstance(row_height, int):
-            raise TypeError("The value for row_height has to be an integer.")
-        if row_height < 0:
-            raise ValueError("The value for row_height has to be larger than 0. Invalid Value: %d" % row_height)
-
-        if not isinstance(alpha, float) or isinstance(alpha, int):
-            raise TypeError("Alpha has to be a floating point value, not %s", str(type(alpha)))
-        if alpha < 0.0 or alpha > 1.0:
-            raise ValueError("Alpha value has to be between 0.0 and 1.0. Invalid value: %d" % alpha)
-
-        if sample is None:
-            self.df = df
-        else:
-            if isinstance(sample, float):
-                if sample < 0.0 or sample > 1.0:
-                    raise ValueError("Sample has to be between 0.0 and 1.0. Invalid value : %d" % sample)
-                self.df = df.sample(frac=sample)
-            else:
-                if sample < 0 or sample > len(df):
-                    raise ValueError("Sample has to be between 0 and the length of the DataFrame (%d). Invalid value: "
-                                     "%d" % (len(df), sample))
-                self.df = df.sample(n=sample)
+        validate.validate_data(data)
+        validate.validate_alpha(alpha)
+        validate.validate_color(select_color)
+        validate.validate_color(deselect_color)
 
         if isinstance(select_color, str):
             self.select_color = hex_to_rgb(select_color)
         elif isinstance(select_color, tuple):
-            if len(select_color) != 3:
-                raise ValueError("The tuple specifying select_color has to be of length 3.")
             self.select_color = select_color
-        else:
-            raise TypeError("The type of select_color has to be a string or tuple.")
 
         if isinstance(deselect_color, str):
             self.deselect_color = hex_to_rgb(deselect_color)
         elif isinstance(deselect_color, tuple):
-            if len(deselect_color) != 3:
-                raise ValueError("The tuple specifying deselect_color has to be of length 3.")
             self.deselect_color = deselect_color
-        else:
-            raise TypeError("The type of deselect_color has to be a string or tuple.")
-
-        if not (0 <= self.select_color[0] <= 255) \
-                or not (0 <= self.select_color[1] <= 255) \
-                or not (0 <= self.select_color[2] <= 255):
-            raise ValueError("RGB values have to be between 0 and 255. Invalid values: %s" % str(self.select_color))
-
-        if not (0 <= self.deselect_color[0] <= 255) \
-                or not (0 <= self.deselect_color[1] <= 255) \
-                or not (0 <= self.deselect_color[2] <= 255):
-            raise ValueError("RGB values have to be between 0 and 255. Invalid values: %s" % str(self.deselect_color))
 
         self.alpha = alpha
         self.color_scale = [[0, 'rgb(%d,%d,%d)' % self.deselect_color], [1, 'rgb(%d,%d,%d)' % self.select_color]]
@@ -96,12 +60,21 @@ class VisualAnalysis:
         config['deselect_color'] = self.deselect_color
         config['color_scale'] = self.color_scale
 
-        self.data_source = DataSource(df=df, categorical_columns=categorical_columns)
+        if isinstance(data, DataFrame):
+            self.data_source = DataSource(df=data, categorical_columns=categorical_columns, sample=sample)
+        elif isinstance(data, DataSource):
+            self.data_source = data
+
         self.layout = AnalysisLayout(layout=layout, row_height=row_height, data_source=self.data_source)
 
         if self.data_source.few_num_cols and len(self._check_numerical_plots()) != 0:
             warnings.warn("The passed DataFrame only has %d NUMERICAL column, which is insufficient for some plots "
                           "like Parallel Coordinates. These plots will not be displayed."
+                          % len(self.data_source.numerical_columns))
+
+        if self.data_source.few_cat_cols and len(self._check_categorical_plots()) != 0:
+            warnings.warn("The passed DataFrame only has %d CATEGORICAL column, which is insufficient for some plots "
+                          "like Parallel Categories. These plots will not be displayed."
                           % len(self.data_source.numerical_columns))
 
     def _ipython_display_(self):
@@ -113,6 +86,15 @@ class VisualAnalysis:
 
     def _check_numerical_plots(self) -> typing.List[str]:
         numerical_plots = {"ParallelCoordinates"}
+        found_plots = set()
+        for row in self.layout.layout_spec:
+            for el in row:
+                if el in numerical_plots:
+                    found_plots.add(el)
+        return list(found_plots)
+
+    def _check_categorical_plots(self) -> typing.List[str]:
+        numerical_plots = {"ParallelCategories"}
         found_plots = set()
         for row in self.layout.layout_spec:
             for el in row:

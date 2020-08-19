@@ -118,7 +118,7 @@ def test_brush_selection_observe_brushed_data(small_df_index):
 
 # noinspection PyTypeChecker
 def test_brush_selection_wrong_df():
-    with pytest.raises(TraitError):
+    with pytest.raises(TypeError):
         DataSource([1, 2], None)
 
 
@@ -147,3 +147,16 @@ def test_data_source_bool_col_not_in_cat_cols(small_df):
 def test_data_source_len_method(small_df):
     ds = DataSource(small_df, None)
     assert len(ds) == len(small_df)
+
+
+def test_sample_int(small_df):
+    assert DataSource(small_df, None, 3)
+
+
+def test_sample_float(small_df):
+    assert DataSource(small_df, None, 0.5)
+
+
+def test_sample_type_error(small_df):
+    with pytest.raises(TypeError):
+        DataSource(small_df, None, "0.4")

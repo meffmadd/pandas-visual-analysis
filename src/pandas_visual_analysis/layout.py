@@ -5,6 +5,7 @@ from ipywidgets import widgets
 from pandas_visual_analysis.data_source import DataSource
 from pandas_visual_analysis.widgets import BaseWidget
 from pandas_visual_analysis.widgets.registry import WidgetClassRegistry
+import pandas_visual_analysis.utils.validation as validate
 
 
 class AnalysisLayout:
@@ -27,6 +28,7 @@ class AnalysisLayout:
                  *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        validate.validate_row_height(row_height)
         if isinstance(layout, str):
             if layout not in set(self.predefined_layouts.keys()):
                 raise ValueError("The specified layout is invalid. Only these values are accepted: %s"
