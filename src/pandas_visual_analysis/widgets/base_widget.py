@@ -11,7 +11,8 @@ class BaseWidget(HasTraits):
 
     data_source = Instance(DataSource)
 
-    def __init__(self, data_source: DataSource, row: int, index: int, relative_size: float, max_height: int):
+    def __init__(self, data_source: DataSource, row: int, index: int, relative_size: float, max_height: int, *args,
+                 **kwargs):
         """
         Instantiates the base class of the widgets.
 
@@ -21,7 +22,7 @@ class BaseWidget(HasTraits):
         :param relative_size: ratio of the row the widget is allowed to take up
         :param max_height: height in pixels the plot has to have
         """
-        super().__init__()
+        super().__init__(*args, **kwargs)
         self.data_source = data_source
         self.row: int = row
         self.index: int = index

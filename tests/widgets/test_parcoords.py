@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 import pytest
 import ipywidgets as widgets
 
@@ -97,8 +99,12 @@ class TestOnSelectionHelper:
         ps = ParallelCoordinatesWidget(ds, 0, 0, 1.0, 400)
         ds.brushed_indices = [1, 2]
 
-        dimensions = ps.figure_widget.data[0].dimensions  # no constraint ranges
-        ps._on_selection_helper(None, dimensions)  # trigger deselect
+        old_dimensions = deepcopy(ps.figure_widget.data[0].dimensions)  # no constraint ranges
+        dimensions = ps.figure_widget.data[0].dimensions
+        dimensions = fill_sample_constraint_range(dimensions, 'a', [2, 5])
+        ps._on_selection_helper(None, dimensions)
+        assert len(ds) != 0
+        ps._on_selection_helper(None, old_dimensions)  # trigger deselect
 
         assert len(ds.brushed_indices) == ds.len
 
@@ -114,6 +120,18 @@ class TestOnSelection:
 
         assert sum(list(ps.figure_widget.data[0].line.color)) == 3
         assert ds.brushed_indices == points
+
+    def test_on_selection_constraint_ranges_reset(self, small_df, populated_config):
+        ds = DataSource(small_df, None)
+        ps = ParallelCoordinatesWidget(ds, 0, 0, 1.0, 400)
+
+        dimensions = ps.figure_widget.data[0].dimensions
+        assert len(dimensions) != 0
+        dimensions = fill_sample_constraint_range(dimensions, 'a', [2, 5])
+        ps._on_selection_helper(None, dimensions)
+
+        ds.brushed_indices = [1, 2]
+        assert ps.constraint_ranges == {}
 
 
 class TestBrushIndicesChange:
@@ -143,7 +161,8 @@ class TestMultiSelect:
 
     def test_basic_multi_select(self, rand_float_df, populated_config):
         ds = DataSource(rand_float_df, None)
-        ParallelCoordinatesWidget(ds, 0, 0, 0.2, 400)
+        ps = ParallelCoordinatesWidget(ds, 0, 0, 0.2, 400)
+        assert ps.multi_select is not None
 
     def test_multi_select(self, rand_float_df, populated_config):
         ds = DataSource(rand_float_df, None)

@@ -30,7 +30,7 @@ class ParallelCoordinatesWidget(BaseWidget, HasMultiSelect):
     """
 
     def __init__(self, data_source: DataSource, row: int, index: int, relative_size: float, max_height: int):
-        super().__init__(data_source, row, index, relative_size, max_height)
+        super(ParallelCoordinatesWidget, self).__init__(data_source, row, index, relative_size, max_height)
         super(BaseWidget, self).__init__(self.data_source.numerical_columns, relative_size, max_height)
         if len(self.columns) < 1:
             raise ValueError("The data contains too few numerical columns to display a parallel coordinates plot."
@@ -41,6 +41,7 @@ class ParallelCoordinatesWidget(BaseWidget, HasMultiSelect):
             # self.multi_select_toggle.on_click(callback=self._toggle_multi_select)
 
         self.trace, self.figure_widget = self._get_figure_widget()
+        self.constraint_ranges = {}
 
         self.change_initiated = False
 
@@ -70,6 +71,7 @@ class ParallelCoordinatesWidget(BaseWidget, HasMultiSelect):
                 for dimension in self.figure_widget.data[0].dimensions:
                     dimension['constraintrange'] = None
             self.figure_widget.data[0].on_change(self._on_selection_helper, 'dimensions')
+            self.constraint_ranges = {}
 
         self.change_initiated = False
 
@@ -96,11 +98,14 @@ class ParallelCoordinatesWidget(BaseWidget, HasMultiSelect):
         self.data_source.brushed_indices = points
 
     def _on_selection_helper(self, obj, dimensions):
-        constraint_ranges = {dim['label']: dim['constraintrange'] for dim in dimensions if dim['constraintrange']}
-        if len(list(constraint_ranges.keys())) == 0:
+        old_ranges = self.constraint_ranges
+        self.constraint_ranges = {dim['label']: dim['constraintrange'] for dim in dimensions if dim['constraintrange']}
+        if self.constraint_ranges == old_ranges:
+            return  # this is the case when the user just reorders the dimensions
+        if len(list(self.constraint_ranges.keys())) == 0:
             self.on_deselection(None, None)
             return
-        mask = self._get_constraint_mask(constraint_ranges)
+        mask = self._get_constraint_mask(self.constraint_ranges)
         points = list(np.arange(self.data_source.len)[mask])
         self.on_selection(None, points, None)
 
