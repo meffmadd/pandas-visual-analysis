@@ -4,7 +4,6 @@ from pandas_visual_analysis.utils.util import Singleton
 
 
 class WidgetClassRegistry(object, metaclass=Singleton):
-
     def __init__(self):
         self.registry = {}
 
@@ -53,7 +52,9 @@ class WidgetClassRegistry(object, metaclass=Singleton):
         :raises ValueError: if class name does not end with 'Widget'
         """
         if not cls.__name__.endswith("Widget"):
-            raise ValueError("Incorrect class name. Class has to end with 'Widget' in order to be registered.")
+            raise ValueError(
+                "Incorrect class name. Class has to end with 'Widget' in order to be registered."
+            )
         name = cls.__name__[:-6]
         self.registry[name] = cls
 
@@ -67,5 +68,3 @@ def register_widget(cls):
     """
     WidgetClassRegistry().add(cls)
     return cls
-
-

@@ -9,7 +9,6 @@ def sample_options():
 
 
 class TestInit:
-
     def test_object_creation_basic(self, sample_options):
         MultiSelectWidget(sample_options, sample_options[0:3], 0.3, 400)
 
@@ -23,7 +22,6 @@ class TestInit:
 
 
 class TestCheckboxChange:
-
     def test_basic_change_add(self, sample_options):
         ms = MultiSelectWidget(sample_options, sample_options[0:5], 0.3, 400)
         change = {"owner": ms.options_widgets[5], "new": True}
@@ -38,7 +36,6 @@ class TestCheckboxChange:
 
 
 class TestTextChange:
-
     def test_search(self, sample_options):
         ms = MultiSelectWidget(sample_options, sample_options[0:5], 0.3, 400)
         ms.search_widget.value = "3"
@@ -49,7 +46,6 @@ class TestTextChange:
 
 
 class TestSelectUI:
-
     def test_select_all(self, sample_options):
         ms = MultiSelectWidget(sample_options, sample_options[0:5], 0.3, 400)
         ms.on_select_all(None)

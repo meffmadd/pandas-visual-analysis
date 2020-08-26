@@ -26,15 +26,17 @@ class VisualAnalysis:
     :param alpha: opacity of data points
     """
 
-    def __init__(self, data: typing.Union[DataFrame, DataSource],
-                 layout: typing.Union[str, typing.List[typing.List[str]]] = 'default',
-                 categorical_columns: typing.Union[typing.List[str], None] = None,
-                 row_height: int = 400,
-                 sample: typing.Union[float, int, None] = None,
-                 select_color: typing.Union[str, typing.Tuple[int, int, int]] = '#323EEC',
-                 deselect_color: typing.Union[str, typing.Tuple[int, int, int]] = '#8A8C93',
-                 alpha: float = 0.75
-                 ):
+    def __init__(
+        self,
+        data: typing.Union[DataFrame, DataSource],
+        layout: typing.Union[str, typing.List[typing.List[str]]] = "default",
+        categorical_columns: typing.Union[typing.List[str], None] = None,
+        row_height: int = 400,
+        sample: typing.Union[float, int, None] = None,
+        select_color: typing.Union[str, typing.Tuple[int, int, int]] = "#323EEC",
+        deselect_color: typing.Union[str, typing.Tuple[int, int, int]] = "#8A8C93",
+        alpha: float = 0.75,
+    ):
         super().__init__()
 
         validate.validate_data(data)
@@ -53,34 +55,46 @@ class VisualAnalysis:
             self.deselect_color = deselect_color
 
         self.alpha = alpha
-        self.color_scale = [[0, 'rgb(%d,%d,%d)' % self.deselect_color], [1, 'rgb(%d,%d,%d)' % self.select_color]]
+        self.color_scale = [
+            [0, "rgb(%d,%d,%d)" % self.deselect_color],
+            [1, "rgb(%d,%d,%d)" % self.select_color],
+        ]
 
         config = Config()
-        config['alpha'] = self.alpha
-        config['select_color'] = self.select_color
-        config['deselect_color'] = self.deselect_color
-        config['color_scale'] = self.color_scale
+        config["alpha"] = self.alpha
+        config["select_color"] = self.select_color
+        config["deselect_color"] = self.deselect_color
+        config["color_scale"] = self.color_scale
 
         if isinstance(data, DataFrame):
-            self.data_source = DataSource(df=data, categorical_columns=categorical_columns, sample=sample)
+            self.data_source = DataSource(
+                df=data, categorical_columns=categorical_columns, sample=sample
+            )
         elif isinstance(data, DataSource):
             self.data_source = data
 
-        self.layout = AnalysisLayout(layout=layout, row_height=row_height, data_source=self.data_source)
+        self.layout = AnalysisLayout(
+            layout=layout, row_height=row_height, data_source=self.data_source
+        )
 
         if self.data_source.few_num_cols and len(self._check_numerical_plots()) != 0:
-            warnings.warn("The passed DataFrame only has %d NUMERICAL column, which is insufficient for some plots "
-                          "like Parallel Coordinates. These plots will not be displayed."
-                          % len(self.data_source.numerical_columns))
+            warnings.warn(
+                "The passed DataFrame only has %d NUMERICAL column, which is insufficient for some plots "
+                "like Parallel Coordinates. These plots will not be displayed."
+                % len(self.data_source.numerical_columns)
+            )
 
         if self.data_source.few_cat_cols and len(self._check_categorical_plots()) != 0:
-            warnings.warn("The passed DataFrame only has %d CATEGORICAL column, which is insufficient for some plots "
-                          "like Parallel Categories. These plots will not be displayed."
-                          % len(self.data_source.numerical_columns))
+            warnings.warn(
+                "The passed DataFrame only has %d CATEGORICAL column, which is insufficient for some plots "
+                "like Parallel Categories. These plots will not be displayed."
+                % len(self.data_source.numerical_columns)
+            )
 
     def _ipython_display_(self):
         from IPython.core.display import display
         from ipywidgets import widgets
+
         root_widget: widgets.Widget = self.layout.build()
         # noinspection PyTypeChecker
         display(root_widget)
@@ -102,5 +116,3 @@ class VisualAnalysis:
                 if el in numerical_plots:
                     found_plots.add(el)
         return list(found_plots)
-
-

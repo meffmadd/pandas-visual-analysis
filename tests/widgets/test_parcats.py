@@ -23,7 +23,10 @@ def populated_config():
     config.alpha = 0.75
     config.select_color = (0, 0, 0)
     config.deselect_color = (0, 0, 0)
-    config.color_scale = [[0, 'rgb(%d,%d,%d)' % config.deselect_color], [1, 'rgb(%d,%d,%d)' % config.select_color]]
+    config.color_scale = [
+        [0, "rgb(%d,%d,%d)" % config.deselect_color],
+        [1, "rgb(%d,%d,%d)" % config.select_color],
+    ]
 
 
 class PointsObject:
@@ -32,7 +35,6 @@ class PointsObject:
 
 
 class TestInit:
-
     def test_object_creation(self, small_df, populated_config):
         ds = DataSource(small_df, None)
         ParallelCategoriesWidget(ds, 0, 0, 1.0, 400)
@@ -45,7 +47,6 @@ class TestInit:
 
 
 class TestBuild:
-
     def test_normal_build(self, small_df, populated_config):
         ds = DataSource(small_df, None)
         pc = ParallelCategoriesWidget(ds, 0, 0, 1.0, 400)
@@ -54,7 +55,6 @@ class TestBuild:
 
 
 class TestOnSelection:
-
     def test_on_selection(self, small_df, populated_config):
         ds = DataSource(small_df, None)
         pc = ParallelCategoriesWidget(ds, 0, 0, 1.0, 400)
@@ -72,18 +72,16 @@ class TestOnSelection:
 
 
 class TestBrushIndicesChange:
-
     def test_brush_indices_change(self, small_df, populated_config):
         ds = DataSource(small_df, None)
         pc = ParallelCategoriesWidget(ds, 0, 0, 1.0, 400)
-        change = {'new': [1, 2, 3]}
+        change = {"new": [1, 2, 3]}
         pc.observe_brush_indices_change(change)
 
         assert sum(list(pc.figure_widget.data[0].line.color)) == 3
 
 
 class TestMultiSelect:
-
     def test_basic_multi_select(self, rand_cat_df, populated_config):
         ds = DataSource(rand_cat_df, None)
         ParallelCategoriesWidget(ds, 0, 0, 0.2, 400)
@@ -91,4 +89,4 @@ class TestMultiSelect:
     def test_multi_select(self, rand_cat_df, populated_config):
         ds = DataSource(rand_cat_df, None)
         ps = ParallelCategoriesWidget(ds, 0, 0, 0.2, 400)
-        ps.multi_select.selected_options = ['A', 'B']
+        ps.multi_select.selected_options = ["A", "B"]

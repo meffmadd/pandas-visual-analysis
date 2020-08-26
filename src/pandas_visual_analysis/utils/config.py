@@ -10,6 +10,7 @@ class Config(dict, metaclass=Singleton):
 
     def __setattr__(self, attr, value):
         if attr in self.dict_attributes:
-            raise ValueError("Attribute would overwrite dict attributes and cause undefined behaviour.")
+            raise ValueError(
+                "Attribute would overwrite dict attributes and cause undefined behaviour."
+            )
         self[attr] = value
-

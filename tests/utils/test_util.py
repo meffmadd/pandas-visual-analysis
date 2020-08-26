@@ -10,7 +10,7 @@ def test_hex_to_rgb():
 
 
 def test_hex_to_rgb_uppercase():
-    assert hex_to_rgb('#F245E1') == (242, 69, 225)
+    assert hex_to_rgb("#F245E1") == (242, 69, 225)
 
 
 def test_hex_to_rgb_error_some_text():
@@ -41,27 +41,26 @@ def test_hex_to_rgb_error_none():
 
 
 def test_compare_lists():
-    assert (compare_lists([1, 2, 2], [1, 2, 2]) is True)
+    assert compare_lists([1, 2, 2], [1, 2, 2]) is True
 
 
 def test_compare_lists_neg():
-    assert (compare_lists([1, 2, 2], [1, 2, 4]) is False)
+    assert compare_lists([1, 2, 2], [1, 2, 4]) is False
 
 
 def test_compare_lists_duplicates():
-    assert (compare_lists([4, 5], [4, 5, 5]) is False)
+    assert compare_lists([4, 5], [4, 5, 5]) is False
 
 
 def test_compare_lists_none():
-    assert (compare_lists([1, 4], None) is False)
+    assert compare_lists([1, 4], None) is False
 
 
 def test_compare_lists_some_value():
-    assert (compare_lists("str", [1, 4]) is False)
+    assert compare_lists("str", [1, 4]) is False
 
 
 def test_timing(capsys):
-
     @timing
     def to_time():
         time.sleep(1)

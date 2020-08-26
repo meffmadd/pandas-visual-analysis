@@ -25,11 +25,13 @@ def populated_config():
     config.alpha = 0.75
     config.select_color = (0, 0, 0)
     config.deselect_color = (0, 0, 0)
-    config.color_scale = [[0, 'rgb(%d,%d,%d)' % config.deselect_color], [1, 'rgb(%d,%d,%d)' % config.select_color]]
+    config.color_scale = [
+        [0, "rgb(%d,%d,%d)" % config.deselect_color],
+        [1, "rgb(%d,%d,%d)" % config.select_color],
+    ]
 
 
 class TestInit:
-
     def test_basic_creation(self, small_df):
         ds = DataSource(small_df, None)
         BrushSummaryWidget(ds, 0, 0, 1.0, 300)
@@ -42,7 +44,6 @@ class TestInit:
 
 
 class TestBuild:
-
     def test_basic_build(self, small_df, populated_config):
         ds = DataSource(small_df, None)
         bs = BrushSummaryWidget(ds, 0, 0, 1.0, 400)
@@ -54,27 +55,25 @@ class TestBuild:
 
 
 class TestChanges:
-
     def test_indices_changed(self, small_df, populated_config):
         ds = DataSource(small_df, None)
         bs = BrushSummaryWidget(ds, 0, 0, 1.0, 400)
 
         ds.brushed_indices = [0]
         brushed_row = ds.brushed_data
-        assert bs.brushed_metrics.loc["mean"]['a'] == brushed_row['a'][0]
-        assert bs.brushed_metrics.loc["mean"]['c'] == brushed_row['c'][0]
-        assert bs.brushed_metrics['a']['count'] == 1.0
-        assert bs.brushed_metrics['c']['count'] == 1.0
+        assert bs.brushed_metrics.loc["mean"]["a"] == brushed_row["a"][0]
+        assert bs.brushed_metrics.loc["mean"]["c"] == brushed_row["c"][0]
+        assert bs.brushed_metrics["a"]["count"] == 1.0
+        assert bs.brushed_metrics["c"]["count"] == 1.0
 
     def test_metric_changed_basic(self, small_df):
         ds = DataSource(small_df, None)
         bs = BrushSummaryWidget(ds, 0, 0, 1.0, 400)
 
-        bs.metric_select.value = 'min'
+        bs.metric_select.value = "min"
 
 
 class TestMapValues:
-
     def test_basic_map(self):
         assert BrushSummaryWidget._map_value(5, 0, 10, 0, 1) == 0.5
 
@@ -89,7 +88,6 @@ class TestMapValues:
 
 
 class TestSelection:
-
     def test_selection(self, small_df):
         ds = DataSource(small_df, None)
         bs = BrushSummaryWidget(ds, 0, 0, 1.0, 400)

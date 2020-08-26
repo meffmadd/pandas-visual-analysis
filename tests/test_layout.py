@@ -33,17 +33,17 @@ def randint_df():
 
 
 def test_analysis_layout_one_num_col_no_warning(small_df):
-    assert AnalysisLayout([['Scatter']], 400, DataSource(small_df, None))
+    assert AnalysisLayout([["Scatter"]], 400, DataSource(small_df, None))
 
 
 def test_analysis_layout_incorrect_widget_name(small_df):
     with pytest.raises(ValueError):
-        AnalysisLayout([['asdfasdf']], 400, DataSource(small_df, None))
+        AnalysisLayout([["asdfasdf"]], 400, DataSource(small_df, None))
 
 
 def test_analysis_layout_build(small_df, populated_config):
     ds = DataSource(small_df, None)
-    layout = AnalysisLayout([['Scatter'], ['Scatter']], 400, ds)
+    layout = AnalysisLayout([["Scatter"], ["Scatter"]], 400, ds)
     root_widget = layout.build()
     assert isinstance(root_widget, widgets.VBox)
     children = root_widget.children
@@ -61,4 +61,4 @@ def test_analysis_layout_wrong_predefined_layout_error(small_df):
 
 def test_analysis_layout_wrong_layout_type_error(small_df):
     with pytest.raises(TypeError):
-        AnalysisLayout(set(['A', 'B']), 400, DataSource(small_df, None))
+        AnalysisLayout(set(["A", "B"]), 400, DataSource(small_df, None))

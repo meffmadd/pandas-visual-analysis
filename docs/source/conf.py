@@ -12,18 +12,19 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../../src/'))
+
+sys.path.insert(0, os.path.abspath("../../src/"))
 # sys.path.insert(0, os.path.join("..", "..", "src"))
 
 
 # -- Project information -----------------------------------------------------
 
-project = 'pandas-visual-analysis'
-copyright = '2020, Matthias Matt'
-author = 'Matthias Matt'
+project = "pandas-visual-analysis"
+copyright = "2020, Matthias Matt"
+author = "Matthias Matt"
 
 # The full version, including alpha/beta/rc tags
-release = '0.0.1'
+release = "0.0.1"
 
 
 # -- General configuration ---------------------------------------------------
@@ -38,11 +39,11 @@ extensions = [
     "sphinx.ext.autosummary",
     "sphinx.ext.coverage",
     "sphinx_autodoc_typehints",
-    "sphinx.ext.autosectionlabel"
+    "sphinx.ext.autosectionlabel",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+templates_path = ["_templates"]
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -55,33 +56,29 @@ exclude_patterns = []
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = ["_static"]
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'alabaster'
+html_theme = "alabaster"
 
-main_color = '#323EEC'
-dark_gray = '#0f111f'
-medium_gray = '#3b3c45'
-light_gray = '#878892'
+main_color = "#323EEC"
+dark_gray = "#0f111f"
+medium_gray = "#3b3c45"
+light_gray = "#878892"
 
 html_theme_options = {
-    'logo': 'assets/logo_tall.jpeg',
-    'logo_name': None,
-    'github_user': 'meffmadd',
-    'github_repo': 'pandas-visual-analysis',
-
-    'anchor': main_color,
-    'link_hover': main_color,
-    'link': dark_gray,
-    'note_border': main_color,
-    'sidebar_search_button': main_color,
-    'gray_1': dark_gray,
-    'gray_2': light_gray,
-    'gray_3': medium_gray
-
-
+    "logo": "assets/logo_tall.jpeg",
+    "logo_name": None,
+    "github_user": "meffmadd",
+    "github_repo": "pandas-visual-analysis",
+    "anchor": main_color,
+    "link_hover": main_color,
+    "link": dark_gray,
+    "note_border": main_color,
+    "sidebar_search_button": main_color,
+    "gray_1": dark_gray,
+    "gray_2": light_gray,
+    "gray_3": medium_gray,
 }
-

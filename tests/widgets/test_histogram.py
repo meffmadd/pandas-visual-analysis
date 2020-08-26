@@ -23,7 +23,10 @@ def populated_config():
     config.alpha = 0.75
     config.select_color = (0, 0, 0)
     config.deselect_color = (0, 0, 0)
-    config.color_scale = [[0, 'rgb(%d,%d,%d)' % config.deselect_color], [1, 'rgb(%d,%d,%d)' % config.select_color]]
+    config.color_scale = [
+        [0, "rgb(%d,%d,%d)" % config.deselect_color],
+        [1, "rgb(%d,%d,%d)" % config.select_color],
+    ]
 
 
 class PointsObject:
@@ -32,14 +35,12 @@ class PointsObject:
 
 
 class TestInit:
-
     def test_object_creation(self, small_df, populated_config):
         ds = DataSource(small_df, None)
         HistogramWidget(ds, 0, 0, 1.0, 400)
 
 
 class TestBuild:
-
     def test_normal_build(self, small_df, populated_config):
         ds = DataSource(small_df, None)
         hw = HistogramWidget(ds, 0, 0, 1.0, 400)
@@ -62,7 +63,6 @@ class TestOnSelection:
 
 
 class TestBrushIndicesChange:
-
     def test_brush_indices_change(self, small_df, populated_config):
         ds = DataSource(small_df, None)
         hw = HistogramWidget(ds, 0, 0, 1.0, 400)
@@ -84,12 +84,11 @@ class TestBrushIndicesChange:
 
 
 class TestSelectUI:
-
     def test_column_select(self, small_df, populated_config):
         ds = DataSource(small_df, None)
         hw = HistogramWidget(ds, 0, 0, 1.0, 400)
-        hw.column_select.value = 'b'
-        assert list(hw.figure_widget.data[0].x) == list(small_df['b'].values)
+        hw.column_select.value = "b"
+        assert list(hw.figure_widget.data[0].x) == list(small_df["b"].values)
 
     def test_normalize_select_true(self, small_df, populated_config):
         ds = DataSource(small_df, None)

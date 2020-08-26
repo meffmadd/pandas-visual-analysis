@@ -11,8 +11,16 @@ class BaseWidget(HasTraits):
 
     data_source = Instance(DataSource)
 
-    def __init__(self, data_source: DataSource, row: int, index: int, relative_size: float, max_height: int, *args,
-                 **kwargs):
+    def __init__(
+        self,
+        data_source: DataSource,
+        row: int,
+        index: int,
+        relative_size: float,
+        max_height: int,
+        *args,
+        **kwargs
+    ):
         """
         Instantiates the base class of the widgets.
 
@@ -48,14 +56,36 @@ class BaseWidget(HasTraits):
         """
         with widget.hold_trait_notifications():
             margin = 5
-            num_widgets_in_row = int(round(1/self.relative_size)) - 1
-            size_mod = 2 * num_widgets_in_row  # because a border is added to each widget we have to subtract that (2px)
-            widget.layout.min_width = "calc(" + str(self.relative_size * 100) + "%" + " - %dpx)" % (margin + size_mod)
-            widget.layout.max_width = "calc(" + str(self.relative_size * 100) + "%" + " - %dpx)" % (margin + size_mod)
+            num_widgets_in_row = int(round(1 / self.relative_size)) - 1
+            size_mod = (
+                2 * num_widgets_in_row
+            )  # because a border is added to each widget we have to subtract that (2px)
+            widget.layout.min_width = (
+                "calc("
+                + str(self.relative_size * 100)
+                + "%"
+                + " - %dpx)" % (margin + size_mod)
+            )
+            widget.layout.max_width = (
+                "calc("
+                + str(self.relative_size * 100)
+                + "%"
+                + " - %dpx)" % (margin + size_mod)
+            )
             widget.layout.max_height = "%dpx" % self.max_height
             widget.layout.min_height = "%dpx" % self.max_height
-            widget.layout.margin = "%dpx %dpx %dpx %dpx" % (margin, margin, margin, margin)
-            widget.layout.padding = "%dpx %dpx %dpx %dpx" % (margin, margin, margin, margin)
+            widget.layout.margin = "%dpx %dpx %dpx %dpx" % (
+                margin,
+                margin,
+                margin,
+                margin,
+            )
+            widget.layout.padding = "%dpx %dpx %dpx %dpx" % (
+                margin,
+                margin,
+                margin,
+                margin,
+            )
             widget.layout.border = "2px solid rgb(%d,%d,%d)" % Config().select_color
         return widget
 

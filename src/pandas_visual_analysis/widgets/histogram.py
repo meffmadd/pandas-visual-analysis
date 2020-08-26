@@ -20,13 +20,28 @@ class HistogramWidget(BaseWidget):
     :param max_height: height in pixels the plot has to have
     """
 
-    def __init__(self, data_source: DataSource, row: int, index: int, relative_size: float, max_height: int):
+    def __init__(
+        self,
+        data_source: DataSource,
+        row: int,
+        index: int,
+        relative_size: float,
+        max_height: int,
+    ):
         super().__init__(data_source, row, index, relative_size, max_height)
 
-        self.columns = data_source.numerical_columns + data_source.time_columns + data_source.categorical_columns
+        self.columns = (
+            data_source.numerical_columns
+            + data_source.time_columns
+            + data_source.categorical_columns
+        )
 
-        self.column_select = widgets.Dropdown(options=self.columns, value=self.columns[0], description="Column:")
-        self.normalize = widgets.Checkbox(value=False, description='Normalize', indent=False)
+        self.column_select = widgets.Dropdown(
+            options=self.columns, value=self.columns[0], description="Column:"
+        )
+        self.normalize = widgets.Checkbox(
+            value=False, description="Normalize", indent=False
+        )
 
         self.data = self.data_source.data
         self.brushed_data = self.data_source.brushed_data
@@ -34,12 +49,14 @@ class HistogramWidget(BaseWidget):
         self.figure_widget = self._get_figure_widget()
 
         self.set_observers()
-        self.column_select.observe(handler=self._on_column_change, names='value')
-        self.normalize.observe(handler=self._on_normalize_change, names='value')
+        self.column_select.observe(handler=self._on_column_change, names="value")
+        self.normalize.observe(handler=self._on_normalize_change, names="value")
         self.figure_widget.data[0].on_deselect(callback=self.on_deselection)
 
     def build(self) -> widgets.Widget:
-        root = widgets.VBox([widgets.HBox([self.column_select, self.normalize]), self.figure_widget])
+        root = widgets.VBox(
+            [widgets.HBox([self.column_select, self.normalize]), self.figure_widget]
+        )
         return self.apply_size_constraints(root)
 
     def observe_brush_indices_change(self, change):
@@ -49,11 +66,17 @@ class HistogramWidget(BaseWidget):
         else:
             self.figure_widget.data[0].visible = True
 
-        self.figure_widget.data[1].selectedpoints = change['new']  # set selected points so that double click works
+        self.figure_widget.data[1].selectedpoints = change[
+            "new"
+        ]  # set selected points so that double click works
         self._redraw_plot()
 
     def set_observers(self):
-        HasTraits.observe(self.data_source, handler=self.observe_brush_indices_change, names='_brushed_indices')
+        HasTraits.observe(
+            self.data_source,
+            handler=self.observe_brush_indices_change,
+            names="_brushed_indices",
+        )
 
     # issue: selection does not work for histogram: https://github.com/plotly/plotly.py/issues/2698
     def on_selection(self, trace, points, state):
@@ -78,27 +101,31 @@ class HistogramWidget(BaseWidget):
     def _get_histograms(self):
         col = self.column_select.value
         config = Config()
-        fig = go.Figure(layout=go.Layout(margin=dict(
-                                   l=5,
-                                   r=5,
-                                   b=5,
-                                   t=5,
-                                   pad=2
-                               )))
-        fig.add_trace(go.Histogram(x=self.data[col],
-                                   opacity=max(config.alpha, 0.75),
-                                   marker={'color': 'rgb(%d,%d,%d)' % config.deselect_color},
-                                   selected={'marker': {'color': 'rgb(%d,%d,%d)' % config.deselect_color}},
-                                   unselected={'marker': {'opacity': 0.4}},
-                                   hoverinfo='skip', histnorm=''))
-        fig.add_trace(go.Histogram(x=self.brushed_data[col],
-                                   opacity=1.0,
-                                   # mode='markers',
-                                   marker={'color': 'rgb(%d,%d,%d)' % config.select_color},
-                                   selected={'marker': {'color': 'rgb(%d,%d,%d)' % config.select_color}},
-                                   unselected={'marker': {'opacity': 1.0}},
-                                   hoverinfo='skip', histnorm=''))
-        fig.update_layout(barmode='overlay', showlegend=False, dragmode='select')
+        fig = go.Figure(layout=go.Layout(margin=dict(l=5, r=5, b=5, t=5, pad=2)))
+        fig.add_trace(
+            go.Histogram(
+                x=self.data[col],
+                opacity=max(config.alpha, 0.75),
+                marker={"color": "rgb(%d,%d,%d)" % config.deselect_color},
+                selected={"marker": {"color": "rgb(%d,%d,%d)" % config.deselect_color}},
+                unselected={"marker": {"opacity": 0.4}},
+                hoverinfo="skip",
+                histnorm="",
+            )
+        )
+        fig.add_trace(
+            go.Histogram(
+                x=self.brushed_data[col],
+                opacity=1.0,
+                # mode='markers',
+                marker={"color": "rgb(%d,%d,%d)" % config.select_color},
+                selected={"marker": {"color": "rgb(%d,%d,%d)" % config.select_color}},
+                unselected={"marker": {"opacity": 1.0}},
+                hoverinfo="skip",
+                histnorm="",
+            )
+        )
+        fig.update_layout(barmode="overlay", showlegend=False, dragmode="select")
         return fig
 
     def _redraw_plot(self, only_brushed=True):

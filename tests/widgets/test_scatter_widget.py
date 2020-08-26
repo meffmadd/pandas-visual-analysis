@@ -26,13 +26,13 @@ def test_on_selection(small_df, populated_config):
     scatter_widget = ScatterWidget(ds, 0, 0, 1.0, 400)
 
     def simple_observe(change):
-        assert change['old'] == list(range(len(small_df)))
-        assert change['new'] == [0]
+        assert change["old"] == list(range(len(small_df)))
+        assert change["new"] == [0]
 
-    HasTraits.observe(ds, simple_observe, '_brushed_indices')
+    HasTraits.observe(ds, simple_observe, "_brushed_indices")
 
     class Points:
-        point_inds= [0]
+        point_inds = [0]
 
     scatter_widget.on_selection(None, Points(), None)
 
@@ -45,9 +45,9 @@ def test_on_deselection(small_df, populated_config):
     ds.brushed_indices = [0]
 
     def simple_observe(change):
-        assert change['new'] == original_indices
+        assert change["new"] == original_indices
 
-    HasTraits.observe(ds, simple_observe, '_brushed_indices')
+    HasTraits.observe(ds, simple_observe, "_brushed_indices")
 
     class Points:
         point_inds = [0]
@@ -59,53 +59,55 @@ def test_on_axis_x_change(small_df, populated_config):
     ds = DataSource(small_df, None)
     scatter_widget = ScatterWidget(ds, 0, 0, 1.0, 400)
 
-    scatter_widget.x_selection.value = 'e'
+    scatter_widget.x_selection.value = "e"
 
-    assert list(scatter_widget.figure_widget.data[0].x) == list(small_df['e'])
+    assert list(scatter_widget.figure_widget.data[0].x) == list(small_df["e"])
 
 
 def test_on_axis_y_change(small_df, populated_config):
     ds = DataSource(small_df, None)
     scatter_widget = ScatterWidget(ds, 0, 0, 1.0, 400)
 
-    scatter_widget.y_selection.value = 'd'
+    scatter_widget.y_selection.value = "d"
 
-    assert list(scatter_widget.figure_widget.data[0].y) == list(small_df['d'])
+    assert list(scatter_widget.figure_widget.data[0].y) == list(small_df["d"])
 
 
 def test_on_axis_size_change(small_df, populated_config):
     ds = DataSource(small_df, None)
     scatter_widget = ScatterWidget(ds, 0, 0, 1.0, 400)
 
-    scatter_widget.size_selection.value = 'c'
-    assert list(scatter_widget.figure_widget.data[0].marker['size']) == list(small_df['c'])
+    scatter_widget.size_selection.value = "c"
+    assert list(scatter_widget.figure_widget.data[0].marker["size"]) == list(
+        small_df["c"]
+    )
 
 
 def test_on_axis_change_size_date_error(small_df, populated_config):
     ds = DataSource(small_df, None)
     scatter_widget = ScatterWidget(ds, 0, 0, 1.0, 400)
 
-    assert 'datetime64' in str(small_df['d'].dtype)
+    assert "datetime64" in str(small_df["d"].dtype)
     with pytest.raises(TraitError):  # selection not found
-        scatter_widget.size_selection.value = 'd'  # data time not allowed
+        scatter_widget.size_selection.value = "d"  # data time not allowed
 
 
 def test_on_axis_change_bool_date_error(small_df, populated_config):
     ds = DataSource(small_df, None)
     scatter_widget = ScatterWidget(ds, 0, 0, 1.0, 400)
 
-    assert 'bool' in str(small_df['e'].dtype)
+    assert "bool" in str(small_df["e"].dtype)
     with pytest.raises(TraitError):  # selection not found
-        scatter_widget.size_selection.value = 'e'  # bool not allowed
+        scatter_widget.size_selection.value = "e"  # bool not allowed
 
 
 def test_on_axis_change_size_none(small_df, populated_config):
     ds = DataSource(small_df, None)
     scatter_widget = ScatterWidget(ds, 0, 0, 1.0, 400)
 
-    scatter_widget.size_selection.value = 'c'
+    scatter_widget.size_selection.value = "c"
     scatter_widget.size_selection.value = "None"
-    assert scatter_widget.figure_widget.data[0].marker['size'] is None
+    assert scatter_widget.figure_widget.data[0].marker["size"] is None
 
 
 def test_redraw_plot_with_none(small_df, populated_config):

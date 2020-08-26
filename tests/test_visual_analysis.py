@@ -21,7 +21,6 @@ def int_df():
 
 
 class TestInit:
-
     def test_visual_analysis_object_creation(self, small_df):
         assert VisualAnalysis(small_df)
 
@@ -38,12 +37,13 @@ class TestInit:
 
 
 class TestColor:
-
     def test_visual_analysis_color_tuple(self, small_df):
         assert VisualAnalysis(small_df, select_color=(12, 12, 12))
 
     def test_visual_analysis_object_creation_color(self, small_df):
-        assert VisualAnalysis(small_df, select_color='#ffffff', deselect_color=(0, 0, 0))
+        assert VisualAnalysis(
+            small_df, select_color="#ffffff", deselect_color=(0, 0, 0)
+        )
 
     # noinspection PyTypeChecker
     def test_visual_analysis_object_creation_color_error(self, small_df):
@@ -63,12 +63,12 @@ class TestColor:
     # noinspection PyTypeChecker
     def test_visual_analysis_object_creation_select_color_type_error(self, small_df):
         with pytest.raises(TypeError):
-            VisualAnalysis(small_df, select_color=set([0,0,0]))
+            VisualAnalysis(small_df, select_color=set([0, 0, 0]))
 
     # noinspection PyTypeChecker
     def test_visual_analysis_object_creation_deselect_color_type_error(self, small_df):
         with pytest.raises(TypeError):
-            VisualAnalysis(small_df, deselect_color=set([0,0,0]))
+            VisualAnalysis(small_df, deselect_color=set([0, 0, 0]))
 
     def test_visual_analysis_object_creation_color_error2(self, small_df):
         with pytest.raises(ValueError):
@@ -92,7 +92,6 @@ class TestAlpha:
 
 
 class TestSample:
-
     def test_visual_analysis_sample_number_neg_error(self, int_df):
         with pytest.raises(ValueError):
             VisualAnalysis(int_df, sample=-100)
@@ -116,10 +115,10 @@ class TestSample:
 
 
 class TestDisplay:
-
     def test_visual_analysis_display_system(self, int_df):
-        va = VisualAnalysis(int_df, [['Scatter']])
+        va = VisualAnalysis(int_df, [["Scatter"]])
         from IPython.core.display import display
+
         display((va,))
 
     def test_ipython_display(self, small_df):
@@ -128,20 +127,18 @@ class TestDisplay:
 
 
 class TestPlotTypeWarn:
-
     def test_visual_analysis_warn_num_cols(self, small_df):
-        small_df.drop(columns=['c'], inplace=True)
+        small_df.drop(columns=["c"], inplace=True)
         with pytest.warns(UserWarning):
-            VisualAnalysis(small_df, layout=[['ParallelCoordinates']])
+            VisualAnalysis(small_df, layout=[["ParallelCoordinates"]])
 
     def test_warn_cat_cols(self, small_df):
-        small_df.drop(columns=['b'], inplace=True)
+        small_df.drop(columns=["b"], inplace=True)
         with pytest.warns(UserWarning):
-            VisualAnalysis(small_df, layout=[['ParallelCategories']])
+            VisualAnalysis(small_df, layout=[["ParallelCategories"]])
 
 
 class TestRowHeight:
-
     def test_visual_analysis_row_height_type_error(self, small_df):
         with pytest.raises(TypeError):
             VisualAnalysis(small_df, row_height="100px")
@@ -149,5 +146,3 @@ class TestRowHeight:
     def test_visual_analysis_row_height_neg_error(self, small_df):
         with pytest.raises(ValueError):
             VisualAnalysis(small_df, row_height=-10)
-
-

@@ -10,13 +10,18 @@ def hex_to_rgb(hex_value: str) -> Tuple[int, int, int]:
     :param hex_value: String representation of hexadecimal color.
     :return: Tuple of RGB color values: (R,G,B)
     """
-    if len(hex_value) != 7 or hex_value[0] != '#':
-        raise ValueError("the color has to be specified by '#XXXXXX'. Invalid value %s" % hex_value)
-    hex_value = hex_value.lstrip('#')
+    if len(hex_value) != 7 or hex_value[0] != "#":
+        raise ValueError(
+            "the color has to be specified by '#XXXXXX'. Invalid value %s" % hex_value
+        )
+    hex_value = hex_value.lstrip("#")
     try:
         int(hex_value, 16)
     except ValueError:
-        raise ValueError("the color value has to be a valid hexadecimal number. Invalid value %s" % hex_value)
+        raise ValueError(
+            "the color value has to be a valid hexadecimal number. Invalid value %s"
+            % hex_value
+        )
     return int(hex_value[0:2], 16), int(hex_value[2:4], 16), int(hex_value[4:6], 16)
 
 
@@ -48,14 +53,16 @@ def timing(f):
         time1 = time.time()
         ret = f(*args, **kwargs)
         time2 = time.time()
-        print('{:s} function took {:.3f} ms'.format(f.__name__, (time2-time1)*1000.0))
+        print(
+            "{:s} function took {:.3f} ms".format(f.__name__, (time2 - time1) * 1000.0)
+        )
 
         return ret
+
     return wrap
 
 
 class Timer:
-
     def __init__(self, name: str = "Default Time"):
         self.end_time = None
         self.name = name
@@ -63,4 +70,8 @@ class Timer:
 
     def stop(self):
         self.end_time = time.time()
-        print('Timer: {:s} took {:.3f} ms'.format(self.name, (self.end_time - self.start_time) * 1000.0))
+        print(
+            "Timer: {:s} took {:.3f} ms".format(
+                self.name, (self.end_time - self.start_time) * 1000.0
+            )
+        )

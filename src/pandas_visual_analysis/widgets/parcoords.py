@@ -12,7 +12,10 @@ from pandas_visual_analysis import DataSource
 from pandas_visual_analysis.utils.config import Config
 from pandas_visual_analysis.utils.util import timing, Timer
 from pandas_visual_analysis.widgets import BaseWidget, register_widget
-from pandas_visual_analysis.widgets.helpers.multi_select import MultiSelectWidget, HasMultiSelect
+from pandas_visual_analysis.widgets.helpers.multi_select import (
+    MultiSelectWidget,
+    HasMultiSelect,
+)
 
 
 @register_widget
@@ -29,15 +32,30 @@ class ParallelCoordinatesWidget(BaseWidget, HasMultiSelect):
     :param max_height: height in pixels the plot has to have
     """
 
-    def __init__(self, data_source: DataSource, row: int, index: int, relative_size: float, max_height: int):
-        super(ParallelCoordinatesWidget, self).__init__(data_source, row, index, relative_size, max_height)
-        super(BaseWidget, self).__init__(self.data_source.numerical_columns, relative_size, max_height)
+    def __init__(
+        self,
+        data_source: DataSource,
+        row: int,
+        index: int,
+        relative_size: float,
+        max_height: int,
+    ):
+        super(ParallelCoordinatesWidget, self).__init__(
+            data_source, row, index, relative_size, max_height
+        )
+        super(BaseWidget, self).__init__(
+            self.data_source.numerical_columns, relative_size, max_height
+        )
         if len(self.columns) < 1:
-            raise ValueError("The data contains too few numerical columns to display a parallel coordinates plot."
-                             "Remove the widget from the layout!")
+            raise ValueError(
+                "The data contains too few numerical columns to display a parallel coordinates plot."
+                "Remove the widget from the layout!"
+            )
 
         if self.use_multi_select:
-            self.multi_select_toggle: widgets.Button = widgets.Button(description="Hide Selection")
+            self.multi_select_toggle: widgets.Button = widgets.Button(
+                description="Hide Selection"
+            )
             # self.multi_select_toggle.on_click(callback=self._toggle_multi_select)
 
         self.trace, self.figure_widget = self._get_figure_widget()
@@ -53,10 +71,11 @@ class ParallelCoordinatesWidget(BaseWidget, HasMultiSelect):
         self.set_observers()
 
         # set root here because need to toggle the select and need widgets for that
-        self.root: widgets.Widget = widgets.HBox([self.figure_widget], layout=widgets.Layout(width='100%'))
+        self.root: widgets.Widget = widgets.HBox(
+            [self.figure_widget], layout=widgets.Layout(width="100%")
+        )
         if self.multi_select:
-            self.root = widgets.HBox([self.figure_widget,
-                                      self.multi_select_widget])
+            self.root = widgets.HBox([self.figure_widget, self.multi_select_widget])
         if self.data_source.few_num_cols:
             pass  # todo: implement behaviour for few numerical columns (HTML message)
 
@@ -66,31 +85,41 @@ class ParallelCoordinatesWidget(BaseWidget, HasMultiSelect):
     def observe_brush_indices_change(self, change):
         if not self.change_initiated:
             # shortly disable selection behaviour to reset constraint ranges
-            self.figure_widget.data[0].on_change(self.pass_func, 'dimensions')
+            self.figure_widget.data[0].on_change(self.pass_func, "dimensions")
             with self.figure_widget.batch_update(), self.figure_widget.hold_trait_notifications():
                 for dimension in self.figure_widget.data[0].dimensions:
-                    dimension['constraintrange'] = None
-            self.figure_widget.data[0].on_change(self._on_selection_helper, 'dimensions')
+                    dimension["constraintrange"] = None
+            self.figure_widget.data[0].on_change(
+                self._on_selection_helper, "dimensions"
+            )
             self.constraint_ranges = {}
 
         self.change_initiated = False
 
-        new_indices = change['new']
+        new_indices = change["new"]
 
-        new_color = np.zeros(self.data_source.len, dtype='uint8')
+        new_color = np.zeros(self.data_source.len, dtype="uint8")
         new_color[new_indices] = 1
         with self.figure_widget.batch_update(), self.figure_widget.hold_trait_notifications():
             self.figure_widget.data[0].line.color = new_color
 
     def set_observers(self):
-        HasTraits.observe(self.data_source, handler=self.observe_brush_indices_change, names='_brushed_indices')
+        HasTraits.observe(
+            self.data_source,
+            handler=self.observe_brush_indices_change,
+            names="_brushed_indices",
+        )
         if self.use_multi_select:
-            HasTraits.observe(self.multi_select, self._on_selected_columns_changed, names='selected_options')
+            HasTraits.observe(
+                self.multi_select,
+                self._on_selected_columns_changed,
+                names="selected_options",
+            )
 
     def on_selection(self, trace, points, state):
         self.change_initiated = True
 
-        new_color = np.zeros(self.data_source.len, dtype='uint8')
+        new_color = np.zeros(self.data_source.len, dtype="uint8")
         new_color[points] = 1
         with self.figure_widget.batch_update(), self.figure_widget.hold_trait_notifications():
             self.figure_widget.data[0].line.color = new_color
@@ -99,7 +128,11 @@ class ParallelCoordinatesWidget(BaseWidget, HasMultiSelect):
 
     def _on_selection_helper(self, obj, dimensions):
         old_ranges = self.constraint_ranges
-        self.constraint_ranges = {dim['label']: dim['constraintrange'] for dim in dimensions if dim['constraintrange']}
+        self.constraint_ranges = {
+            dim["label"]: dim["constraintrange"]
+            for dim in dimensions
+            if dim["constraintrange"]
+        }
         if self.constraint_ranges == old_ranges:
             return  # this is the case when the user just reorders the dimensions
         if len(list(self.constraint_ranges.keys())) == 0:
@@ -116,9 +149,13 @@ class ParallelCoordinatesWidget(BaseWidget, HasMultiSelect):
             range_tuple = constraint_ranges[col]
             if all(isinstance(x, numbers.Number) for x in range_tuple):
                 range_tuple = (range_tuple,)
-            intermediate_mask: np.array = np.full(self.data_source.len, fill_value=False, dtype=bool)
+            intermediate_mask: np.array = np.full(
+                self.data_source.len, fill_value=False, dtype=bool
+            )
             for ranges in range_tuple:
-                intermediate_mask |= (self.data_source.data[col].between(ranges[0], ranges[1])).values
+                intermediate_mask |= (
+                    self.data_source.data[col].between(ranges[0], ranges[1])
+                ).values
             mask &= intermediate_mask
         return mask
 
@@ -129,38 +166,34 @@ class ParallelCoordinatesWidget(BaseWidget, HasMultiSelect):
         config = Config()
 
         self.trace: go.Parcoords = go.Parcoords(
-            line=dict(color=config.color_scale[1][1], colorscale=config.color_scale, cmin=0, cmax=1),
-            dimensions=[self._get_dimension_dict(col) for col in self.selected_columns]
+            line=dict(
+                color=config.color_scale[1][1],
+                colorscale=config.color_scale,
+                cmin=0,
+                cmax=1,
+            ),
+            dimensions=[self._get_dimension_dict(col) for col in self.selected_columns],
         )
         return self.trace
 
     def _get_figure_widget(self):
         trace: go.Parcoords = self._get_par_coords()
-        figure_widget: go.FigureWidget = go.FigureWidget(data=[self.trace], layout=go.Layout(
-            margin=dict(
-                l=50,
-                r=50,
-                b=30,
-                t=50,
-                pad=10
+        figure_widget: go.FigureWidget = go.FigureWidget(
+            data=[self.trace],
+            layout=go.Layout(
+                margin=dict(l=50, r=50, b=30, t=50, pad=10),
+                autosize=True,
+                xaxis=dict(automargin=True),
+                showlegend=False,
             ),
-            autosize=True,
-            xaxis=dict(
-                automargin=True
-            ),
-            showlegend=False
-        ))
-        figure_widget.data[0].on_change(self._on_selection_helper, 'dimensions')
+        )
+        figure_widget.data[0].on_change(self._on_selection_helper, "dimensions")
 
         return trace, figure_widget
 
     def _get_dimension_dict(self, col: str) -> dict:
         series: pd.Series = self.data_source.data[col]
-        return dict(
-            range=[series.min(), series.max()],
-            label=col,
-            values=series
-        )
+        return dict(range=[series.min(), series.max()], label=col, values=series)
 
     # def _toggle_multi_select(self, obj):
     #     if self.multi_select:
@@ -175,19 +208,24 @@ class ParallelCoordinatesWidget(BaseWidget, HasMultiSelect):
     #         self.root.children = (self.multi_select_toggle, widgets.HBox(children))
 
     def _on_selected_columns_changed(self, change):
-        self.selected_columns = change['new']
+        self.selected_columns = change["new"]
         self._redraw_plot()
 
     def _redraw_plot(self):
         # shortly disable selection behaviour to reset constraint ranges
-        self.figure_widget.data[0].on_change(self.pass_func, 'dimensions')
+        self.figure_widget.data[0].on_change(self.pass_func, "dimensions")
 
-        old_constraint_ranges = {dim['label']: dim['constraintrange']
-                                 for dim in self.figure_widget.data[0].dimensions if dim['constraintrange']}
+        old_constraint_ranges = {
+            dim["label"]: dim["constraintrange"]
+            for dim in self.figure_widget.data[0].dimensions
+            if dim["constraintrange"]
+        }
         with self.figure_widget.batch_update(), self.figure_widget.hold_trait_notifications():
-            self.figure_widget.data[0].dimensions = [self._get_dimension_dict(col) for col in self.selected_columns]
+            self.figure_widget.data[0].dimensions = [
+                self._get_dimension_dict(col) for col in self.selected_columns
+            ]
             for dim in self.figure_widget.data[0].dimensions:
-                if dim['label'] in old_constraint_ranges.keys():
-                    dim['constraintrange'] = old_constraint_ranges[dim['label']]
+                if dim["label"] in old_constraint_ranges.keys():
+                    dim["constraintrange"] = old_constraint_ranges[dim["label"]]
 
-        self.figure_widget.data[0].on_change(self._on_selection_helper, 'dimensions')
+        self.figure_widget.data[0].on_change(self._on_selection_helper, "dimensions")

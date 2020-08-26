@@ -28,24 +28,24 @@ def test_brush_selection_object_creation(small_df):
 
 
 def test_brush_selection_object_creation_with_catcol(small_df):
-    DataSource(small_df, ['b', 'e'])
+    DataSource(small_df, ["b", "e"])
 
 
 def test_brush_selection_with_catcol_time_cols(small_df):
-    bs = DataSource(small_df, ['b', 'e'])
-    assert bs.time_columns == ['d']
+    bs = DataSource(small_df, ["b", "e"])
+    assert bs.time_columns == ["d"]
 
 
 def test_brush_selection_without_catcol(small_df):
     bs = DataSource(small_df, None)
-    assert bs.categorical_columns == ['b', 'e']
-    assert bs.time_columns == ['d']
-    assert bs.numerical_columns == ['a', 'c']
+    assert bs.categorical_columns == ["b", "e"]
+    assert bs.time_columns == ["d"]
+    assert bs.numerical_columns == ["a", "c"]
 
 
 def test_brush_selection_columns(small_df):
     bs = DataSource(small_df, None)
-    assert bs.columns == ['a', 'b', 'c', 'd', 'e']
+    assert bs.columns == ["a", "b", "c", "d", "e"]
 
 
 def test_brush_selection_columns_only_int(randint_df):
@@ -67,13 +67,13 @@ def test_brush_selection_indices(randint_df):
 
 def test_brush_selection_catcol_not_present(small_df):
     with pytest.raises(ValueError):
-        DataSource(small_df, ['unknown'])
+        DataSource(small_df, ["unknown"])
 
 
 # noinspection PyTypeChecker
 def test_brush_selection_wrong_catcol_arg(small_df):
     with pytest.raises(TypeError):
-        DataSource(small_df, 'unknown')
+        DataSource(small_df, "unknown")
 
 
 def test_brush_selection_reset_selection(small_df):
@@ -98,10 +98,10 @@ def test_brush_selection_observe_brushed_indices(small_df_index):
     bs = DataSource(small_df_index, None)
 
     def simple_observe(change):
-        assert change['old'] == list(range(len(small_df_index)))
-        assert change['new'] == [0]
+        assert change["old"] == list(range(len(small_df_index)))
+        assert change["new"] == [0]
 
-    HasTraits.observe(bs, simple_observe, '_brushed_indices')
+    HasTraits.observe(bs, simple_observe, "_brushed_indices")
     bs._brushed_indices = [0]
 
 
@@ -109,10 +109,10 @@ def test_brush_selection_observe_brushed_data(small_df_index):
     bs = DataSource(small_df_index, None)
 
     def simple_observe(change):
-        assert len(change['old']) == len(small_df_index)
-        assert len(change['new']) == 1
+        assert len(change["old"]) == len(small_df_index)
+        assert len(change["new"]) == 1
 
-    HasTraits.observe(bs, simple_observe, '_brushed_data')
+    HasTraits.observe(bs, simple_observe, "_brushed_data")
     bs._brushed_indices = [0]
 
 
@@ -124,24 +124,24 @@ def test_brush_selection_wrong_df():
 
 def test_data_source_too_few_cols_error(small_df):
     with pytest.raises(ValueError):
-        DataSource(small_df[['a']], None)
+        DataSource(small_df[["a"]], None)
 
 
 def test_data_source_date_time_as_category(small_df):
-    assert 'datetime64' in str(small_df['d'].dtype)
-    DataSource(small_df, categorical_columns=['b', 'd', 'e'])
+    assert "datetime64" in str(small_df["d"].dtype)
+    DataSource(small_df, categorical_columns=["b", "d", "e"])
 
 
 def test_data_source_string_col_not_in_cat_cols(small_df):
-    assert 'object' in str(small_df['b'].dtype)
+    assert "object" in str(small_df["b"].dtype)
     with pytest.raises(ValueError):
-        DataSource(small_df, categorical_columns=['a'])
+        DataSource(small_df, categorical_columns=["a"])
 
 
 def test_data_source_bool_col_not_in_cat_cols(small_df):
-    assert 'bool' in str(small_df['e'].dtype)
+    assert "bool" in str(small_df["e"].dtype)
     with pytest.raises(ValueError):
-        DataSource(small_df, categorical_columns=['b'])
+        DataSource(small_df, categorical_columns=["b"])
 
 
 def test_data_source_len_method(small_df):
