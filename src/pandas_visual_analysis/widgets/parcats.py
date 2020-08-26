@@ -31,7 +31,9 @@ class ParallelCategoriesWidget(BaseWidget, HasMultiSelect):
         relative_size: float,
         max_height: int,
     ):
-        super().__init__(data_source, row, index, relative_size, max_height)
+        super(ParallelCategoriesWidget, self).__init__(
+            data_source, row, index, relative_size, max_height
+        )
         super(BaseWidget, self).__init__(
             self.data_source.categorical_columns, relative_size, max_height
         )

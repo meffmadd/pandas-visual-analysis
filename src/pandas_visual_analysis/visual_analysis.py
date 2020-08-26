@@ -45,14 +45,16 @@ class VisualAnalysis:
         validate.validate_color(deselect_color)
 
         if isinstance(select_color, str):
-            self.select_color = hex_to_rgb(select_color)
+            self.select_color: typing.Tuple[int, int, int] = hex_to_rgb(select_color)
         elif isinstance(select_color, tuple):
-            self.select_color = select_color
+            self.select_color: typing.Tuple[int, int, int] = select_color
 
         if isinstance(deselect_color, str):
-            self.deselect_color = hex_to_rgb(deselect_color)
+            self.deselect_color: typing.Tuple[int, int, int] = hex_to_rgb(
+                deselect_color
+            )
         elif isinstance(deselect_color, tuple):
-            self.deselect_color = deselect_color
+            self.deselect_color: typing.Tuple[int, int, int] = deselect_color
 
         self.alpha = alpha
         self.color_scale = [

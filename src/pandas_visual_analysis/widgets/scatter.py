@@ -1,12 +1,9 @@
-import datetime
-
 import ipywidgets as widgets
 import plotly.graph_objs as go
 from traitlets import HasTraits
 
 from pandas_visual_analysis import DataSource
 from pandas_visual_analysis.utils.config import Config
-from pandas_visual_analysis.utils.util import Timer, timing
 from pandas_visual_analysis.widgets.base_widget import BaseWidget
 from pandas_visual_analysis.widgets.registry import register_widget
 

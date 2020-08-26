@@ -1,5 +1,3 @@
-from typing import Union
-
 from pandas import DataFrame
 
 from pandas_visual_analysis.utils import hex_to_rgb

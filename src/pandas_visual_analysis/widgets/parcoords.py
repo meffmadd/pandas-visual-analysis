@@ -1,19 +1,15 @@
-import datetime
 import numbers
-from typing import List
 
-import pandas as pd
+import ipywidgets as widgets
 import numpy as np
+import pandas as pd
 import plotly.graph_objs as go
 from traitlets import HasTraits
-import ipywidgets as widgets
 
 from pandas_visual_analysis import DataSource
 from pandas_visual_analysis.utils.config import Config
-from pandas_visual_analysis.utils.util import timing, Timer
 from pandas_visual_analysis.widgets import BaseWidget, register_widget
 from pandas_visual_analysis.widgets.helpers.multi_select import (
-    MultiSelectWidget,
     HasMultiSelect,
 )
 

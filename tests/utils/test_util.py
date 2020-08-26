@@ -76,4 +76,4 @@ def test_timer():
     time.sleep(1)
     timer.stop()
 
-    assert ((timer.end_time - timer.start_time) * 1000.0) - 1000 < 10  # ms
+    assert ((timer.end_time - timer.start_time) * 1000.0) > 1000.0  # ms

@@ -1,6 +1,7 @@
 import typing
+
 import ipywidgets as widgets
-from traitlets import HasTraits, List, observe
+from traitlets import HasTraits, List
 
 
 class HasMultiSelect:

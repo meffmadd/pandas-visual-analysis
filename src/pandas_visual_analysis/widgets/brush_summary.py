@@ -1,11 +1,9 @@
 import math
-from timeit import timeit
 
 import ipywidgets as widgets
 from traitlets import HasTraits
 
 from pandas_visual_analysis import DataSource
-from pandas_visual_analysis.utils.util import timing
 from pandas_visual_analysis.widgets import BaseWidget, register_widget
 
 
