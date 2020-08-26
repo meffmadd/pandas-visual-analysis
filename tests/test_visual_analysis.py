@@ -118,7 +118,7 @@ class TestSample:
 class TestDisplay:
 
     def test_visual_analysis_display_system(self, int_df):
-        va = VisualAnalysis(int_df, None, [['Scatter']])
+        va = VisualAnalysis(int_df, [['Scatter']])
         from IPython.core.display import display
         display((va,))
 

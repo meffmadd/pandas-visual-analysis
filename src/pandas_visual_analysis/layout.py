@@ -10,6 +10,8 @@ import pandas_visual_analysis.utils.validation as validate
 
 class AnalysisLayout:
     """
+    The AnalysisLayout class determines which widgets should be displayed in the analysis
+    and defines their position and size.
 
     :param layout: the layout specification
     :param row_height: height in pixels each row and consequently each plot should have
@@ -19,7 +21,8 @@ class AnalysisLayout:
     root_widget = None
 
     predefined_layouts = {
-        "default": [[]]
+        "default": [['BrushSummary', 'Scatter'],
+                    ['Histogram', 'Scatter']]
     }
 
     def __init__(self, layout: typing.Union[str, typing.List[typing.List[str]]],

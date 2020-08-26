@@ -15,8 +15,8 @@ class VisualAnalysis:
     Generate linked plots that support brushing from a pandas.DataFrame and display them in Jupyter notebooks.
 
     :param data: the pandas.DataFrame object or a :class:`DataSource`
-    :param categorical_columns: if given, specifies which columns are to be interpreted as categorical
     :param layout: layout specification name or explicit definition of plot in rows
+    :param categorical_columns: if given, specifies which columns are to be interpreted as categorical
     :param row_height: height in pixels each row and consequently each plot should have
     :param sample: int or float specifying if the DataFrame should be sub-sampled.
         When an int is given, the DataFrame will be limited to that number of rows given by the value.
@@ -26,8 +26,9 @@ class VisualAnalysis:
     :param alpha: opacity of data points
     """
 
-    def __init__(self, data: typing.Union[DataFrame, DataSource], categorical_columns: typing.Union[typing.List[str], None] = None,
+    def __init__(self, data: typing.Union[DataFrame, DataSource],
                  layout: typing.Union[str, typing.List[typing.List[str]]] = 'default',
+                 categorical_columns: typing.Union[typing.List[str], None] = None,
                  row_height: int = 400,
                  sample: typing.Union[float, int, None] = None,
                  select_color: typing.Union[str, typing.Tuple[int, int, int]] = '#323EEC',

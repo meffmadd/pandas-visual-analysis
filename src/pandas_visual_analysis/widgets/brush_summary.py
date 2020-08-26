@@ -120,7 +120,7 @@ class BrushSummaryWidget(BaseWidget):
                 self.grid[(i + 1), 0].value = "<b>%s</b>" % col
 
     def _get_metric_html_content(self, metric_value: float, diff: float = None) -> str:
-        percentage = "100" if not diff else "%.2f" % (100 * (1 + diff))
+        percentage = "100%" if not diff else '{:.2%}'.format((1 + diff))
         color = "black" if not diff else self.pos_change_color if diff <= 0 else self.neg_change_color
         content = '<p style="margin-bottom:-10px;color:%s">%s</p>' \
                   '<p style="margin-bottom:-10px;color:%s">%.4f</p>' % (color, percentage, color, metric_value)
