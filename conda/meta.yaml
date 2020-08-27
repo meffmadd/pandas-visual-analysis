@@ -1,0 +1,35 @@
+
+{% set data = load_setup_py_data() %}
+
+package:
+  name: pandas-visual-analysis
+  version: {{ data['version'] }}
+
+source:
+  path: ..
+
+build:
+  number: 0
+  script: python setup.py install --single-version-externally-managed --record=record.txt
+
+requirements:
+  build:
+    - python
+    {% for req in data.get('install_requires', []) %}
+      - {{ req }}
+    {% endfor %}
+
+  run:
+    - python
+    {% for req in data.get('install_requires', []) %}
+      - {{ req }}
+    {% endfor %}
+
+test:
+  imports:
+    - pandas-visual-analysis
+
+about:
+  home: {{ data['url'] }}
+  license: {{ data['license'] }}
+summary: {{ data['description'] }}

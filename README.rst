@@ -1,4 +1,4 @@
-.. image:: docs/source/_static/assets/banner.jpeg
+.. image:: https://github.com/meffmadd/pandas-visual-analysis/blob/master/docs/source/_static/assets/banner.jpeg?raw=true
    :width: 95%
    :alt: banner
    :align: center
@@ -12,6 +12,10 @@
 
 .. image:: https://codecov.io/gh/meffmadd/pandas-visual-analysis/branch/master/graph/badge.svg
     :target: https://codecov.io/gh/meffmadd/pandas-visual-analysis
+
+.. image:: https://api.codeclimate.com/v1/badges/46ff86e0785eda2a2e80/maintainability
+   :target: https://codeclimate.com/github/meffmadd/pandas-visual-analysis/maintainability
+   :alt: Maintainability
 
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
     :target: https://github.com/psf/black
