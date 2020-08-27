@@ -22,7 +22,7 @@ Status
 
 Release
 
-.. image:: https://img.shields.io/pypi/v/pandas-visual-analysis?color=blue&label=release
+.. image:: https://img.shields.io/pypi/v/pandas-visual-analysis?color=blue
     :target: https://pypi.org/project/pandas-visual-analysis/
     :alt: PyPI
 
