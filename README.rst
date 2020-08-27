@@ -6,12 +6,23 @@
 .. image:: https://github.com/meffmadd/pandas-visual-analysis/workflows/Tests/badge.svg
     :target: https://github.com/meffmadd/pandas-visual-analysis/actions?query=workflow%3ATests
 
-.. image:: https://api.codacy.com/project/badge/Grade/87128508f93c474ba93f6eff45e5a9fb
-    :alt: Codacy Badge
-    :target: https://app.codacy.com/manual/meffmadd/pandas-visual-analysis?utm_source=github.com&utm_medium=referral&utm_content=meffmadd/pandas-visual-analysis&utm_campaign=Badge_Grade_Settings
+.. image:: https://readthedocs.org/projects/pandas-visual-analysis/badge/?version=latest
+    :target: https://pandas-visual-analysis.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
 
 .. image:: https://codecov.io/gh/meffmadd/pandas-visual-analysis/branch/master/graph/badge.svg
     :target: https://codecov.io/gh/meffmadd/pandas-visual-analysis
+
+.. image:: https://img.shields.io/pypi/v/pandas-visual-analysis?color=blue&label=release
+    :target: https://pypi.org/project/pandas-visual-analysis/
+    :alt: PyPI
+
+.. image:: https://img.shields.io/pypi/pyversions/pandas-visual-analysis
+    :alt: PyPI - Python Version
+
+.. image:: https://api.codacy.com/project/badge/Grade/87128508f93c474ba93f6eff45e5a9fb
+    :alt: Codacy Badge
+    :target: https://app.codacy.com/manual/meffmadd/pandas-visual-analysis?utm_source=github.com&utm_medium=referral&utm_content=meffmadd/pandas-visual-analysis&utm_campaign=Badge_Grade_Settings
 
 .. image:: https://api.codeclimate.com/v1/badges/46ff86e0785eda2a2e80/maintainability
    :target: https://codeclimate.com/github/meffmadd/pandas-visual-analysis/maintainability
@@ -24,21 +35,26 @@
     :alt: MIT License
     :target: https://opensource.org/licenses/MIT
 
-.. image:: https://readthedocs.org/projects/pandas-visual-analysis/badge/?version=latest
-    :target: https://pandas-visual-analysis.readthedocs.io/en/latest/?badge=latest
-    :alt: Documentation Status
+
+|
+|
 
 .. intro-start
 
 Pandas-Visual-Analysis enables visual analysis of a pandas ``DataFrame`` in Jupyter notebooks.
 It can display various different types of graphs with support for linked-brushing in interactive widgets.
 This allows data exploration and cognition to be easy and convenient, even with complex multivariate datasets.
+
 There is no need to setup and style plots or interactivity - its all ready without any configuration.
 
+|
+
 .. image:: https://github.com/meffmadd/pandas-visual-analysis/blob/master/docs/source/_static/assets/default_layout.gif?raw=true
-   :width: 70%
+   :width: 60%
    :alt: interactivity
    :align: center
+
+|
 
 .. intro-end
 
@@ -91,7 +107,7 @@ Having a ``DataFrame``, for example:
 
     df = pd.read_csv(url)
 
-you can just pass it to ``VisualAnalysis`` to display the default layout.
+you can just pass it to ``VisualAnalysis`` to display the default layout:
 
 .. code-block:: python
 
@@ -161,4 +177,13 @@ This outputs the following list of plots:
 
 Any of those can be part of the layout specification.
 
+See also: `widgets Documentation <https://pandas-visual-analysis.readthedocs.io/en/latest/api/widgets.html>`_.
+
 .. usage-end
+
+
+====================
+Documentation
+====================
+
+For more details see the `Official Documentation <https://pandas-visual-analysis.readthedocs.io/>`_.

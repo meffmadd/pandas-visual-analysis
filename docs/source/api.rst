@@ -7,9 +7,6 @@ Module
     api/visual_analysis
     api/layout
     api/data_source
-
-.. toctree::
-    :maxdepth: 2
-
     api/widgets
+
 
