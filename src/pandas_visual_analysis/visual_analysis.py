@@ -8,6 +8,7 @@ from pandas_visual_analysis.layout import AnalysisLayout
 from pandas_visual_analysis.utils.config import Config
 from pandas_visual_analysis.utils.util import hex_to_rgb
 import pandas_visual_analysis.utils.validation as validate
+from pandas_visual_analysis.widgets import WidgetClassRegistry
 
 
 class VisualAnalysis:
@@ -118,3 +119,7 @@ class VisualAnalysis:
                 if el in numerical_plots:
                     found_plots.add(el)
         return list(found_plots)
+
+    @staticmethod
+    def widgets():
+        return WidgetClassRegistry().widget_list

@@ -146,3 +146,9 @@ class TestRowHeight:
     def test_visual_analysis_row_height_neg_error(self, small_df):
         with pytest.raises(ValueError):
             VisualAnalysis(small_df, row_height=-10)
+
+
+class TestWidgetList:
+    def test_get_all_widgets(self, small_df):
+        assert isinstance(VisualAnalysis.widgets(), list)
+        assert len(VisualAnalysis.widgets()) != 0

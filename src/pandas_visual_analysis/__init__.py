@@ -4,3 +4,10 @@ from .visual_analysis import VisualAnalysis
 
 # Import Widgets so that they get registered
 import pandas_visual_analysis.widgets
+
+try:
+    import plotly.io as pio
+
+    pio.templates.default = "plotly_white"
+except ImportError:
+    pass

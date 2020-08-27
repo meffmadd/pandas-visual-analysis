@@ -47,7 +47,7 @@ def test_analysis_layout_build(small_df, populated_config):
     root_widget = layout.build()
     assert isinstance(root_widget, widgets.VBox)
     children = root_widget.children
-    assert len(children) == 2
+    assert len(children) == 3  # 2 + 1 for HTML(css)
     assert isinstance(children[0], widgets.HBox)
     assert isinstance(children[1], widgets.HBox)
     assert len(children[0].children) == 1

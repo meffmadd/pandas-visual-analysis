@@ -19,7 +19,7 @@ class DataSource(HasTraits):
     def __init__(
         self,
         df: DataFrame,
-        categorical_columns: typing.Union[typing.List[str], None],
+        categorical_columns: typing.Union[typing.List[str], None] = None,
         sample: typing.Union[float, int, None] = None,
         *args,
         **kwargs

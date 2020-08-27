@@ -34,7 +34,6 @@ release = "0.0.1"
 # ones.
 extensions = [
     # "recommonmark",
-    "m2r2",
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
     "sphinx.ext.coverage",
@@ -81,4 +80,5 @@ html_theme_options = {
     "gray_1": dark_gray,
     "gray_2": light_gray,
     "gray_3": medium_gray,
+    "pre_bg": "#ffffff",  # background color of code blocks and other preformatted text
 }

@@ -58,13 +58,13 @@ class BrushSummaryWidget(BaseWidget):
         self.num_grid_columns = 4
         self.num_grid_rows = len(self.columns) + 1  # + 1 for count
         self.grid = widgets.GridspecLayout(self.num_grid_rows, self.num_grid_columns)
+        self.grid.layout.height = "calc(100% - 40px)"
 
         self.base_metrics = self.data_source.data[self.columns].describe(include="all")
         self.brushed_metrics = self._get_brushed_metrics()
 
         self.pos_change_color = "red"
         self.neg_change_color = "green"
-        self.item_layout = widgets.Layout(height="auto", width="auto")
 
         self._fill_empty_grid()
         self._update_column_names()

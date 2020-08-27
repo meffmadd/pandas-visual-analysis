@@ -79,5 +79,12 @@ class AnalysisLayout:
                 row_widgets.append(widget.build())
             h_box = widgets.HBox(row_widgets)
             rows.append(h_box)
+
+        # workaround to include arbitrary css
+        css = "<style>"
+        css += ".jupyter-widgets { border-radius : 5px ; }"
+        css += "</style>"
+        rows.append(widgets.HTML(css))
+
         self.root_widget = widgets.VBox(rows)
         return self.root_widget
