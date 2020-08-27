@@ -15,7 +15,7 @@ build:
 requirements:
   build:
     - python
-    - setuptools
+    - setuptools >=49.2.0
 
   run:
     - python
