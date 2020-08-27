@@ -16,6 +16,7 @@ import sys
 sys.path.insert(0, os.path.abspath("./../../src/"))
 # sys.path.insert(0, os.path.join("..", "..", "src"))
 
+from pandas_visual_analysis.version import __version__
 
 # -- Project information -----------------------------------------------------
 
@@ -24,7 +25,7 @@ copyright = "2020, Matthias Matt"
 author = "Matthias Matt"
 
 # The full version, including alpha/beta/rc tags
-release = "0.0.1"
+release = __version__
 
 
 # -- General configuration ---------------------------------------------------
