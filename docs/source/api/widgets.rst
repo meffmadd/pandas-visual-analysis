@@ -1,5 +1,5 @@
 Widgets
------------
+========
 
 .. currentmodule:: pandas_visual_analysis
 
