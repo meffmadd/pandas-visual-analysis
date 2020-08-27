@@ -10,7 +10,7 @@ with (source_root / "README.rst").open(encoding="utf-8") as f:
 with (source_root / "requirements.txt").open(encoding="utf8") as f:
     requirements = f.readlines()
 
-version = "0.0.2"
+version = "0.0.3"
 
 with (source_root / "src" / "pandas_visual_analysis" / "version.py").open(
     "w", encoding="utf-8"
