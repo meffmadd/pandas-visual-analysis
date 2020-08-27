@@ -15,15 +15,16 @@ build:
 requirements:
   build:
     - python
-    {% for req in data.get('install_requires', []) %}
-      - {{ req }}
-    {% endfor %}
+    - setuptools
 
   run:
     - python
-    {% for req in data.get('install_requires', []) %}
-      - {{ req }}
-    {% endfor %}
+    - setuptools >=49.2.0
+    - traitlets >=4.3.3
+    - pandas >=1.1.0
+    - ipywidgets >=7.5.1
+    - numpy >=1.19.1
+    - plotly >=4.9.0
 
 test:
   imports:
