@@ -26,6 +26,10 @@ Release
     :target: https://pypi.org/project/pandas-visual-analysis/
     :alt: PyPI
 
+.. image:: https://img.shields.io/conda/v/meffmadd/pandas-visual-analysis?color=brightgreen&label=conda
+    :target: https://anaconda.org/meffmadd/pandas-visual-analysis
+    :alt: Conda
+
 .. image:: https://img.shields.io/pypi/pyversions/pandas-visual-analysis
     :alt: PyPI - Python Version
 
@@ -57,7 +61,7 @@ There is no need to setup and style plots or interactivity - its all ready witho
 |
 
 .. image:: https://github.com/meffmadd/pandas-visual-analysis/blob/master/docs/source/_static/assets/default_layout.gif?raw=true
-   :width: 60%
+   :width: 70%
    :alt: interactivity
    :align: center
 
@@ -74,11 +78,21 @@ Installation
 Using pip
 ##########
 
-You can install using the pip package manager by running
+To install this package with pip run:
 
 .. code-block::
 
     pip install pandas-visual-analysis
+
+
+Using conda
+###########
+
+To install this package with conda run:
+
+.. code-block::
+
+    conda install -c meffmadd pandas-visual-analysis
 
 From Source
 ###########
