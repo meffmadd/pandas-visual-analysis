@@ -7,9 +7,7 @@ ssl._create_default_https_context = ssl._create_unverified_context
 
 @pytest.fixture(scope="module")
 def mpg_df():
-    df = pd.read_csv(
-        "https://raw.githubusercontent.com/mwaskom/seaborn-data/master/mpg.csv"
-    )
+    df = pd.read_csv("./mpg.csv")
     yield df
 
 
