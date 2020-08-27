@@ -8,29 +8,29 @@ jobs:
   publish-pypi:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.6'
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install setuptools wheel twine
-    - name: Build and publish
-      env:
-        TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
-        TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-      run: |
-        python setup.py sdist bdist_wheel
-        twine upload dist/*
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.6'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install setuptools wheel twine
+      - name: Build and publish
+        env:
+          TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+        run: |
+          python setup.py sdist bdist_wheel
+          twine upload dist/*
 
   publish-conda:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: publish-to-conda
-        uses: meffmadd/conda-publish-action@v1.4
+        uses: fcakyon/conda-publish-action@v1.3
         with:
           subdir: 'conda'
           anacondatoken: ${{ secrets.ANACONDA_TOKEN }}

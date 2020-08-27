@@ -3,6 +3,9 @@
    :alt: banner
    :align: center
 
+
+Status
+
 .. image:: https://github.com/meffmadd/pandas-visual-analysis/workflows/Tests/badge.svg
     :target: https://github.com/meffmadd/pandas-visual-analysis/actions?query=workflow%3ATests
 
@@ -13,12 +16,20 @@
 .. image:: https://codecov.io/gh/meffmadd/pandas-visual-analysis/branch/master/graph/badge.svg
     :target: https://codecov.io/gh/meffmadd/pandas-visual-analysis
 
+.. image:: https://img.shields.io/badge/License-MIT-yellow.svg
+    :alt: MIT License
+    :target: https://opensource.org/licenses/MIT
+
+Release
+
 .. image:: https://img.shields.io/pypi/v/pandas-visual-analysis?color=blue&label=release
     :target: https://pypi.org/project/pandas-visual-analysis/
     :alt: PyPI
 
 .. image:: https://img.shields.io/pypi/pyversions/pandas-visual-analysis
     :alt: PyPI - Python Version
+
+Code
 
 .. image:: https://api.codacy.com/project/badge/Grade/87128508f93c474ba93f6eff45e5a9fb
     :alt: Codacy Badge
@@ -30,10 +41,6 @@
 
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
     :target: https://github.com/psf/black
-
-.. image:: https://img.shields.io/badge/License-MIT-yellow.svg
-    :alt: MIT License
-    :target: https://opensource.org/licenses/MIT
 
 
 |
