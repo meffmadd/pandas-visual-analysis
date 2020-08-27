@@ -24,6 +24,3 @@ python:
   setup_py_install: true
   install:
     - requirements: ./requirements_dev.txt
-    extra_requirements:
-      - jupyter-client>=6.0.0
-      - jupyter-core>=4.6.3
