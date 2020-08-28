@@ -8,9 +8,17 @@ import pandas_visual_analysis.utils.validation as validate
 
 class DataSource(HasTraits):
     """
+    The DataSource object provides the data itself to the plots and also manages the brushing between the plots.
+    If the plots observe the brushed_indices property of this class, they can react to any change in the data.
+    It is also possible to set the brushed_indices property to trigger the change in any instances that observe
+    this property. In addition to the brushed indices, this class also provides the brushed data directly, which
+    is cached to speed up subsequent access to the data.
 
-    :param df: the the pandas.DataFrame object
-    :param categorical_columns: if given, specifies which columns are to be interpreted as categorical
+    :param df: A pandas.DataFrame object
+    :param categorical_columns: If given, specifies which columns are to be interpreted as categorical.
+        Those columns have to include all columns of the DataFrame
+        which have type `object`, `str`, `bool` or `category`.
+        This means it can only add columns which do not have the aforementioned types.
     """
 
     _df = Instance(klass=DataFrame)
@@ -118,12 +126,17 @@ class DataSource(HasTraits):
         self.few_cat_cols = len(self.categorical_columns) < 2
 
     def reset_selection(self):
+        """
+        Reset all the indices to the original state, that is all indices are selected.
+
+        :return: None
+        """
         self._brushed_indices = self._indices
 
     @property
     def len(self) -> int:
         """
-        :return: Returns the length of the DataFrame
+        :return: The length of the DataFrame
         """
         return self._length
 
@@ -133,15 +146,16 @@ class DataSource(HasTraits):
     @property
     def brushed_indices(self) -> typing.List[int]:
         """
-        :return: Returns the selected indices.
+        :return: The currently selected indices.
         """
         return self._brushed_indices
 
     @brushed_indices.setter
     def brushed_indices(self, indices: typing.List[int]):
         """
-        Selects specified indices in the DataFrame
-        :param indices: indices of data points that are brushed
+        Sets the specified indices as selection in the data.
+
+        :param indices: indices of data points that should be brushed.
         """
         self._brushed_indices = indices
 
@@ -150,7 +164,8 @@ class DataSource(HasTraits):
         """
         Only determines brushed data if it was invalidated by new selected indices.
         This gives more efficiency if only the brushed indices are needed and not the brushed data.
-        :return: Returns the selected data corresponding to the indices.
+
+        :return: The selected data corresponding to the indices.
         """
         if self.brushed_data_invalidated:
             self._brushed_data = self._df.iloc[self._brushed_indices, :]
@@ -160,17 +175,26 @@ class DataSource(HasTraits):
     @property
     def indices(self) -> typing.List[int]:
         """
-        :return: Returns all indices of the data frame. This is a list from 0 to len-1.
+
+        :return: All indices of the data frame. This is a list from 0 to len-1.
         """
         return self._indices
 
     @property
     def data(self) -> DataFrame:
         """
+
         :return: The DataFrame for this :class:`pandas_visual_analysis.data_source.DataSource` object.
         """
         return self._df
 
     @observe("_brushed_indices")
     def _observe_indices(self, change):
+        """
+        Observes any change in the _brushed_indices property and sets the current brushed_data property to dirty.
+        This has the effect that the cached value for brushed_data is being re-indexed once it is needed.
+
+        :param change: Dictionary containing all the change information e.g. new and old values.
+        :return: None
+        """
         self.brushed_data_invalidated = True

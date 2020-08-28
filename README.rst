@@ -46,6 +46,9 @@ Code
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
     :target: https://github.com/psf/black
 
+.. image:: https://img.shields.io/github/languages/code-size/meffmadd/pandas-visual-analysis
+    :alt: GitHub code size in bytes
+
 
 |
 |
@@ -98,7 +101,7 @@ From Source
 ###########
 
 Clone into the repository or download the `zip file <https://github.com/meffmadd/pandas-visual-analysis/archive/master.zip>`_
-and run
+and run:
 
 .. code-block::
 

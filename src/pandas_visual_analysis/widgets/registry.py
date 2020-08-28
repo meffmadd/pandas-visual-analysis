@@ -4,6 +4,11 @@ from pandas_visual_analysis.utils.util import Singleton
 
 
 class WidgetClassRegistry(object, metaclass=Singleton):
+    """
+    The :class:`WidgetClassRegistry` contains all names and the corresponding classes of the widgets that have been
+    registered.
+    """
+
     def __init__(self):
         self.registry = {}
 
@@ -11,7 +16,7 @@ class WidgetClassRegistry(object, metaclass=Singleton):
     def widget_set(self) -> Set[str]:
         """
 
-        :return: Returns the set of names of all widgets registered in this object.
+        :return: The set of names of all widgets registered in this object.
         """
         return set(self.registry.keys())
 
@@ -28,7 +33,7 @@ class WidgetClassRegistry(object, metaclass=Singleton):
         Checks if a widget has been registered by name.
 
         :param name: Class name of the widget.
-        :return: Returns True iff the widget name is contained in the registry, False otherwise.
+        :return: True iff the widget name is contained in the registry, False otherwise.
         """
         return name in self.registry
 
@@ -48,7 +53,7 @@ class WidgetClassRegistry(object, metaclass=Singleton):
         The class has to end with 'Widget' in order to be registered, which is then removed from the name.
         This means 'TestWidget' will be registered as 'Test'.
 
-        :param cls: Widget to add.
+        :param cls: Widget class to add.
         :raises ValueError: if class name does not end with 'Widget'
         """
         if not cls.__name__.endswith("Widget"):
@@ -63,7 +68,7 @@ def register_widget(cls):
     """
     Class decorator to add a widget class to the widget registry.
 
-    :param cls: The class to add. The class name has to end in 'Widget'
+    :param cls: The class to add. The class name has to end in 'Widget'.
     :return: The widget class.
     """
     WidgetClassRegistry().add(cls)

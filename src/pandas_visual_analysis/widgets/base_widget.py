@@ -93,7 +93,7 @@ class BaseWidget(HasTraits):
     def observe_brush_indices_change(self, change):
         """
         This method observes the changes in the brush selection.
-        In order to actually observe changes it has to be registered in :meth:`set_observers`
+        In order to actually observe changes it has to be registered in :meth:`set_observers`.
 
         :param change: Value containing the new and old values that can be accessed with change['new'] or change['old'].
         """

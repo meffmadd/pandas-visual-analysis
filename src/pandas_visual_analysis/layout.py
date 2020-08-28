@@ -65,6 +65,7 @@ class AnalysisLayout:
         """
         Generates widgets from layout and returns the root widget for this layout.
         Rows are in a VBox while plots in the rows are in HBox widgets.
+
         :return: self.root_widget
         """
         wcr = WidgetClassRegistry()
