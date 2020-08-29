@@ -11,11 +11,13 @@ from pandas_visual_analysis.widgets.helpers.multi_select import HasMultiSelect
 
 @register_widget
 class ParallelCategoriesWidget(BaseWidget, HasMultiSelect):
-    """
+    """The ParallelCategoriesWidget is useful for high dimensional data and
+    supports brushing.
 
-    The ParallelCategoriesWidget is useful for high dimensional data and supports brushing.
-    Only displays categorical columns, which can be reordered arbitrarily.
-    Displays a multi column selection if there are too many columns to display them all at once.
+    Only displays categorical columns, which can be reordered
+    arbitrarily. Displays a multi column selection if there are too many
+    columns to display them all at once.
+
     """
 
     def __init__(

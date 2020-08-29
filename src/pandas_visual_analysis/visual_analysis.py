@@ -13,9 +13,8 @@ from pandas_visual_analysis.widgets import WidgetClassRegistry
 
 class VisualAnalysis:
 
-    """
-    Generate linked plots that support brushing from a pandas.DataFrame and display them in Jupyter notebooks.
-    """
+    """Generate linked plots that support brushing from a pandas.DataFrame and
+    display them in Jupyter notebooks."""
 
     def __init__(
         self,
@@ -104,10 +103,10 @@ class VisualAnalysis:
             )
 
     def _ipython_display_(self):
-        """
-        Builds the layout and calls :func:`IPython.core.display.display`
+        """Builds the layout and calls :func:`IPython.core.display.display`
 
         :return:
+
         """
         from IPython.core.display import display
         from ipywidgets import widgets
@@ -117,10 +116,11 @@ class VisualAnalysis:
         display(root_widget)
 
     def _check_numerical_plots(self) -> typing.List[str]:
-        """
-        Checks if the layout contains widgets that can only display numerical data.
+        """Checks if the layout contains widgets that can only display
+        numerical data.
 
         :return: Set of widgets in the layout that are strictly numerical. Empty set otherwise.
+
         """
         numerical_plots = {"ParallelCoordinates"}
         found_plots = set()
@@ -131,10 +131,11 @@ class VisualAnalysis:
         return list(found_plots)
 
     def _check_categorical_plots(self) -> typing.List[str]:
-        """
-        Checks if the layout contains widgets that can only display categorical data.
+        """Checks if the layout contains widgets that can only display
+        categorical data.
 
         :return: Set of widgets in the layout that are strictly categorical. Empty set otherwise.
+
         """
         numerical_plots = {"ParallelCategories"}
         found_plots = set()

@@ -9,12 +9,15 @@ from pandas_visual_analysis.widgets import BaseWidget, register_widget
 
 @register_widget
 class BrushSummaryWidget(BaseWidget):
-    """
+    """The BrushSummaryWidget displays how a metric changes for the selection
+    compared to the whole data.
 
-    The BrushSummaryWidget displays how a metric changes for the selection compared to the whole data.
-    It shows all of the data as the baseline and displays the change in absolute values and as a percentage value.
-    In addition it also displays arrows indicating the change with both color and direction.
-    The magnitude of the change is illustrated as the size of the arrow to see the sensitivity at a glance.
+    It shows all of the data as the baseline and displays the change in
+    absolute values and as a percentage value. In addition it also
+    displays arrows indicating the change with both color and direction.
+    The magnitude of the change is illustrated as the size of the arrow
+    to see the sensitivity at a glance.
+
     """
 
     def __init__(
