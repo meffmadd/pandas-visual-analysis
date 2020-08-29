@@ -16,16 +16,11 @@ from pandas_visual_analysis.widgets.helpers.multi_select import (
 
 @register_widget
 class ParallelCoordinatesWidget(BaseWidget, HasMultiSelect):
+
     """
     The ParallelCoordinatesWidget shows a parallel coordinates plot for high dimensional data and supports brushing.
     Only displays numerical columns, which can be reordered arbitrarily.
     Displays a multi column selection if there are too many columns to display them all at once.
-
-    :param data_source: :class:`pandas_visual_analysis.data_source.DataSource` for the widget.
-    :param row: The row the widget is in.
-    :param index: Index of the row the widget is in.
-    :param relative_size: The space the widget has in a row which is then converted to the width. (e.g. 0.33 => 33%)
-    :param max_height: height in pixels the plot has to have
     """
 
     def __init__(
@@ -36,6 +31,14 @@ class ParallelCoordinatesWidget(BaseWidget, HasMultiSelect):
         relative_size: float,
         max_height: int,
     ):
+        """
+
+        :param data_source: :class:`pandas_visual_analysis.data_source.DataSource` for the widget.
+        :param row: The row the widget is in.
+        :param index: Index of the row the widget is in.
+        :param relative_size: The space the widget has in a row which is then converted to the width. (e.g. 0.33 => 33%)
+        :param max_height: height in pixels the plot has to have
+        """
         super(ParallelCoordinatesWidget, self).__init__(
             data_source, row, index, relative_size, max_height
         )
@@ -220,8 +223,15 @@ class ParallelCoordinatesWidget(BaseWidget, HasMultiSelect):
             self.figure_widget.data[0].dimensions = [
                 self._get_dimension_dict(col) for col in self.selected_columns
             ]
-            for dim in self.figure_widget.data[0].dimensions:
-                if dim["label"] in old_constraint_ranges.keys():
-                    dim["constraintrange"] = old_constraint_ranges[dim["label"]]
+        #  add old constraint ranges to plot
+        for dim in self.figure_widget.data[0].dimensions:
+            if dim["label"] in old_constraint_ranges.keys():
+                dim["constraintrange"] = old_constraint_ranges[dim["label"]]
+
+        # if constraint ranges were removed by deselecting a column with a constraint update selection
+        # only updates if constraint ranges actually change, else it returns without updating the selection
+        self._on_selection_helper(
+            None, dimensions=self.figure_widget.data[0].dimensions
+        )
 
         self.figure_widget.data[0].on_change(self._on_selection_helper, "dimensions")

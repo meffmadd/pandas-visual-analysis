@@ -31,6 +31,7 @@ Release
     :alt: Conda
 
 .. image:: https://img.shields.io/pypi/pyversions/pandas-visual-analysis
+    :target: https://pypi.org/project/pandas-visual-analysis/
     :alt: PyPI - Python Version
 
 Code
@@ -48,6 +49,7 @@ Code
 
 .. image:: https://img.shields.io/github/languages/code-size/meffmadd/pandas-visual-analysis
     :alt: GitHub code size in bytes
+    :target: https://github.com/meffmadd/pandas-visual-analysis
 
 
 |
@@ -55,11 +57,11 @@ Code
 
 .. intro-start
 
-Pandas-Visual-Analysis enables visual analysis of a pandas ``DataFrame`` in Jupyter notebooks.
+Generates an `interactive visual analysis <https://en.wikipedia.org/wiki/Interactive_visual_analysis>`_ widget to analyze a pandas ``DataFrame`` in Jupyter notebooks.
 It can display various different types of graphs with support for linked-brushing in interactive widgets.
-This allows data exploration and cognition to be easy and convenient, even with complex multivariate datasets.
+This allows data exploration and cognition to be simple, even with complex multivariate datasets.
 
-There is no need to setup and style plots or interactivity - its all ready without any configuration.
+There is no need to create and style plots or interactivity - its all ready without any configuration.
 
 |
 
@@ -100,7 +102,7 @@ To install this package with conda run:
 From Source
 ###########
 
-Clone into the repository or download the `zip file <https://github.com/meffmadd/pandas-visual-analysis/archive/master.zip>`_
+To install this package from source, clone into the repository or download the `zip file <https://github.com/meffmadd/pandas-visual-analysis/archive/master.zip>`_
 and run:
 
 .. code-block::
@@ -138,7 +140,7 @@ you can just pass it to ``VisualAnalysis`` to display the default layout:
     from pandas_visual_analysis import VisualAnalysis
     VisualAnalysis(df)
 
-If you want to specify which columns of the ``DataFrame`` are categorical, just pass the ``categorical_coumns`` option:
+If you want to specify which columns of the ``DataFrame`` are categorical, just pass the ``categorical_columns`` option:
 
 .. code-block:: python
 
@@ -150,8 +152,7 @@ If you want to specify which columns of the ``DataFrame`` are categorical, just 
 Using DataSource
 ################
 
-Instead of passing the ``DataFrame`` object directly to ``VisualAnalysis`` it is possible to use a
-a ``DataSource`` object.
+Instead of passing the ``DataFrame`` object directly to ``VisualAnalysis`` it is possible to use a ``DataSource`` object.
 This enables linked-brushing across multiple notebook cells if the object is used across cells.
 
 .. code-block:: python
@@ -175,6 +176,8 @@ If you want to specify your own layout, you can do that by passing the ``layout`
 The parameter is a list of rows, where each row is in turn a list specifying the Widgets in that row.
 
 .. code-block:: python
+
+    from pandas_visual_analysis import VisualAnalysis
 
     VisualAnalysis(df,
         layout=[["Scatter", "Scatter"],

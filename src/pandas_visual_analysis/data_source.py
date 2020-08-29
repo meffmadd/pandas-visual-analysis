@@ -7,18 +7,13 @@ import pandas_visual_analysis.utils.validation as validate
 
 
 class DataSource(HasTraits):
+
     """
     The DataSource object provides the data itself to the plots and also manages the brushing between the plots.
     If the plots observe the brushed_indices property of this class, they can react to any change in the data.
     It is also possible to set the brushed_indices property to trigger the change in any instances that observe
     this property. In addition to the brushed indices, this class also provides the brushed data directly, which
     is cached to speed up subsequent access to the data.
-
-    :param df: A pandas.DataFrame object
-    :param categorical_columns: If given, specifies which columns are to be interpreted as categorical.
-        Those columns have to include all columns of the DataFrame
-        which have type `object`, `str`, `bool` or `category`.
-        This means it can only add columns which do not have the aforementioned types.
     """
 
     _df = Instance(klass=DataFrame)
@@ -29,12 +24,27 @@ class DataSource(HasTraits):
         df: DataFrame,
         categorical_columns: typing.Union[typing.List[str], None] = None,
         sample: typing.Union[float, int, None] = None,
+        seed: typing.Union[int, None] = None,
         *args,
         **kwargs
     ):
+        """
+
+        :param df: A pandas.DataFrame object
+        :param categorical_columns: If given, specifies which columns are to be interpreted as categorical.
+            Those columns have to include all columns of the DataFrame
+            which have type `object`, `str`, `bool` or `category`.
+            This means it can only add columns which do not have the aforementioned types.
+        :param seed: Random seed used for sampling the data.
+            Values can be any integer between 0 and 2**32 - 1 inclusive or None.
+        :param args: args for HasTraits superclass
+        :param kwargs: kwargs for HasTraits superclass
+
+        """
         super().__init__(*args, **kwargs)
         validate.validate_data_frame(df)
         validate.validate_sample(sample)
+        validate.validate_seed(seed)
 
         if sample is None:
             self._df = df
@@ -45,14 +55,14 @@ class DataSource(HasTraits):
                         "Sample has to be between 0.0 and 1.0. Invalid value : %d"
                         % sample
                     )
-                self._df = df.sample(frac=sample)
+                self._df = df.sample(frac=sample, random_state=seed)
             else:
                 if sample < 0 or sample > len(df):
                     raise ValueError(
                         "Sample has to be between 0 and the length of the DataFrame (%d). Invalid value: "
                         "%d" % (len(df), sample)
                     )
-                self._df = df.sample(n=sample)
+                self._df = df.sample(n=sample, random_state=seed)
         self.columns = list(self._df.columns.values)
 
         if isinstance(categorical_columns, list):
@@ -136,6 +146,7 @@ class DataSource(HasTraits):
     @property
     def len(self) -> int:
         """
+
         :return: The length of the DataFrame
         """
         return self._length
@@ -146,6 +157,7 @@ class DataSource(HasTraits):
     @property
     def brushed_indices(self) -> typing.List[int]:
         """
+
         :return: The currently selected indices.
         """
         return self._brushed_indices

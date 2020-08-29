@@ -9,13 +9,10 @@ import pandas_visual_analysis.utils.validation as validate
 
 
 class AnalysisLayout:
+
     """
     The AnalysisLayout class determines which widgets should be displayed in the analysis
     and defines their position and size.
-
-    :param layout: the layout specification
-    :param row_height: height in pixels each row and consequently each plot should have
-    :param data_source: the :class:`pandas_visual_analysis.data_source.DataSource` object passed to the widgets
     """
 
     root_widget = None
@@ -32,6 +29,12 @@ class AnalysisLayout:
         *args,
         **kwargs
     ):
+        """
+
+        :param layout: the layout specification
+        :param row_height: height in pixels each row and consequently each plot should have
+        :param data_source: the :class:`pandas_visual_analysis.data_source.DataSource` object passed to the widgets
+        """
         super().__init__(*args, **kwargs)
 
         validate.validate_row_height(row_height)

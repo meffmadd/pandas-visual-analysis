@@ -10,16 +10,11 @@ from pandas_visual_analysis.widgets.registry import register_widget
 
 @register_widget
 class ScatterWidget(BaseWidget):
+
     """
     The ScatterWidget displays a scatter plot to highlight the relation
     between two numerical, time-based or categorical dimensions.
     In addition to selecting the x- and y-axis, it is also possible show an additional dimension as the size.
-
-    :param data_source: :class:`pandas_visual_analysis.data_source.DataSource` for the widget.
-    :param row: The row the widget is in.
-    :param index: Index of the row the widget is in.
-    :param relative_size: The space the widget has in a row which is then converted to the width. (e.g. 0.33 => 33%)
-    :param max_height: height in pixels the plot has to have
     """
 
     def __init__(
@@ -30,6 +25,14 @@ class ScatterWidget(BaseWidget):
         relative_size: float,
         max_height: int,
     ):
+        """
+
+        :param data_source: :class:`pandas_visual_analysis.data_source.DataSource` for the widget.
+        :param row: The row the widget is in.
+        :param index: Index of the row the widget is in.
+        :param relative_size: The space the widget has in a row which is then converted to the width. (e.g. 0.33 => 33%)
+        :param max_height: height in pixels the plot has to have
+        """
         super().__init__(data_source, row, index, relative_size, max_height)
 
         all_columns = (

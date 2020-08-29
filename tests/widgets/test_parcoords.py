@@ -68,9 +68,11 @@ class TestOnSelectionHelper:
 
         ds = DataSource(small_df, None)
         ps = ParallelCoordinatesWidget(ds, 0, 0, 1.0, 400)
-        dimensions = ps.figure_widget.data[0].dimensions
-        assert len(dimensions) != 0
-        dimensions = fill_sample_constraint_range(dimensions, "a", [2, 5])
+        old_dimensions = deepcopy(
+            ps.figure_widget.data[0].dimensions
+        )  # no constraint ranges
+        assert len(old_dimensions) != 0
+        dimensions = fill_sample_constraint_range(old_dimensions, "a", [2, 5])
         print(dimensions)
 
         ps.on_selection = on_selection_assert
@@ -84,9 +86,11 @@ class TestOnSelectionHelper:
 
         ds = DataSource(small_df, None)
         ps = ParallelCoordinatesWidget(ds, 0, 0, 1.0, 400)
-        dimensions = ps.figure_widget.data[0].dimensions
-        assert len(dimensions) != 0
-        dimensions = fill_sample_constraint_range(dimensions, "a", [1.5, 5])
+        old_dimensions = deepcopy(
+            ps.figure_widget.data[0].dimensions
+        )  # no constraint ranges
+        assert len(old_dimensions) != 0
+        dimensions = fill_sample_constraint_range(old_dimensions, "a", [1.5, 5])
         print(dimensions)
 
         ps.on_selection = on_selection_assert
@@ -153,6 +157,30 @@ class TestBrushIndicesChange:
             if dimension.label == "a":
                 assert dimension["constraintrange"] is None
                 break
+
+
+class TestRedraw:
+    def test_redraw_plot_keep_old_constraint_ranges(
+        self, rand_float_df, populated_config
+    ):
+        ds = DataSource(rand_float_df, None)
+        ps = ParallelCoordinatesWidget(ds, 0, 0, 0.2, 400)
+
+        dimensions = ps.figure_widget.data[0].dimensions
+        assert len(dimensions) != 0
+        dimensions = fill_sample_constraint_range(dimensions, "A", [1.5, 5])
+        ps.figure_widget.data[0].dimensions = dimensions
+
+        ps.selected_columns = ["A", "B"]
+        ps._redraw_plot()
+
+        updated_ranges = {
+            dim["label"]: dim["constraintrange"]
+            for dim in ps.figure_widget.data[0].dimensions
+            if dim["constraintrange"]
+        }
+
+        assert list(updated_ranges["A"]) == [1.5, 5]
 
 
 class TestMultiSelect:

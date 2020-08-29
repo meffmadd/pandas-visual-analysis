@@ -9,15 +9,10 @@ from pandas_visual_analysis.widgets import BaseWidget, register_widget
 
 @register_widget
 class HistogramWidget(BaseWidget):
+
     """
     The HistogramWidget displays a single dimension of the data as a histogram where the brush selection
     is overlaid to see the distribution of both the underlying data and the selection.
-
-    :param data_source: :class:`pandas_visual_analysis.data_source.DataSource` for the widget.
-    :param row: The row the widget is in.
-    :param index: Index of the row the widget is in.
-    :param relative_size: The space the widget has in a row which is then converted to the width. (e.g. 0.33 => 33%)
-    :param max_height: height in pixels the plot has to have
     """
 
     def __init__(
@@ -28,6 +23,14 @@ class HistogramWidget(BaseWidget):
         relative_size: float,
         max_height: int,
     ):
+        """
+
+        :param data_source: :class:`pandas_visual_analysis.data_source.DataSource` for the widget.
+        :param row: The row the widget is in.
+        :param index: Index of the row the widget is in.
+        :param relative_size: The space the widget has in a row which is then converted to the width. (e.g. 0.33 => 33%)
+        :param max_height: height in pixels the plot has to have
+        """
         super().__init__(data_source, row, index, relative_size, max_height)
 
         self.columns = (

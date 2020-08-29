@@ -9,17 +9,12 @@ from pandas_visual_analysis.widgets import BaseWidget, register_widget
 
 @register_widget
 class BoxPlotWidget(BaseWidget):
+
     """
     The BoxPlotWidget displays a box plot for a single column with additional information of mean and standard deviation
     as a diamond.
     Per default the plot shows all the points side-by-side in order to select points.
     This behaviour can be changed to show only the outliers as points or no points at all.
-
-    :param data_source: :class:`pandas_visual_analysis.data_source.DataSource` for the widget.
-    :param row: The row the widget is in.
-    :param index: Index of the row the widget is in.
-    :param relative_size: The space the widget has in a row which is then converted to the width. (e.g. 0.33 => 33%)
-    :param max_height: height in pixels the plot has to have
     """
 
     def __init__(
@@ -30,6 +25,14 @@ class BoxPlotWidget(BaseWidget):
         relative_size: float,
         max_height: int,
     ):
+        """
+
+        :param data_source: :class:`pandas_visual_analysis.data_source.DataSource` for the widget.
+        :param row: The row the widget is in.
+        :param index: Index of the row the widget is in.
+        :param relative_size: The space the widget has in a row which is then converted to the width. (e.g. 0.33 => 33%)
+        :param max_height: height in pixels the plot has to have
+        """
         super().__init__(data_source, row, index, relative_size, max_height)
 
         self.columns = self.data_source.numerical_columns

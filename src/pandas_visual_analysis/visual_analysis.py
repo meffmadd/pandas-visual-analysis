@@ -12,19 +12,9 @@ from pandas_visual_analysis.widgets import WidgetClassRegistry
 
 
 class VisualAnalysis:
+
     """
     Generate linked plots that support brushing from a pandas.DataFrame and display them in Jupyter notebooks.
-
-    :param data: the pandas.DataFrame object or a :class:`DataSource`
-    :param layout: layout specification name or explicit definition of plot in rows
-    :param categorical_columns: if given, specifies which columns are to be interpreted as categorical
-    :param row_height: height in pixels each row and consequently each plot should have
-    :param sample: int or float specifying if the DataFrame should be sub-sampled.
-        When an int is given, the DataFrame will be limited to that number of rows given by the value.
-        When a float is given, the DataFrame will include the fraction of rows given by the value.
-    :param select_color: RGB tuple or hex color specifying the color display selected data points
-    :param deselect_color: RGB tuple or hex color specifying the color display deselected data points
-    :param alpha: opacity of data points
     """
 
     def __init__(
@@ -37,7 +27,23 @@ class VisualAnalysis:
         select_color: typing.Union[str, typing.Tuple[int, int, int]] = "#323EEC",
         deselect_color: typing.Union[str, typing.Tuple[int, int, int]] = "#8A8C93",
         alpha: float = 0.75,
+        seed: typing.Union[int, None] = None,
     ):
+        """
+
+        :param data: the pandas.DataFrame object or a :class:`DataSource`
+        :param layout: layout specification name or explicit definition of plot in rows
+        :param categorical_columns: if given, specifies which columns are to be interpreted as categorical
+        :param row_height: height in pixels each row and consequently each plot should have
+        :param sample: int or float specifying if the DataFrame should be sub-sampled.
+            When an int is given, the DataFrame will be limited to that number of rows given by the value.
+            When a float is given, the DataFrame will include the fraction of rows given by the value.
+        :param select_color: RGB tuple or hex color specifying the color display selected data points
+        :param deselect_color: RGB tuple or hex color specifying the color display deselected data points
+        :param alpha: opacity of data points
+        :param seed: Random seed used for sampling the data.
+            Values can be any integer between 0 and 2**32 - 1 inclusive or None.
+        """
         super().__init__()
 
         validate.validate_data(data)
@@ -71,7 +77,10 @@ class VisualAnalysis:
 
         if isinstance(data, DataFrame):
             self.data_source = DataSource(
-                df=data, categorical_columns=categorical_columns, sample=sample
+                df=data,
+                categorical_columns=categorical_columns,
+                sample=sample,
+                seed=seed,
             )
         elif isinstance(data, DataSource):
             self.data_source = data

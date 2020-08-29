@@ -62,3 +62,16 @@ def validate_color(color):
         raise ValueError(
             "RGB values have to be between 0 and 255. Invalid values: %s" % str(color)
         )
+
+
+def validate_seed(seed):
+    if isinstance(seed, int) or seed is None:
+        if isinstance(seed, int) and (seed < 0 or seed > (2 ** 32 - 1)):
+            raise ValueError(
+                "The seed has to be an integer between 0 and 2**32 - 1. Invalid value: %d"
+                % seed
+            )
+    else:
+        raise TypeError(
+            "The seed has to be an integer between 0 and 2**32 - 1 inclusive or None."
+        )
