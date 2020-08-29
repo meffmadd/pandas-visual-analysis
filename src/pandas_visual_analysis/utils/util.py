@@ -64,11 +64,21 @@ def timing(f):
 
 class Timer:
     def __init__(self, name: str = "Default Time"):
+        """
+        The Timer class can be used to measure the elapsed time between starting the timer and stopping in.
+
+        :param name: The name of the timer to print when it is stopped.
+        """
         self.end_time = None
         self.name = name
         self.start_time = time.time()
 
     def stop(self):
+        """
+        Print the elapsed time between starting the timer and stopping it in milliseconds.
+
+        :return: None
+        """
         self.end_time = time.time()
         print(
             "Timer: {:s} took {:.3f} ms".format(

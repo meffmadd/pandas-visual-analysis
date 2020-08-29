@@ -5,11 +5,16 @@ from pandas_visual_analysis.utils.util import Singleton
 
 class WidgetClassRegistry(object, metaclass=Singleton):
     """
+
     The :class:`WidgetClassRegistry` contains all names and the corresponding classes of the widgets that have been
     registered.
     """
 
     def __init__(self):
+        """
+
+        The registry keeps track of all widgets.
+        """
         self.registry = {}
 
     @property

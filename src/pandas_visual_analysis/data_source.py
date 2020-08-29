@@ -147,11 +147,15 @@ class DataSource(HasTraits):
     def len(self) -> int:
         """
 
-        :return: The length of the DataFrame
+        :return: The length of the DataFrame.
         """
         return self._length
 
     def __len__(self):
+        """
+
+        :return: The length of the DataFrame.
+        """
         return self._length
 
     @property

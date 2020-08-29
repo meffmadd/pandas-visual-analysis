@@ -9,8 +9,8 @@ from pandas_visual_analysis.widgets import BaseWidget, register_widget
 
 @register_widget
 class HistogramWidget(BaseWidget):
-
     """
+
     The HistogramWidget displays a single dimension of the data as a histogram where the brush selection
     is overlaid to see the distribution of both the underlying data and the selection.
     """

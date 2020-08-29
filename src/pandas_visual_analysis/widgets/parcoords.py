@@ -16,8 +16,8 @@ from pandas_visual_analysis.widgets.helpers.multi_select import (
 
 @register_widget
 class ParallelCoordinatesWidget(BaseWidget, HasMultiSelect):
-
     """
+
     The ParallelCoordinatesWidget shows a parallel coordinates plot for high dimensional data and supports brushing.
     Only displays numerical columns, which can be reordered arbitrarily.
     Displays a multi column selection if there are too many columns to display them all at once.
