@@ -10,8 +10,10 @@ import pandas_visual_analysis.utils.validation as validate
 
 class AnalysisLayout:
 
-    """The AnalysisLayout class determines which widgets should be displayed in
-    the analysis and defines their position and size."""
+    """
+    The AnalysisLayout class determines which widgets should be displayed in the analysis
+    and defines their position and size.
+    """
 
     root_widget = None
 
@@ -63,11 +65,11 @@ class AnalysisLayout:
         self.row_height = row_height
 
     def build(self) -> widgets.Widget:
-        """Generates widgets from layout and returns the root widget for this
-        layout. Rows are in a VBox while plots in the rows are in HBox widgets.
+        """
+        Generates widgets from layout and returns the root widget for this layout.
+        Rows are in a VBox while plots in the rows are in HBox widgets.
 
         :return: self.root_widget
-
         """
         wcr = WidgetClassRegistry()
         rows = []

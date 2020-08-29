@@ -4,13 +4,11 @@ from typing import Tuple
 
 
 def hex_to_rgb(hex_value: str) -> Tuple[int, int, int]:
-    """Converts a valid hexadecimal color string given by '#XXXXXX' to a tuple
-    representing RGB values. If the string representation does not match the
-    above description, a ValueError is raised.
-
+    """
+    Converts a valid hexadecimal color string given by '#XXXXXX' to a tuple representing RGB values.
+    If the string representation does not match the above description, a ValueError is raised.
     :param hex_value: String representation of hexadecimal color.
     :return: Tuple of RGB color values: (R,G,B)
-
     """
     if len(hex_value) != 7 or hex_value[0] != "#":
         raise ValueError(
@@ -28,14 +26,13 @@ def hex_to_rgb(hex_value: str) -> Tuple[int, int, int]:
 
 
 def compare_lists(s, t):
-    """Compares two unordered lists and checks for equality. Duplicates are
-    considered and False is returned when one list has a different number of
-    the same item. The objects in the list have to be hashable.
-
+    """
+    Compares two unordered lists and checks for equality.
+    Duplicates are considered and False is returned when one list has a different number of the same item.
+    The objects in the list have to be hashable.
     :param s: The first list to compare.
     :param t: The second list to compare.
     :return: True iff the two lists contain the same elements (including duplicates) in some order, False otherwise.
-
     """
     if not isinstance(s, list) or not isinstance(t, list):
         return False
@@ -67,22 +64,20 @@ def timing(f):
 
 class Timer:
     def __init__(self, name: str = "Default Time"):
-        """The Timer class can be used to measure the elapsed time between
-        starting the timer and stopping in.
+        """
+        The Timer class can be used to measure the elapsed time between starting the timer and stopping in.
 
         :param name: The name of the timer to print when it is stopped.
-
         """
         self.end_time = None
         self.name = name
         self.start_time = time.time()
 
     def stop(self):
-        """Print the elapsed time between starting the timer and stopping it in
-        milliseconds.
+        """
+        Print the elapsed time between starting the timer and stopping it in milliseconds.
 
         :return: None
-
         """
         self.end_time = time.time()
         print(

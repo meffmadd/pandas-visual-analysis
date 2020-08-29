@@ -9,13 +9,12 @@ from pandas_visual_analysis.widgets import BaseWidget, register_widget
 
 @register_widget
 class BoxPlotWidget(BaseWidget):
-    """The BoxPlotWidget displays a box plot for a single column with
-    additional information of mean and standard deviation as a diamond.
+    """
 
-    Per default the plot shows all the points side-by-side in order to
-    select points. This behaviour can be changed to show only the
-    outliers as points or no points at all.
-
+    The BoxPlotWidget displays a box plot for a single column with additional information of mean and standard deviation
+    as a diamond.
+    Per default the plot shows all the points side-by-side in order to select points.
+    This behaviour can be changed to show only the outliers as points or no points at all.
     """
 
     def __init__(

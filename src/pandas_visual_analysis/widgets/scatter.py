@@ -10,12 +10,11 @@ from pandas_visual_analysis.widgets.registry import register_widget
 
 @register_widget
 class ScatterWidget(BaseWidget):
-    """The ScatterWidget displays a scatter plot to highlight the relation
+    """
+
+    The ScatterWidget displays a scatter plot to highlight the relation
     between two numerical, time-based or categorical dimensions.
-
-    In addition to selecting the x- and y-axis, it is also possible show
-    an additional dimension as the size.
-
+    In addition to selecting the x- and y-axis, it is also possible show an additional dimension as the size.
     """
 
     def __init__(
