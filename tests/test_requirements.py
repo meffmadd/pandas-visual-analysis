@@ -44,6 +44,17 @@ def test_requirement_versions_equal():
     assert set(req_dependencies) == set(meta_dependencies)
 
 
+def test_requirements_setuptools_equal():
+    _, meta_content = get_requirement_lines()
+
+    setup_dependencies = [
+        "".join(dep.split()).replace("-", "")
+        for dep in meta_content
+        if "setuptools" in dep
+    ]
+    assert setup_dependencies[0] == setup_dependencies[1]
+
+
 def test_version():
     from pandas_visual_analysis.version import __version__
 
