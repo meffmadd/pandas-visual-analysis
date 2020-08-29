@@ -1,9 +1,7 @@
 from pathlib import Path
-import yaml
 
 
-def test_requirement_versions_equal():
-
+def get_requirement_lines():
     req_path = Path(__file__).parent / "../requirements.txt"
     with req_path.open() as f:
         req_content = f.readlines()
@@ -28,15 +26,19 @@ def test_requirement_versions_equal():
                 break
 
         requirements_end = line_number
-        meta_str = "".join(meta_lines[requirements_start:requirements_end])
-        meta_content = yaml.load(meta_str)
+
+    return req_content, meta_lines[requirements_start:requirements_end]
+
+
+def test_requirement_versions_equal():
+    req_content, meta_content = get_requirement_lines()
 
     #  filter all whitespace from dependencies list entries and assert that they are equal
     req_dependencies = ["".join(dep.split()) for dep in req_content]
     meta_dependencies = [
-        "".join(dep.split())
-        for dep in meta_content["requirements"]["run"]
-        if dep != "python"
+        "".join(dep.split()).replace("-", "")
+        for dep in meta_content[6:]
+        if "python" not in dep
     ]
     assert len(req_dependencies) == len(meta_dependencies)
     assert set(req_dependencies) == set(meta_dependencies)
