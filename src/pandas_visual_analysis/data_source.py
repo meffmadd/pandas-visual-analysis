@@ -30,7 +30,7 @@ class DataSource(HasTraits):
     ):
         """
 
-        :param df: A pandas.DataFrame object
+        :param df: A pandas.DataFrame object.
         :param categorical_columns: If given, specifies which columns are to be interpreted as categorical.
             Those columns have to include all columns of the DataFrame
             which have type `object`, `str`, `bool` or `category`.

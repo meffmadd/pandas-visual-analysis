@@ -24,20 +24,22 @@ class AnalysisLayout:
     def __init__(
         self,
         layout: typing.Union[str, typing.List[typing.List[str]]],
-        row_height: int,
+        row_height: typing.Union[int, typing.List[int]],
         data_source: DataSource,
         *args,
         **kwargs
     ):
         """
 
-        :param layout: the layout specification
-        :param row_height: height in pixels each row and consequently each plot should have
-        :param data_source: the :class:`pandas_visual_analysis.data_source.DataSource` object passed to the widgets
+        :param layout: Layout specification name or explicit definition of widget names in rows.
+        :param row_height: Height in pixels each row should have. If given an integer, each row has the height
+            specified by that value, if given a list of integers, each value in the list specifies the height of
+            the corresponding row.
+        :param data_source: The :class:`pandas_visual_analysis.data_source.DataSource` object passed to the widgets
+            in that layout.
         """
         super().__init__(*args, **kwargs)
 
-        validate.validate_row_height(row_height)
         if isinstance(layout, str):
             if layout not in set(self.predefined_layouts.keys()):
                 raise ValueError(
@@ -45,7 +47,11 @@ class AnalysisLayout:
                     % str(self.predefined_layouts.keys())
                 )
             self.layout_spec = self.predefined_layouts[layout]
-        elif isinstance(layout, list):
+        elif (
+            isinstance(layout, list)
+            and all(isinstance(x, list) for x in layout)
+            and all(isinstance(x, str) for row in layout for x in row)
+        ):
             self.layout_spec = layout
             valid_widgets = WidgetClassRegistry().widget_set
 
@@ -61,6 +67,8 @@ class AnalysisLayout:
                 "The layout specification either has to be a string or a list of list of strings."
             )
 
+        validate.validate_row_height(row_height, self.layout_spec)
+
         self.data_source = data_source
         self.row_height = row_height
 
@@ -75,10 +83,14 @@ class AnalysisLayout:
         rows = []
         for r, row in enumerate(self.layout_spec):
             row_widgets = []
+            if isinstance(self.row_height, int):
+                current_row_height = self.row_height
+            else:  # list
+                current_row_height = self.row_height[r]
             for i, widget_name in enumerate(row):
                 widget_cls: BaseWidget.__class__ = wcr.get_widget_class(widget_name)
                 widget = widget_cls(
-                    self.data_source, r, i, 1.0 / len(row), self.row_height
+                    self.data_source, r, i, 1.0 / len(row), current_row_height
                 )
                 row_widgets.append(widget.build())
             h_box = widgets.HBox(row_widgets)

@@ -16,14 +16,29 @@ def validate_data_frame(df, name="df"):
         raise TypeError("The %s parameter must be a Pandas DataFrame." % name)
 
 
-def validate_row_height(row_height, name="row_height"):
-    if not isinstance(row_height, int):
-        raise TypeError("The value for %s has to be an integer." % name)
-    if row_height < 0:
+def validate_row_height(row_height, layout, name="row_height"):
+    if not (isinstance(row_height, (int, list))):
+        raise TypeError(
+            "The value for %s has to be an integer or list of integers." % name
+        )
+    if isinstance(row_height, int) and row_height < 0:
         raise ValueError(
             "The value for %s has to be larger than 0. Invalid Value: %d"
             % (name, row_height)
         )
+    if isinstance(row_height, list):
+        if not all(isinstance(x, int) for x in row_height):
+            raise TypeError(
+                "The value for %s has to be an integer or list of integers." % name
+            )
+        if len(row_height) != len(layout):
+            raise ValueError(
+                "The number of row heights has to be equal to the number of rows in the layout "
+                "specification. The length of row_height is %d, while the layout contains %d rows."
+                % (len(row_height), len(layout))
+            )
+        if not all((x > 0) for x in row_height):
+            raise ValueError("All values for row height have to be positive.")
 
 
 def validate_alpha(alpha):

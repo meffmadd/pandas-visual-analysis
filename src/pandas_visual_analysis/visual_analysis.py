@@ -22,7 +22,7 @@ class VisualAnalysis:
         data: typing.Union[DataFrame, DataSource],
         layout: typing.Union[str, typing.List[typing.List[str]]] = "default",
         categorical_columns: typing.Union[typing.List[str], None] = None,
-        row_height: int = 400,
+        row_height: typing.Union[int, typing.List[int]] = 400,
         sample: typing.Union[float, int, None] = None,
         select_color: typing.Union[str, typing.Tuple[int, int, int]] = "#323EEC",
         deselect_color: typing.Union[str, typing.Tuple[int, int, int]] = "#8A8C93",
@@ -31,16 +31,25 @@ class VisualAnalysis:
     ):
         """
 
-        :param data: the pandas.DataFrame object or a :class:`DataSource`
-        :param layout: layout specification name or explicit definition of plot in rows
-        :param categorical_columns: if given, specifies which columns are to be interpreted as categorical
-        :param row_height: height in pixels each row and consequently each plot should have
-        :param sample: int or float specifying if the DataFrame should be sub-sampled.
+        :param data: A pandas.DataFrame object or a :class:`DataSource`.
+        :param layout: Layout specification name or explicit definition of widget names in rows.
+            Those columns have to include all columns of the DataFrame
+            which have type `object`, `str`, `bool` or `category`.
+            This means it can only add columns which do not have the aforementioned types.
+        :param categorical_columns: If given, specifies which columns are to be interpreted as categorical.
+        :param row_height: Height in pixels each row should have. If given an integer, each row has the height
+            specified by that value, if given a list of integers, each value in the list specifies the height of
+            the corresponding row.
+        :param sample: Int or float value specifying if the DataFrame should be sub-sampled.
             When an int is given, the DataFrame will be limited to that number of rows given by the value.
             When a float is given, the DataFrame will include the fraction of rows given by the value.
-        :param select_color: RGB tuple or hex color specifying the color display selected data points
-        :param deselect_color: RGB tuple or hex color specifying the color display deselected data points
-        :param alpha: opacity of data points
+        :param select_color: RGB tuple or hex color specifying the color display selected data points.
+            Values in the tuple have to be between 0 and 255 inclusive or a hex string that converts to
+            such RGB values.
+        :param deselect_color: RGB tuple or hex color specifying the color display deselected data points.
+            Values in the tuple have to be between 0 and 255 inclusive or a hex string that converts to
+            such RGB values.
+        :param alpha: Opacity of data points when applicable ranging from 0.0 to 1.0 inclusive.
         :param seed: Random seed used for sampling the data.
             Values can be any integer between 0 and 2**32 - 1 inclusive or None.
         """
