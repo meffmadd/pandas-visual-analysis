@@ -64,7 +64,7 @@ class ParallelCategoriesWidget(BaseWidget, HasMultiSelect):
         return super().apply_size_constraints(widget)
 
     def observe_brush_indices_change(self, change):
-        new_indices = change["new"]
+        new_indices = list(change["new"])
 
         new_color = np.zeros(self.data_source.len, dtype="uint8")
         new_color[new_indices] = 1
@@ -134,6 +134,6 @@ class ParallelCategoriesWidget(BaseWidget, HasMultiSelect):
         ]
         self.figure_widget.data[0].dimensions = new_dims
         new_color = np.zeros(self.data_source.len, dtype="uint8")
-        new_color[self.data_source.brushed_indices] = 1
+        new_color[list(self.data_source.brushed_indices)] = 1
         with self.figure_widget.batch_update(), self.figure_widget.hold_trait_notifications():
             self.figure_widget.data[0].line.color = new_color

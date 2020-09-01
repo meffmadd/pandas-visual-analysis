@@ -122,7 +122,7 @@ class TestOnSelection:
         ps.on_selection(None, points, None)
 
         assert sum(list(ps.figure_widget.data[0].line.color)) == 3
-        assert ds.brushed_indices == points
+        assert ds.brushed_indices == set(points)
 
     def test_on_selection_constraint_ranges_reset(self, small_df, populated_config):
         ds = DataSource(small_df, None)

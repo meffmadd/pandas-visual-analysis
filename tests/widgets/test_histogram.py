@@ -69,7 +69,7 @@ class TestBrushIndicesChange:
         hw.build()
         ds.brushed_indices = [1, 2, 3]
 
-        assert hw.figure_widget.data[1].selectedpoints == tuple(ds.brushed_indices)
+        assert hw.figure_widget.data[1].selectedpoints == ds.brushed_indices
         assert hw.figure_widget.data[0].visible
 
     def test_brush_indices_change_deselect(self, small_df, populated_config):
@@ -79,7 +79,7 @@ class TestBrushIndicesChange:
         hw.build()
         ds.reset_selection()
 
-        assert hw.figure_widget.data[1].selectedpoints == tuple(ds.indices)
+        assert hw.figure_widget.data[1].selectedpoints == ds.indices
         assert not hw.figure_widget.data[0].visible
 
 

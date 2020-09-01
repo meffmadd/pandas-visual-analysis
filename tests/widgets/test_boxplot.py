@@ -57,7 +57,7 @@ class TestOnSelection:
         points = PointsObject([1, 2, 3])
         bp.on_selection(None, points, None)
 
-        assert ds.brushed_indices == points.point_inds
+        assert ds.brushed_indices == set(points.point_inds)
 
     def test_on_deselection(self, small_df, populated_config):
         ds = DataSource(small_df, None)
@@ -74,7 +74,7 @@ class TestBrushIndicesChange:
         bp.build()
         ds.brushed_indices = [1, 2, 3]
 
-        assert bp.figure_widget.data[0].selectedpoints == tuple(ds.brushed_indices)
+        assert bp.figure_widget.data[0].selectedpoints == ds.brushed_indices
 
     def test_brush_indices_change_deselect(self, small_df, populated_config):
         ds = DataSource(small_df, None)
@@ -83,7 +83,7 @@ class TestBrushIndicesChange:
         bp.build()
         ds.reset_selection()
 
-        assert bp.figure_widget.data[0].selectedpoints == tuple(ds.indices)
+        assert bp.figure_widget.data[0].selectedpoints == ds.indices
 
 
 class TestSelectUI:

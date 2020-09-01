@@ -26,8 +26,8 @@ def test_on_selection(small_df, populated_config):
     scatter_widget = ScatterWidget(ds, 0, 0, 1.0, 400)
 
     def simple_observe(change):
-        assert change["old"] == list(range(len(small_df)))
-        assert change["new"] == [0]
+        assert change["old"] == set(range(len(small_df)))
+        assert change["new"] == {0}
 
     HasTraits.observe(ds, simple_observe, "_brushed_indices")
 

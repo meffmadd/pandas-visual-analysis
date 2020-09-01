@@ -63,7 +63,7 @@ class TestOnSelection:
         pc.on_selection(None, points, None)
 
         assert sum(list(pc.figure_widget.data[0].line.color)) == 3
-        assert ds.brushed_indices == points.point_inds
+        assert ds.brushed_indices == set(points.point_inds)
 
     def test_on_deselection(self, small_df, populated_config):
         ds = DataSource(small_df, None)

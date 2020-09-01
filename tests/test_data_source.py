@@ -73,14 +73,14 @@ class TestColumnAssignments:
 class TestIndicesData:
     def test_brush_selection_indices(self, randint_df):
         bs = DataSource(randint_df, None)
-        assert bs.indices == list(range(df_size))
+        assert bs.indices == set(range(df_size))
 
     def test_reset_selection(self, small_df):
         bs = DataSource(small_df, None)
         bs.brushed_indices = [0]
-        assert bs.brushed_indices == [0]
+        assert bs.brushed_indices == {0}
         bs.reset_selection()
-        assert bs.brushed_indices == list(range(len(small_df)))
+        assert bs.brushed_indices == set(range(len(small_df)))
 
     def test__data(self, small_df):
         bs = DataSource(small_df, None)
@@ -101,8 +101,8 @@ class TestObserve:
         bs = DataSource(small_df_index, None)
 
         def simple_observe(change):
-            assert change["old"] == list(range(len(small_df_index)))
-            assert change["new"] == [0]
+            assert change["old"] == set(range(len(small_df_index)))
+            assert change["new"] == {0}
 
         HasTraits.observe(bs, simple_observe, "_brushed_indices")
         bs._brushed_indices = [0]

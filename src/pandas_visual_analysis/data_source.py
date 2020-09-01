@@ -2,7 +2,7 @@ import typing
 from enum import Enum
 
 from pandas import DataFrame
-from traitlets import HasTraits, Instance, List, observe
+from traitlets import HasTraits, Instance, observe, Set, Int
 
 import pandas_visual_analysis.utils.validation as validate
 
@@ -24,7 +24,7 @@ class DataSource(HasTraits):
     """
 
     _df = Instance(klass=DataFrame)
-    _brushed_indices = List()
+    _brushed_indices: typing.Set[int] = Set(Int())
 
     def __init__(
         self,
@@ -128,7 +128,7 @@ class DataSource(HasTraits):
             )
 
         self._length = len(df)
-        self._indices = list(range(self._length))
+        self._indices = set(range(self._length))
         self.reset_selection()
 
         self.brushed_data_invalidated = True
@@ -167,7 +167,7 @@ class DataSource(HasTraits):
         return self._length
 
     @property
-    def brushed_indices(self) -> typing.List[int]:
+    def brushed_indices(self) -> typing.Set[int]:
         """
 
         :return: The currently selected indices.
@@ -177,19 +177,16 @@ class DataSource(HasTraits):
     @brushed_indices.setter
     def brushed_indices(self, indices: typing.List[int]):
         """
-        Sets the specified indices as selection in the data.
+        Sets the specified indices as selection in the data according to the current selection type.
 
         :param indices: indices of data points that should be brushed.
         """
         if self.selection_type == SelectionType.STANDARD:
-            self._brushed_indices = indices
+            self._brushed_indices = set(indices)
         elif self.selection_type == SelectionType.ADDITIVE:
-            self._brushed_indices = list(set().union(self._brushed_indices, indices))
+            self._brushed_indices = self._brushed_indices.union(indices)
         elif self.selection_type == SelectionType.SUBTRACTIVE:
-            diff = set(indices)
-            self._brushed_indices = [
-                index for index in self._brushed_indices if index not in diff
-            ]
+            self._brushed_indices = self._brushed_indices - set(indices)
 
     @property
     def brushed_data(self) -> DataFrame:
@@ -200,12 +197,12 @@ class DataSource(HasTraits):
         :return: The selected data corresponding to the indices.
         """
         if self.brushed_data_invalidated:
-            self._brushed_data = self._df.iloc[self._brushed_indices, :]
+            self._brushed_data = self._df.iloc[list(self._brushed_indices), :]
             self.brushed_data_invalidated = False
         return self._brushed_data
 
     @property
-    def indices(self) -> typing.List[int]:
+    def indices(self) -> typing.Set[int]:
         """
 
         :return: All indices of the data frame. This is a list from 0 to len-1.

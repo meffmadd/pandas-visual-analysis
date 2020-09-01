@@ -95,7 +95,7 @@ class ParallelCoordinatesWidget(BaseWidget, HasMultiSelect):
 
         self.change_initiated = False
 
-        new_indices = change["new"]
+        new_indices = list(change["new"])
 
         new_color = np.zeros(self.data_source.len, dtype="uint8")
         new_color[new_indices] = 1
@@ -138,7 +138,7 @@ class ParallelCoordinatesWidget(BaseWidget, HasMultiSelect):
             self.on_deselection(None, None)
             return
         mask = self._get_constraint_mask(self.constraint_ranges)
-        points = list(np.arange(self.data_source.len)[mask])
+        points = np.arange(self.data_source.len)[mask].tolist()
         self.on_selection(None, points, None)
 
     def _get_constraint_mask(self, constraint_ranges: dict) -> np.array:
