@@ -109,11 +109,9 @@ class ScatterWidget(BaseWidget):
         self.data_source.on_indices_changed.connect(self.observe_brush_indices_change)
 
     def on_selection(self, trace, points, state):
-        # print("selection in Scatter(%d,%d)" % (self.row, self.index))
         self.data_source.brushed_indices = points.point_inds
 
     def on_deselection(self, trace, points):
-        print("deselection in scatter")
         self.data_source.reset_selection()
 
     def on_axis_change(self, change):

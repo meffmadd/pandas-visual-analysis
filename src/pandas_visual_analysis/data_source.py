@@ -153,7 +153,6 @@ class DataSource:
 
         :return: None
         """
-        print("resetting selection in data source")
         self._brushed_indices = self._indices
         self.notify_indices_changed()
 
