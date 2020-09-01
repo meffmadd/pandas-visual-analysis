@@ -105,6 +105,7 @@ class ScatterWidget(BaseWidget):
 
     def observe_brush_indices_change(self, change):
         new_indices = change["new"]
+        print(len(new_indices))
         # noinspection SpellCheckingInspection
         self.figure_widget.data[0].selectedpoints = new_indices
 

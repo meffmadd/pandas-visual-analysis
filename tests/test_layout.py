@@ -46,11 +46,13 @@ class TestBuild:
         root_widget = layout.build()
         assert isinstance(root_widget, widgets.VBox)
         children = root_widget.children
-        assert len(children) == 3  # 2 + 1 for HTML(css)
-        assert isinstance(children[0], widgets.HBox)
+        assert (
+            len(children) == 4
+        )  # 2 + 2 for HTML(css) and selection types (standard, additive, subtractive)
         assert isinstance(children[1], widgets.HBox)
-        assert len(children[0].children) == 1
+        assert isinstance(children[2], widgets.HBox)
         assert len(children[1].children) == 1
+        assert len(children[2].children) == 1
 
     def test_build_row_height_list(self, small_df, populated_config):
         ds = DataSource(small_df, None)

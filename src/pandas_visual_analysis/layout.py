@@ -2,14 +2,13 @@ import typing
 
 from ipywidgets import widgets
 
-from pandas_visual_analysis.data_source import DataSource
+from pandas_visual_analysis.data_source import DataSource, SelectionType
 from pandas_visual_analysis.widgets import BaseWidget
 from pandas_visual_analysis.widgets.registry import WidgetClassRegistry
 import pandas_visual_analysis.utils.validation as validate
 
 
 class AnalysisLayout:
-
     """
     The AnalysisLayout class determines which widgets should be displayed in the analysis
     and defines their position and size.
@@ -71,6 +70,19 @@ class AnalysisLayout:
 
         self.data_source = data_source
         self.row_height = row_height
+        self.selection_type_widget = widgets.ToggleButtons(
+            options=[("Standard", "std"), ("Additive", "add"), ("Subtractive", "sub")],
+            description="Selection Type:",
+            disabled=False,
+            button_style="",  # 'success', 'info', 'warning', 'danger' or ''
+            tooltips=[
+                "Replaces selection",
+                "Adds selected points to selection",
+                "Removes selected points from selection",
+            ],
+            style={"description_width": "60px"},
+        )
+        self.selection_type_widget.observe(self._selection_type_changed, "value")
 
     def build(self) -> widgets.Widget:
         """
@@ -80,7 +92,7 @@ class AnalysisLayout:
         :return: self.root_widget
         """
         wcr = WidgetClassRegistry()
-        rows = []
+        rows = [self.selection_type_widget]  # first row is the selection type widget
         for r, row in enumerate(self.layout_spec):
             row_widgets = []
             if isinstance(self.row_height, int):
@@ -104,3 +116,12 @@ class AnalysisLayout:
 
         self.root_widget = widgets.VBox(rows)
         return self.root_widget
+
+    def _selection_type_changed(self, change):
+        value = change["new"]
+        if value == "std":
+            self.data_source.selection_type = SelectionType.STANDARD
+        elif value == "add":
+            self.data_source.selection_type = SelectionType.ADDITIVE
+        else:
+            self.data_source.selection_type = SelectionType.SUBTRACTIVE
