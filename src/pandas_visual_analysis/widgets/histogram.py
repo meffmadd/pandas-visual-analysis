@@ -68,6 +68,12 @@ class HistogramWidget(BaseWidget):
         else:
             self.figure_widget.data[0].visible = True
 
+        # empty selection for histogram does not work
+        if len(self.brushed_data) == 0:
+            self.figure_widget.data[1].visible = False
+        else:
+            self.figure_widget.data[1].visible = True
+
         self.figure_widget.data[
             1
         ].selectedpoints = (
@@ -108,6 +114,7 @@ class HistogramWidget(BaseWidget):
                 unselected={"marker": {"opacity": 0.4}},
                 hoverinfo="skip",
                 histnorm="",
+                bingroup=1,
             )
         )
         fig.add_trace(
@@ -120,6 +127,7 @@ class HistogramWidget(BaseWidget):
                 unselected={"marker": {"opacity": 1.0}},
                 hoverinfo="skip",
                 histnorm="",
+                bingroup=1,
             )
         )
         fig.update_layout(barmode="overlay", showlegend=False, dragmode="select")
