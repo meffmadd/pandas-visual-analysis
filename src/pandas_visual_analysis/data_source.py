@@ -189,9 +189,9 @@ class DataSource:
         if self.selection_type == SelectionType.STANDARD:
             self._brushed_indices = set(indices)
         elif self.selection_type == SelectionType.ADDITIVE:
-            self._brushed_indices = self._brushed_indices | set(indices)
+            self._brushed_indices = self._brushed_indices.union(indices)
         elif self.selection_type == SelectionType.SUBTRACTIVE:
-            self._brushed_indices = self._brushed_indices - set(indices)
+            self._brushed_indices = self._brushed_indices.difference(indices)
 
         self.notify_indices_changed()
 

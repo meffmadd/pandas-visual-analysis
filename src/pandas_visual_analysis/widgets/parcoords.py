@@ -7,6 +7,7 @@ import plotly.graph_objs as go
 from plotly.callbacks import Points
 
 from pandas_visual_analysis import DataSource
+from pandas_visual_analysis.data_source import SelectionType
 from pandas_visual_analysis.utils.config import Config
 from pandas_visual_analysis.widgets import BaseWidget, register_widget
 from pandas_visual_analysis.widgets.helpers.multi_select import (
@@ -96,7 +97,6 @@ class ParallelCoordinatesWidget(BaseWidget, HasMultiSelect):
         self.change_initiated = False
 
         new_indices = list(self.data_source.brushed_indices)
-
         new_color = np.zeros(self.data_source.len, dtype="uint8")
         new_color[new_indices] = 1
         with self.figure_widget.batch_update(), self.figure_widget.hold_trait_notifications():
@@ -111,6 +111,11 @@ class ParallelCoordinatesWidget(BaseWidget, HasMultiSelect):
 
     def on_selection(self, trace, points, state):
         self.change_initiated = True
+        if self.data_source.selection_type in {
+            SelectionType.ADDITIVE,
+            SelectionType.SUBTRACTIVE,
+        }:
+            self.change_initiated = False  # we want to remove constraint ranges in observe_brush_indices_change
 
         new_color = np.zeros(self.data_source.len, dtype="uint8")
         new_color[points.point_inds] = 1

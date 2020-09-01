@@ -80,7 +80,7 @@ class AnalysisLayout:
                 "Adds selected points to selection",
                 "Removes selected points from selection",
             ],
-            style={"description_width": "60px"},
+            style={"description_width": "initial"},
         )
         self.selection_type_widget.observe(self._selection_type_changed, "value")
 
