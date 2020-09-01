@@ -1,7 +1,6 @@
 import math
 
 import ipywidgets as widgets
-from traitlets import HasTraits
 
 from pandas_visual_analysis import DataSource
 from pandas_visual_analysis.widgets import BaseWidget, register_widget
@@ -83,18 +82,9 @@ class BrushSummaryWidget(BaseWidget):
         )
         return self.apply_size_constraints(root)
 
-    def observe_brush_indices_change(self, change):
+    def observe_brush_indices_change(self, sender):
         self.brushed_metrics = self._get_brushed_metrics()
         self._update_brushed_metrics()
-
-    def set_observers(self):
-        # self.data_source.update.connect(receiver=self.observe_brush_indices_change)
-        # self.data_source.observe_change(self.observe_brush_indices_change)
-        HasTraits.observe(
-            self.data_source,
-            handler=self.observe_brush_indices_change,
-            names="_brushed_indices",
-        )
 
     def _observe_metric_change(self, obj):
         self._update_base_metrics()

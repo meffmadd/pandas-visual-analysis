@@ -1,6 +1,5 @@
 import ipywidgets as widgets
 import plotly.graph_objs as go
-from traitlets import HasTraits
 
 from pandas_visual_analysis import DataSource
 from pandas_visual_analysis.utils.config import Config
@@ -62,24 +61,19 @@ class HistogramWidget(BaseWidget):
         )
         return self.apply_size_constraints(root)
 
-    def observe_brush_indices_change(self, change):
+    def observe_brush_indices_change(self, sender):
         self.brushed_data = self.data_source.brushed_data
         if len(self.brushed_data) == len(self.data):
             self.figure_widget.data[0].visible = False
         else:
             self.figure_widget.data[0].visible = True
 
-        self.figure_widget.data[1].selectedpoints = change[
-            "new"
-        ]  # set selected points so that double click works
+        self.figure_widget.data[
+            1
+        ].selectedpoints = (
+            self.data_source.brushed_indices
+        )  # set selected points so that double click works
         self._redraw_plot()
-
-    def set_observers(self):
-        HasTraits.observe(
-            self.data_source,
-            handler=self.observe_brush_indices_change,
-            names="_brushed_indices",
-        )
 
     # issue: selection does not work for histogram: https://github.com/plotly/plotly.py/issues/2698
     def on_selection(self, trace, points, state):

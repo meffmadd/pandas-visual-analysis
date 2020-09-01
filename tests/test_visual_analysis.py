@@ -1,5 +1,4 @@
 import pytest
-from traitlets import TraitError
 
 from pandas_visual_analysis import VisualAnalysis, DataSource
 from tests import sample_dataframes

@@ -16,6 +16,11 @@ def validate_data_frame(df, name="df"):
         raise TypeError("The %s parameter must be a Pandas DataFrame." % name)
 
 
+def validate_data_source(ds, name="ds"):
+    if not isinstance(ds, pandas_visual_analysis.DataSource):
+        raise TypeError("The %s parameter must be a DataSource" % name)
+
+
 def validate_row_height(row_height, layout, name="row_height"):
     if not (isinstance(row_height, (int, list))):
         raise TypeError(

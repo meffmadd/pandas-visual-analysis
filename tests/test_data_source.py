@@ -1,5 +1,4 @@
 import pytest
-from traitlets import observe, TraitError, HasTraits
 
 from pandas_visual_analysis import DataSource
 from tests import sample_dataframes
@@ -98,24 +97,22 @@ class TestIndicesData:
 
 class TestObserve:
     def test_brush_selection_observe_brushed_indices(self, small_df_index):
-        bs = DataSource(small_df_index, None)
+        ds = DataSource(small_df_index, None)
 
-        def simple_observe(change):
-            assert change["old"] == set(range(len(small_df_index)))
-            assert change["new"] == {0}
+        def simple_observe(sender: DataSource):
+            assert sender.brushed_indices == {0}
 
-        HasTraits.observe(bs, simple_observe, "_brushed_indices")
-        bs._brushed_indices = [0]
+        ds.on_indices_changed.connect(simple_observe)
+        ds._brushed_indices = [0]
 
     def test_brush_selection_observe_brushed_data(self, small_df_index):
-        bs = DataSource(small_df_index, None)
+        ds = DataSource(small_df_index, None)
 
-        def simple_observe(change):
-            assert len(change["old"]) == len(small_df_index)
-            assert len(change["new"]) == 1
+        def simple_observe(sender: DataSource):
+            assert len(sender.brushed_data) == 1
 
-        HasTraits.observe(bs, handler=simple_observe, names="_brushed_data")
-        bs._brushed_indices = [0]
+        ds.on_indices_changed.connect(simple_observe)
+        ds._brushed_indices = [0]
 
 
 class TestDataParameter:

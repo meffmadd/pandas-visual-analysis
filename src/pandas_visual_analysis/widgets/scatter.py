@@ -1,6 +1,5 @@
 import ipywidgets as widgets
 import plotly.graph_objs as go
-from traitlets import HasTraits
 
 from pandas_visual_analysis import DataSource
 from pandas_visual_analysis.utils.config import Config
@@ -82,9 +81,7 @@ class ScatterWidget(BaseWidget):
         self.figure_widget.data[0].on_deselect(callback=self.on_deselection)
         self.set_observers()
         # initially set brush to state of data_source (for start-up where everything is deselected by default)
-        self.observe_brush_indices_change(
-            change={"new": self.data_source.brushed_indices}
-        )
+        self.observe_brush_indices_change(self.data_source)
 
     def _get_scatter(self):
         config = Config()
@@ -103,24 +100,20 @@ class ScatterWidget(BaseWidget):
         root = widgets.VBox([self._get_controls(), self.figure_widget])
         return self.apply_size_constraints(root)
 
-    def observe_brush_indices_change(self, change):
-        new_indices = change["new"]
-        print(len(new_indices))
+    def observe_brush_indices_change(self, sender):
+        new_indices = self.data_source.brushed_indices
         # noinspection SpellCheckingInspection
         self.figure_widget.data[0].selectedpoints = new_indices
 
     def set_observers(self):
-        HasTraits.observe(
-            self.data_source,
-            handler=self.observe_brush_indices_change,
-            names="_brushed_indices",
-        )
+        self.data_source.on_indices_changed.connect(self.observe_brush_indices_change)
 
     def on_selection(self, trace, points, state):
         # print("selection in Scatter(%d,%d)" % (self.row, self.index))
         self.data_source.brushed_indices = points.point_inds
 
     def on_deselection(self, trace, points):
+        print("deselection in scatter")
         self.data_source.reset_selection()
 
     def on_axis_change(self, change):

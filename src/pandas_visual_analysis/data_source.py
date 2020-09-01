@@ -1,8 +1,7 @@
 import typing
 from enum import Enum
-
+from blinker import Signal
 from pandas import DataFrame
-from traitlets import HasTraits, Instance, observe, Set, Int
 
 import pandas_visual_analysis.utils.validation as validate
 
@@ -13,7 +12,7 @@ class SelectionType(Enum):
     SUBTRACTIVE = 3
 
 
-class DataSource(HasTraits):
+class DataSource:
 
     """
     The DataSource object provides the data itself to the plots and also manages the brushing between the plots.
@@ -22,9 +21,6 @@ class DataSource(HasTraits):
     this property. In addition to the brushed indices, this class also provides the brushed data directly, which
     is cached to speed up subsequent access to the data.
     """
-
-    _df = Instance(klass=DataFrame)
-    _brushed_indices: typing.Set[int] = Set(Int())
 
     def __init__(
         self,
@@ -129,10 +125,12 @@ class DataSource(HasTraits):
 
         self._length = len(df)
         self._indices = set(range(self._length))
-        self.reset_selection()
+        self._brushed_indices: typing.Set[int] = self._indices
 
         self.brushed_data_invalidated = True
         self._brushed_data = None
+
+        self.on_indices_changed = Signal()
 
         if len(self.columns) < 2:
             raise ValueError(
@@ -143,13 +141,21 @@ class DataSource(HasTraits):
         self.few_num_cols = len(self.numerical_columns) < 2
         self.few_cat_cols = len(self.categorical_columns) < 2
 
+    def notify_indices_changed(self):
+        # This has the effect that the cached value for brushed_data is being re-indexed once it is needed.
+        self.brushed_data_invalidated = True
+
+        self.on_indices_changed.send(self)
+
     def reset_selection(self):
         """
         Reset all the indices to the original state, that is all indices are selected.
 
         :return: None
         """
+        print("resetting selection in data source")
         self._brushed_indices = self._indices
+        self.notify_indices_changed()
 
     @property
     def len(self) -> int:
@@ -188,6 +194,8 @@ class DataSource(HasTraits):
         elif self.selection_type == SelectionType.SUBTRACTIVE:
             self._brushed_indices = self._brushed_indices - set(indices)
 
+        self.notify_indices_changed()
+
     @property
     def brushed_data(self) -> DataFrame:
         """
@@ -216,14 +224,3 @@ class DataSource(HasTraits):
         :return: The DataFrame for this :class:`pandas_visual_analysis.data_source.DataSource` object.
         """
         return self._df
-
-    @observe("_brushed_indices")
-    def _observe_indices(self, change):
-        """
-        Observes any change in the _brushed_indices property and sets the current brushed_data property to dirty.
-        This has the effect that the cached value for brushed_data is being re-indexed once it is needed.
-
-        :param change: Dictionary containing all the change information e.g. new and old values.
-        :return: None
-        """
-        self.brushed_data_invalidated = True

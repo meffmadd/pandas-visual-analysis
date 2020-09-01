@@ -1,12 +1,12 @@
 import typing
 
 import ipywidgets as widgets
-from traitlets import HasTraits, List
+from blinker import Signal
 
 
 class HasMultiSelect:
     def __init__(self, columns, relative_size, max_height):
-        self.columns: List[str] = columns
+        self.columns: typing.List[str] = columns
         self.selected_columns = columns
 
         self.select_threshold = int(15 * relative_size)
@@ -28,10 +28,7 @@ class HasMultiSelect:
 
 
 # inspired by: https://gist.github.com/MattJBritton/9dc26109acb4dfe17820cf72d82f1e6f
-class MultiSelectWidget(HasTraits):
-
-    selected_options = List()
-
+class MultiSelectWidget:
     def __init__(
         self,
         options: typing.List[str],
@@ -80,9 +77,6 @@ class MultiSelectWidget(HasTraits):
             description="Select All", disabled=False, icon="check"
         )
 
-        self.info_label = widgets.Label(
-            value="%d of %d selected" % (len(self.selected_options), len(self.options))
-        )
         self.search_widget = widgets.Text(layout=widgets.Layout(max_width="80%"))
 
         self.options_widget = widgets.VBox(
@@ -91,12 +85,13 @@ class MultiSelectWidget(HasTraits):
         multi_select = widgets.VBox([self.search_widget, self.options_widget])
         buttons = widgets.HBox([self.select_all, self.deselect_all])
 
-        self.selected_options = [
+        self._selected_options = [
             option.description for option in self.options_widgets if option.value
         ]
-        self.info_label.value = "%d of %d selected" % (
-            len(self.selected_options),
-            len(self.options),
+        self.on_selected_options_changed = Signal()
+
+        self.info_label = widgets.Label(
+            value="%d of %d selected" % (len(self._selected_options), len(self.options))
         )
 
         self.root = widgets.VBox(
@@ -115,6 +110,15 @@ class MultiSelectWidget(HasTraits):
         self.search_widget.observe(self.on_text_change, names="value")
         self.select_all.on_click(self.on_select_all)
         self.deselect_all.on_click(self.on_deselect_all)
+
+    @property
+    def selected_options(self):
+        return self._selected_options
+
+    @selected_options.setter
+    def selected_options(self, options):
+        self._selected_options = options
+        self.on_selected_options_changed.send(self)
 
     def build(self):
         return self.root

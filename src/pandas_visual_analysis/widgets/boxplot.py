@@ -1,6 +1,5 @@
 import ipywidgets as widgets
 import plotly.graph_objects as go
-from traitlets import HasTraits
 
 from pandas_visual_analysis import DataSource
 from pandas_visual_analysis.utils.config import Config
@@ -76,17 +75,10 @@ class BoxPlotWidget(BaseWidget):
     def apply_size_constraints(self, widget):
         return super().apply_size_constraints(widget)
 
-    def observe_brush_indices_change(self, change):
-        new_indices = change["new"]
+    def observe_brush_indices_change(self, sender):
+        new_indices = self.data_source.brushed_indices
         # noinspection SpellCheckingInspection
         self.figure_widget.data[0].selectedpoints = new_indices
-
-    def set_observers(self):
-        HasTraits.observe(
-            self.data_source,
-            handler=self.observe_brush_indices_change,
-            names="_brushed_indices",
-        )
 
     def on_selection(self, trace, points, state):
         self.data_source.brushed_indices = points.point_inds

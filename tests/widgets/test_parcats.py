@@ -75,8 +75,7 @@ class TestBrushIndicesChange:
     def test_brush_indices_change(self, small_df, populated_config):
         ds = DataSource(small_df, None)
         pc = ParallelCategoriesWidget(ds, 0, 0, 1.0, 400)
-        change = {"new": [1, 2, 3]}
-        pc.observe_brush_indices_change(change)
+        ds.brushed_indices = [1, 2, 3]
 
         assert sum(list(pc.figure_widget.data[0].line.color)) == 3
 

@@ -4,7 +4,7 @@ import ipywidgets as widgets
 import numpy as np
 import pandas as pd
 import plotly.graph_objs as go
-from traitlets import HasTraits
+from plotly.callbacks import Points
 
 from pandas_visual_analysis import DataSource
 from pandas_visual_analysis.utils.config import Config
@@ -81,7 +81,7 @@ class ParallelCoordinatesWidget(BaseWidget, HasMultiSelect):
     def build(self):
         return self.apply_size_constraints(self.root)
 
-    def observe_brush_indices_change(self, change):
+    def observe_brush_indices_change(self, sender):
         if not self.change_initiated:
             # shortly disable selection behaviour to reset constraint ranges
             self.figure_widget.data[0].on_change(self.pass_func, "dimensions")
@@ -95,7 +95,7 @@ class ParallelCoordinatesWidget(BaseWidget, HasMultiSelect):
 
         self.change_initiated = False
 
-        new_indices = list(change["new"])
+        new_indices = list(self.data_source.brushed_indices)
 
         new_color = np.zeros(self.data_source.len, dtype="uint8")
         new_color[new_indices] = 1
@@ -103,27 +103,21 @@ class ParallelCoordinatesWidget(BaseWidget, HasMultiSelect):
             self.figure_widget.data[0].line.color = new_color
 
     def set_observers(self):
-        HasTraits.observe(
-            self.data_source,
-            handler=self.observe_brush_indices_change,
-            names="_brushed_indices",
-        )
+        self.data_source.on_indices_changed.connect(self.observe_brush_indices_change)
         if self.use_multi_select:
-            HasTraits.observe(
-                self.multi_select,
-                self._on_selected_columns_changed,
-                names="selected_options",
+            self.multi_select.on_selected_options_changed.connect(
+                self._on_selected_columns_changed
             )
 
     def on_selection(self, trace, points, state):
         self.change_initiated = True
 
         new_color = np.zeros(self.data_source.len, dtype="uint8")
-        new_color[points] = 1
+        new_color[points.point_inds] = 1
         with self.figure_widget.batch_update(), self.figure_widget.hold_trait_notifications():
             self.figure_widget.data[0].line.color = new_color
 
-        self.data_source.brushed_indices = points
+        self.data_source.brushed_indices = points.point_inds
 
     def _on_selection_helper(self, obj, dimensions):
         old_ranges = self.constraint_ranges
@@ -139,7 +133,7 @@ class ParallelCoordinatesWidget(BaseWidget, HasMultiSelect):
             return
         mask = self._get_constraint_mask(self.constraint_ranges)
         points = np.arange(self.data_source.len)[mask].tolist()
-        self.on_selection(None, points, None)
+        self.on_selection(None, Points(point_inds=points), None)
 
     def _get_constraint_mask(self, constraint_ranges: dict) -> np.array:
         cols = list(constraint_ranges.keys())
@@ -206,8 +200,8 @@ class ParallelCoordinatesWidget(BaseWidget, HasMultiSelect):
     #             children = (self.figure_widget,)
     #         self.root.children = (self.multi_select_toggle, widgets.HBox(children))
 
-    def _on_selected_columns_changed(self, change):
-        self.selected_columns = change["new"]
+    def _on_selected_columns_changed(self, sender):
+        self.selected_columns = sender.selected_options
         self._redraw_plot()
 
     def _redraw_plot(self):

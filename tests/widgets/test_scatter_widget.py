@@ -1,5 +1,4 @@
 import pytest
-from traitlets import HasTraits, TraitError
 import numpy as np
 
 from pandas_visual_analysis import DataSource
@@ -25,11 +24,10 @@ def test_on_selection(small_df, populated_config):
     ds = DataSource(small_df, None)
     scatter_widget = ScatterWidget(ds, 0, 0, 1.0, 400)
 
-    def simple_observe(change):
-        assert change["old"] == set(range(len(small_df)))
-        assert change["new"] == {0}
+    def simple_observe(sender):
+        assert ds.brushed_indices == {0}
 
-    HasTraits.observe(ds, simple_observe, "_brushed_indices")
+    ds.on_indices_changed.connect(simple_observe)
 
     class Points:
         point_inds = [0]
@@ -44,10 +42,10 @@ def test_on_deselection(small_df, populated_config):
 
     ds.brushed_indices = [0]
 
-    def simple_observe(change):
-        assert change["new"] == original_indices
+    def simple_observe(sender):
+        assert ds.brushed_indices == original_indices
 
-    HasTraits.observe(ds, simple_observe, "_brushed_indices")
+    ds.on_indices_changed.connect(simple_observe)
 
     class Points:
         point_inds = [0]
@@ -81,24 +79,6 @@ def test_on_axis_size_change(small_df, populated_config):
     assert list(scatter_widget.figure_widget.data[0].marker["size"]) == list(
         small_df["c"]
     )
-
-
-def test_on_axis_change_size_date_error(small_df, populated_config):
-    ds = DataSource(small_df, None)
-    scatter_widget = ScatterWidget(ds, 0, 0, 1.0, 400)
-
-    assert "datetime64" in str(small_df["d"].dtype)
-    with pytest.raises(TraitError):  # selection not found
-        scatter_widget.size_selection.value = "d"  # data time not allowed
-
-
-def test_on_axis_change_bool_date_error(small_df, populated_config):
-    ds = DataSource(small_df, None)
-    scatter_widget = ScatterWidget(ds, 0, 0, 1.0, 400)
-
-    assert "bool" in str(small_df["e"].dtype)
-    with pytest.raises(TraitError):  # selection not found
-        scatter_widget.size_selection.value = "e"  # bool not allowed
 
 
 def test_on_axis_change_size_none(small_df, populated_config):

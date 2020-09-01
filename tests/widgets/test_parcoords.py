@@ -31,6 +31,11 @@ def populated_config():
     ]
 
 
+class PointsObject:
+    def __init__(self, indices):
+        self.point_inds = indices
+
+
 def fill_sample_constraint_range(dimensions, col, constraint_range):
     for dim in dimensions:
         if dim.label != col:
@@ -62,9 +67,9 @@ class TestBuild:
 class TestOnSelectionHelper:
     def test_on_selection_helper_int_range(self, small_df, populated_config):
         def on_selection_assert(trace, points, state):
-            assert len(points) == 4
-            assert isinstance(points, list)
-            assert 0 not in points
+            assert len(points.point_inds) == 4
+            assert isinstance(points.point_inds, list)
+            assert 0 not in points.point_inds
 
         ds = DataSource(small_df, None)
         ps = ParallelCoordinatesWidget(ds, 0, 0, 1.0, 400)
@@ -80,9 +85,9 @@ class TestOnSelectionHelper:
 
     def test_on_selection_helper_float_range(self, small_df, populated_config):
         def on_selection_assert(trace, points, state):
-            assert len(points) == 4
-            assert isinstance(points, list)
-            assert 0 not in points
+            assert len(points.point_inds) == 4
+            assert isinstance(points.point_inds, list)
+            assert 0 not in points.point_inds
 
         ds = DataSource(small_df, None)
         ps = ParallelCoordinatesWidget(ds, 0, 0, 1.0, 400)
@@ -118,11 +123,11 @@ class TestOnSelection:
         ds = DataSource(small_df, None)
         ps = ParallelCoordinatesWidget(ds, 0, 0, 1.0, 400)
 
-        points = [1, 2, 3]
+        points = PointsObject([1, 2, 3])
         ps.on_selection(None, points, None)
 
         assert sum(list(ps.figure_widget.data[0].line.color)) == 3
-        assert ds.brushed_indices == set(points)
+        assert ds.brushed_indices == set(points.point_inds)
 
     def test_on_selection_constraint_ranges_reset(self, small_df, populated_config):
         ds = DataSource(small_df, None)

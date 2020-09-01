@@ -1,16 +1,13 @@
 from abc import abstractmethod
 
-from traitlets import Instance, HasTraits
 import ipywidgets as widgets
 
 from pandas_visual_analysis import DataSource
 from pandas_visual_analysis.utils.config import Config
+from pandas_visual_analysis.utils.validation import validate_data_source
 
 
-class BaseWidget(HasTraits):
-
-    data_source = Instance(DataSource)
-
+class BaseWidget:
     def __init__(
         self,
         data_source: DataSource,
@@ -30,7 +27,7 @@ class BaseWidget(HasTraits):
         :param relative_size: ratio of the row the widget is allowed to take up
         :param max_height: height in pixels the plot has to have
         """
-        super().__init__(*args, **kwargs)
+        validate_data_source(data_source, name="data_source")
         self.data_source = data_source
         self.row: int = row
         self.index: int = index
@@ -90,21 +87,20 @@ class BaseWidget(HasTraits):
         return widget
 
     @abstractmethod
-    def observe_brush_indices_change(self, change):
+    def observe_brush_indices_change(self, sender):
         """
         This method observes the changes in the brush selection.
         In order to actually observe changes it has to be registered in :meth:`set_observers`.
 
-        :param change: Value containing the new and old values that can be accessed with change['new'] or change['old'].
+        :param sender: The instance that sent the signal.
         """
         pass
 
-    @abstractmethod
     def set_observers(self):
         """
         This method adds the necessary callbacks to trait changes.
         """
-        pass
+        self.data_source.on_indices_changed.connect(self.observe_brush_indices_change)
 
     @abstractmethod
     def on_selection(self, trace, points, state):

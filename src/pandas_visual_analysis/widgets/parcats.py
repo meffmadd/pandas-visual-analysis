@@ -1,7 +1,6 @@
 import ipywidgets as widgets
 import plotly.graph_objects as go
 import numpy as np
-from traitlets import HasTraits
 
 from pandas_visual_analysis import DataSource
 from pandas_visual_analysis.utils.config import Config
@@ -63,8 +62,8 @@ class ParallelCategoriesWidget(BaseWidget, HasMultiSelect):
     def apply_size_constraints(self, widget):
         return super().apply_size_constraints(widget)
 
-    def observe_brush_indices_change(self, change):
-        new_indices = list(change["new"])
+    def observe_brush_indices_change(self, sender):
+        new_indices = list(self.data_source.brushed_indices)
 
         new_color = np.zeros(self.data_source.len, dtype="uint8")
         new_color[new_indices] = 1
@@ -72,16 +71,10 @@ class ParallelCategoriesWidget(BaseWidget, HasMultiSelect):
             self.figure_widget.data[0].line.color = new_color
 
     def set_observers(self):
-        HasTraits.observe(
-            self.data_source,
-            handler=self.observe_brush_indices_change,
-            names="_brushed_indices",
-        )
+        self.data_source.on_indices_changed.connect(self.observe_brush_indices_change)
         if self.use_multi_select:
-            HasTraits.observe(
-                self.multi_select,
-                self._on_selected_columns_changed,
-                names="selected_options",
+            self.multi_select.on_selected_options_changed.connect(
+                self._on_selected_columns_changed
             )
 
     def on_selection(self, trace, points, state):
@@ -123,8 +116,8 @@ class ParallelCategoriesWidget(BaseWidget, HasMultiSelect):
         figure_widget.data[0].on_click(self.on_selection)
         return trace, figure_widget
 
-    def _on_selected_columns_changed(self, change):
-        self.selected_columns = change["new"]
+    def _on_selected_columns_changed(self, sender):
+        self.selected_columns = sender.selected_options
         self._redraw_plot()
 
     def _redraw_plot(self):
