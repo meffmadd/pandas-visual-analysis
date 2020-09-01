@@ -185,13 +185,13 @@ The parameter is a list of rows, where each row is in turn a list specifying the
     )
 
 Here, two scatter plots will share the first row while the second row only contains a parallel coordinates plot.
-In order to see all the possible options you can the ``widgets`` method of ``VisualAnalysis``.
+In order to see all the possible options you can call the ``widgets`` class-method of ``VisualAnalysis``.
 
 .. code-block:: python
 
     VisualAnalysis.widgets()
 
-This outputs the following list of plots:
+This outputs the following list of possible plots:
 
 .. code-block:: python
 

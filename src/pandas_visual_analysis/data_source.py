@@ -1,9 +1,16 @@
 import typing
+from enum import Enum
 
 from pandas import DataFrame
 from traitlets import HasTraits, Instance, List, observe
 
 import pandas_visual_analysis.utils.validation as validate
+
+
+class SelectionType(Enum):
+    STANDARD = 1
+    ADDITIVE = 2
+    SUBTRACTIVE = 3
 
 
 class DataSource(HasTraits):
@@ -46,6 +53,7 @@ class DataSource(HasTraits):
         validate.validate_sample(sample)
         validate.validate_seed(seed)
 
+        self.selection_type = SelectionType.STANDARD
         if sample is None:
             self._df = df
         else:
@@ -173,7 +181,15 @@ class DataSource(HasTraits):
 
         :param indices: indices of data points that should be brushed.
         """
-        self._brushed_indices = indices
+        if self.selection_type == SelectionType.STANDARD:
+            self._brushed_indices = indices
+        elif self.selection_type == SelectionType.ADDITIVE:
+            self._brushed_indices = list(set().union(self._brushed_indices, indices))
+        elif self.selection_type == SelectionType.SUBTRACTIVE:
+            diff = set(indices)
+            self._brushed_indices = [
+                index for index in self._brushed_indices if index not in diff
+            ]
 
     @property
     def brushed_data(self) -> DataFrame:
