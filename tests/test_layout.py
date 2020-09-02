@@ -3,7 +3,7 @@ from unittest.mock import ANY, Mock, call
 from ipywidgets import widgets
 
 from pandas_visual_analysis.layout import AnalysisLayout
-from pandas_visual_analysis.data_source import DataSource
+from pandas_visual_analysis.data_source import DataSource, SelectionType
 from pandas_visual_analysis.utils.config import Config
 from pandas_visual_analysis.widgets import WidgetClassRegistry
 from pandas_visual_analysis.widgets.scatter import ScatterWidget
@@ -120,3 +120,31 @@ class TestRowHeight:
             AnalysisLayout(
                 [["Scatter"], ["Scatter"]], [200, -300], DataSource(small_df)
             )
+
+
+class TestSelectionType:
+    def test_std_standard(self, small_df):
+        ds = DataSource(small_df, None)
+        layout = AnalysisLayout([["Scatter"], ["Scatter"]], 400, ds)
+        assert layout.data_source.selection_type == SelectionType.STANDARD
+
+    def test_change_to_std(self, small_df):
+        ds = DataSource(small_df, None)
+        layout = AnalysisLayout([["Scatter"], ["Scatter"]], 400, ds)
+        layout.selection_type_widget.value = (
+            "add"  # change first so observe gets triggered
+        )
+        layout.selection_type_widget.value = "std"
+        assert layout.data_source.selection_type == SelectionType.STANDARD
+
+    def test_change_to_add(self, small_df):
+        ds = DataSource(small_df, None)
+        layout = AnalysisLayout([["Scatter"], ["Scatter"]], 400, ds)
+        layout.selection_type_widget.value = "add"
+        assert layout.data_source.selection_type == SelectionType.ADDITIVE
+
+    def test_change_to_sub(self, small_df):
+        ds = DataSource(small_df, None)
+        layout = AnalysisLayout([["Scatter"], ["Scatter"]], 400, ds)
+        layout.selection_type_widget.value = "sub"
+        assert layout.data_source.selection_type == SelectionType.SUBTRACTIVE

@@ -4,6 +4,7 @@ import pytest
 import ipywidgets as widgets
 
 from pandas_visual_analysis import DataSource
+from pandas_visual_analysis.data_source import SelectionType
 from pandas_visual_analysis.utils.config import Config
 from pandas_visual_analysis.widgets import ParallelCoordinatesWidget
 from tests import sample_dataframes
@@ -139,6 +140,21 @@ class TestOnSelection:
         ps._on_selection_helper(None, dimensions)
 
         ds.brushed_indices = [1, 2]
+        assert ps.constraint_ranges == {}
+
+    @pytest.mark.parametrize(
+        "type", [SelectionType.ADDITIVE, SelectionType.SUBTRACTIVE]
+    )
+    def test_constraint_range_reset_data_source(self, small_df, populated_config, type):
+        ds = DataSource(small_df)
+        ps = ParallelCoordinatesWidget(ds, 0, 0, 1.0, 400)
+        ds.selection_type = type
+
+        dimensions = ps.figure_widget.data[0].dimensions
+        assert len(dimensions) != 0
+        dimensions = fill_sample_constraint_range(dimensions, "a", [2, 5])
+        ps._on_selection_helper(None, dimensions)
+
         assert ps.constraint_ranges == {}
 
 

@@ -3,8 +3,10 @@ import typing
 from ipywidgets import widgets
 
 from pandas_visual_analysis.data_source import DataSource, SelectionType
+from pandas_visual_analysis.utils.config import Config
 from pandas_visual_analysis.widgets import BaseWidget
 from pandas_visual_analysis.widgets.registry import WidgetClassRegistry
+from pandas_visual_analysis.utils.util import text_color
 import pandas_visual_analysis.utils.validation as validate
 
 
@@ -109,12 +111,28 @@ class AnalysisLayout:
             rows.append(h_box)
 
         # workaround to include arbitrary css
+        bg_color: typing.Tuple[int, int, int] = Config().select_color
         css = "<style>"
         css += ".jupyter-widgets { border-radius : 5px ; }"
+        css += ".jupyter-button.mod-active {{ background-color : rgb{}; color: rgb{}; }}".format(
+            bg_color, text_color(bg_color)
+        )
+        css += ".jupyter.button, .widget-toggle-button {border-radius : 5px; }"
+        css += ".widget-dropdown > select {border-radius : 5px; }"
+        css += (
+            ".jupyter-widgets::-webkit-scrollbar-track { border-radius: 4px; background-color: #F5F5F5; "
+            "-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.15); }"
+        )
+        css += ".jupyter-widgets::-webkit-scrollbar { width: 7px; background-color: #F5F5F5; }"
+        css += ".jupyter-widgets::-webkit-scrollbar-thumb {{ border-radius: 4px; background-color: rgb{col}; }}".format(
+            col=(170, 170, 170)
+        )
         css += "</style>"
         rows.append(widgets.HTML(css))
 
-        self.root_widget = widgets.VBox(rows)
+        self.root_widget = widgets.VBox(
+            rows, layout=widgets.Layout(margin="20px 0px 10px 0px")
+        )
         return self.root_widget
 
     def _selection_type_changed(self, change):
@@ -123,5 +141,5 @@ class AnalysisLayout:
             self.data_source.selection_type = SelectionType.STANDARD
         elif value == "add":
             self.data_source.selection_type = SelectionType.ADDITIVE
-        else:
+        elif value == "sub":
             self.data_source.selection_type = SelectionType.SUBTRACTIVE

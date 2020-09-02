@@ -82,6 +82,16 @@ class TestBrushIndicesChange:
         assert hw.figure_widget.data[1].selectedpoints == ds.indices
         assert not hw.figure_widget.data[0].visible
 
+    def test_plot_invisible_with_no_data(self, small_df, populated_config):
+        ds = DataSource(small_df)
+        hw = HistogramWidget(ds, 0, 0, 1.0, 400)
+        ds.brushed_indices = []
+
+        assert not hw.figure_widget.data[1].visible
+
+        ds.brushed_indices = [0]
+        assert hw.figure_widget.data[1].visible
+
 
 class TestSelectUI:
     def test_column_select(self, small_df, populated_config):

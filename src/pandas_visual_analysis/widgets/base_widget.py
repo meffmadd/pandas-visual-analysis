@@ -55,8 +55,8 @@ class BaseWidget:
             margin = 5
             num_widgets_in_row = int(round(1 / self.relative_size)) - 1
             size_mod = (
-                2 * num_widgets_in_row
-            )  # because a border is added to each widget we have to subtract that (2px)
+                3 * num_widgets_in_row
+            )  # because a border is added to each widget we have to subtract that (2px) + 1px for safety
             widget.layout.min_width = (
                 "calc("
                 + str(self.relative_size * 100)

@@ -149,7 +149,7 @@ class ParallelCoordinatesWidget(BaseWidget, HasMultiSelect):
                 range_tuple = (range_tuple,)
             intermediate_mask: np.array = np.full(
                 self.data_source.len, fill_value=False, dtype=bool
-            )
+            )  # for several constraints in one dimension
             for ranges in range_tuple:
                 intermediate_mask |= (
                     self.data_source.data[col].between(ranges[0], ranges[1])

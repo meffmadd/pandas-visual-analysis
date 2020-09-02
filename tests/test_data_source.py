@@ -1,6 +1,7 @@
 import pytest
 
 from pandas_visual_analysis import DataSource
+from pandas_visual_analysis.data_source import SelectionType
 from tests import sample_dataframes
 
 df_size = 1000
@@ -169,3 +170,28 @@ class TestSeed:
     def test_seed_type_errro(self, small_df):
         with pytest.raises(TypeError):
             DataSource(small_df, seed="ten")
+
+
+class TestSelectionType:
+    def test_standard_is_default(self, small_df):
+        ds = DataSource(small_df)
+        assert ds.selection_type == SelectionType.STANDARD
+
+    def test_standard(self, small_df):
+        ds = DataSource(small_df)
+        ds.brushed_indices = [1, 2]
+        assert ds.brushed_indices == {1, 2}
+
+    def test_additive(self, small_df):
+        ds = DataSource(small_df)
+        ds.brushed_indices = [1, 2]
+        ds.selection_type = SelectionType.ADDITIVE
+        ds.brushed_indices = [2, 3]
+        assert ds.brushed_indices == {1, 2, 3}
+
+    def test_subtractive(self, small_df):
+        ds = DataSource(small_df)
+        ds.brushed_indices = [1, 2]
+        ds.selection_type = SelectionType.SUBTRACTIVE
+        ds.brushed_indices = [2, 3]
+        assert ds.brushed_indices == {1}

@@ -25,6 +25,20 @@ def hex_to_rgb(hex_value: str) -> Tuple[int, int, int]:
     return int(hex_value[0:2], 16), int(hex_value[2:4], 16), int(hex_value[4:6], 16)
 
 
+def text_color(bg_color: Tuple[int, int, int]) -> Tuple[int, int, int]:
+    """
+    Determines the text color based on background color.
+
+    :param bg_color: The color of the background.
+    :return: The text color as a tuple for (r, g, b) values.
+    """
+    r, g, b = bg_color
+    if (r * 0.299 + g * 0.587 + b * 0.114) > 186:
+        return 0, 0, 0
+    else:
+        return 255, 255, 255
+
+
 def compare_lists(s, t):
     """
     Compares two unordered lists and checks for equality.
