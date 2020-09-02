@@ -123,7 +123,7 @@ class DataSource:
                 "with None."
             )
 
-        self._length = len(df)
+        self._length = len(self._df)
         self._indices = set(range(self._length))
         self._brushed_indices: typing.Set[int] = self._indices
 

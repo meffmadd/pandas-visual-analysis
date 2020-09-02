@@ -139,10 +139,12 @@ class TestLen:
 
 class TestSample:
     def test_sample_int(self, small_df):
-        assert DataSource(small_df, None, 3)
+        ds = DataSource(small_df, None, 3)
+        assert len(ds) == 3
 
     def test_sample_float(self, small_df):
-        assert DataSource(small_df, None, 0.5)
+        ds = DataSource(small_df, None, 0.5)
+        assert len(ds) == len(small_df) // 2
 
     def test_sample_type_error(self, small_df):
         with pytest.raises(TypeError):

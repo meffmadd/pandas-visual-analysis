@@ -14,7 +14,7 @@ from pandas_visual_analysis.widgets import WidgetClassRegistry
 class VisualAnalysis:
 
     """
-    Generate linked plots that support brushing from a pandas.DataFrame and display them in Jupyter notebooks.
+    Generate plots that support linked-brushing from a pandas `DataFrame` and display them in Jupyter notebooks.
     """
 
     def __init__(
@@ -36,22 +36,29 @@ class VisualAnalysis:
             Those columns have to include all columns of the DataFrame
             which have type `object`, `str`, `bool` or `category`.
             This means it can only add columns which do not have the aforementioned types.
+            Defaults to 'default'.
         :param categorical_columns: If given, specifies which columns are to be interpreted as categorical.
+            Defaults to None.
         :param row_height: Height in pixels each row should have. If given an integer, each row has the height
             specified by that value, if given a list of integers, each value in the list specifies the height of
             the corresponding row.
+            Defaults to 400.
         :param sample: Int or float value specifying if the DataFrame should be sub-sampled.
             When an int is given, the DataFrame will be limited to that number of rows given by the value.
             When a float is given, the DataFrame will include the fraction of rows given by the value.
+            Defaults to None.
         :param select_color: RGB tuple or hex color specifying the color display selected data points.
             Values in the tuple have to be between 0 and 255 inclusive or a hex string that converts to
             such RGB values.
+            Defaults to '#323EEC'.
         :param deselect_color: RGB tuple or hex color specifying the color display deselected data points.
             Values in the tuple have to be between 0 and 255 inclusive or a hex string that converts to
             such RGB values.
-        :param alpha: Opacity of data points when applicable ranging from 0.0 to 1.0 inclusive.
+            Defaults to '#8A8C93'.
+        :param alpha: Opacity of data points when applicable ranging from 0.0 to 1.0 inclusive. Defaults to 0.75.
         :param seed: Random seed used for sampling the data.
             Values can be any integer between 0 and 2**32 - 1 inclusive or None.
+            Defaults to None.
         """
         super().__init__()
 

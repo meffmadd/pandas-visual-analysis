@@ -149,6 +149,23 @@ If you want to specify which columns of the ``DataFrame`` are categorical, just 
     VisualAnalysis(df, categorical_columns=categorical)
 
 
+Selection Types
+###############
+
+|
+
+.. image:: https://github.com/meffmadd/pandas-visual-analysis/blob/master/docs/source/_static/assets/selection_types.gif?raw=true
+   :width: 70%
+   :alt: selection types
+   :align: center
+
+|
+
+By default a new selection replaces the old selection, however, it is also possible to add data points to the existing
+selection by selecting the `Additive` selection type. By choosing the `Subtractive` selection newly selected
+data points are removed from the selection.
+
+
 Using DataSource
 ################
 
