@@ -1,4 +1,5 @@
 import typing
+import uuid
 
 from ipywidgets import widgets
 
@@ -40,6 +41,7 @@ class AnalysisLayout:
             in that layout.
         """
         super().__init__(*args, **kwargs)
+        self._id = uuid.uuid4().hex
 
         if isinstance(layout, str):
             if layout not in set(self.predefined_layouts.keys()):
@@ -84,6 +86,7 @@ class AnalysisLayout:
             ],
             style={"description_width": "initial"},
         )
+        self.selection_type_widget.add_class("layout-" + self._id)
         self.selection_type_widget.observe(self._selection_type_changed, "value")
 
     def build(self) -> widgets.Widget:
@@ -114,9 +117,9 @@ class AnalysisLayout:
         bg_color: typing.Tuple[int, int, int] = Config().select_color
         css = "<style>"
         css += ".jupyter-widgets { border-radius : 5px ; }"
-        css += ".jupyter-button.mod-active {{ background-color : rgb{}; color: rgb{}; }}".format(
-            bg_color, text_color(bg_color)
-        )
+        css += ".layout-{} * .jupyter-button.mod-active {{ background-color : rgb{}; color: rgb{}; }}".format(
+            self._id, bg_color, text_color(bg_color)
+        )  # add layout-xxx... class to buttons since this color is specific to this layout
         css += ".jupyter.button, .widget-toggle-button {border-radius : 5px; }"
         css += ".widget-dropdown > select {border-radius : 5px; }"
         css += (
