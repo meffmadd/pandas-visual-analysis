@@ -24,3 +24,8 @@ def test_base_widget_abstract_methods(small_df):
     d.build()
     d.on_selection(None, None, None)
     d.set_observers()
+
+
+def test_validate_data_source(small_df):
+    with pytest.raises(TypeError):
+        BaseWidget(small_df, 0, 0, 0.3, 100)

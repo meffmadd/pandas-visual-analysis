@@ -220,8 +220,10 @@ This outputs the following list of possible plots:
      'BoxPlot']
 
 Any of those can be part of the layout specification.
-
 See also: `widgets Documentation <https://pandas-visual-analysis.readthedocs.io/en/latest/api/widgets.html>`_.
+
+For more advanced features of the ``VisualAnalysis`` class see:
+`VisualAnalysis Documentation <https://pandas-visual-analysis.readthedocs.io/en/latest/api/visual_analysis.html#advanced-usage>`_
 
 .. usage-end
 

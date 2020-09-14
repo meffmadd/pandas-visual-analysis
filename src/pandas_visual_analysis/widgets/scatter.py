@@ -34,25 +34,16 @@ class ScatterWidget(BaseWidget):
         """
         super().__init__(data_source, row, index, relative_size, max_height)
 
-        all_columns = (
-            self.data_source.numerical_columns
-            + self.data_source.time_columns
-            + self.data_source.categorical_columns
-        )
-        # we know that the dataframe has at least two columns so this is safe
-        self.initial_x = all_columns[0]
-        self.initial_y = all_columns[1]
-
         self.x_selection = widgets.Dropdown(
             options=self.data_source.columns,
-            value=self.initial_x,
+            value=self.data_source.column_store.next_numerical(),
             description="x:",
             style={"description_width": "20px"},
         )
 
         self.y_selection = widgets.Dropdown(
             options=self.data_source.columns,
-            value=self.initial_y,
+            value=self.data_source.column_store.next_numerical(),
             description="y:",
             style={"description_width": "20px"},
         )

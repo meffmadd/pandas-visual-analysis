@@ -4,6 +4,7 @@ from blinker import Signal
 from pandas import DataFrame
 
 import pandas_visual_analysis.utils.validation as validate
+from pandas_visual_analysis.utils.column_store import ColumnStore
 
 
 class SelectionType(Enum):
@@ -69,59 +70,13 @@ class DataSource:
                 self._df = df.sample(n=sample, random_state=seed)
         self.columns = list(self._df.columns.values)
 
-        if isinstance(categorical_columns, list):
-            if not set(categorical_columns).issubset(set(self.columns)):
-                raise ValueError(
-                    "All categorical columns have to be present in the DataFrame. Invalid columns: "
-                    + str(list(set(categorical_columns).difference(set(self.columns))))
-                )
-            self.categorical_columns = categorical_columns
-            diff = set(
-                self._df.select_dtypes(
-                    exclude=["number", "datetime", "timedelta", "datetimetz"]
-                ).columns.values
-            ).difference(set(self.categorical_columns))
-            if len(diff) != 0:
-                raise ValueError(
-                    "Categorical columns have to include all columns with dtype object, bool or category. "
-                    + "The following columns were not included in those: %s"
-                    % str(list(diff))
-                )
-            time_cols = list(
-                self._df.select_dtypes(
-                    include=["datetime", "timedelta", "datetimetz"]
-                ).columns.values
-            )
-            self.time_columns = list(
-                set(time_cols).difference(set(self.categorical_columns))
-            )
-            self.numerical_columns = list(
-                set(self.columns).difference(
-                    set(self.categorical_columns).union(set(self.time_columns))
-                )
-            )
-            self._df[self.categorical_columns].select_dtypes(
-                exclude=["category", object]
-            ).astype(dtype="category")
-        elif categorical_columns is None:
-            self.categorical_columns = list(
-                self._df.select_dtypes(
-                    exclude=["number", "datetime", "timedelta", "datetimetz"]
-                ).columns.values
-            )
-            self.time_columns = list(
-                self._df.select_dtypes(
-                    include=["datetime", "timedelta", "datetimetz"]
-                ).columns.values
-            )
-            self.numerical_columns = list(
-                self._df.select_dtypes(include=["number"]).columns.values
-            )
-        else:
-            raise TypeError(
-                "Categorical columns have to be specified with a list of strings or have to be omitted "
-                "with None."
-            )
+        self.column_store = ColumnStore(self._df, self.columns, categorical_columns)
+        self.numerical_columns = self.column_store.numerical_columns
+        self.time_columns = self.column_store.time_columns
+        self.categorical_columns = self.column_store.categorical_columns
+
+        if self.categorical_columns is not None:
+            self._df[self.categorical_columns].astype(dtype="category")
 
         self._length = len(self._df)
         self._indices = set(range(self._length))

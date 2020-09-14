@@ -43,7 +43,7 @@ class BoxPlotWidget(BaseWidget):
 
         self.column_select = widgets.Dropdown(
             options=self.columns,
-            value=self.columns[0],
+            value=self.data_source.column_store.next_numerical(),
             description="Column:",
             style={"description_width": "60px"},
         )

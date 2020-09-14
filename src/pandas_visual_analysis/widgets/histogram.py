@@ -39,7 +39,9 @@ class HistogramWidget(BaseWidget):
         )
 
         self.column_select = widgets.Dropdown(
-            options=self.columns, value=self.columns[0], description="Column:"
+            options=self.columns,
+            value=self.data_source.column_store.next_prefer_numerical(),
+            description="Column:",
         )
         self.normalize = widgets.Checkbox(
             value=False, description="Normalize", indent=False

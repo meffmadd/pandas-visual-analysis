@@ -2,7 +2,13 @@ import time
 
 import pytest
 
-from pandas_visual_analysis.utils.util import hex_to_rgb, compare_lists, timing, Timer
+from pandas_visual_analysis.utils.util import (
+    hex_to_rgb,
+    compare_lists,
+    timing,
+    Timer,
+    text_color,
+)
 
 
 def test_hex_to_rgb():
@@ -77,3 +83,8 @@ def test_timer():
     timer.stop()
 
     assert ((timer.end_time - timer.start_time) * 1000.0) > 1000.0  # ms
+
+
+def test_text_color_white():
+    col = text_color((255, 255, 255))
+    assert col == (0, 0, 0)
