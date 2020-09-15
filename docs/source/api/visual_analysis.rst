@@ -8,8 +8,8 @@ VisualAnalysis
     :show-inheritance:
 
 
-Advanced Usage
-----------------
+Advanced Usage of VisualAnalysis
+----------------------------------
 
 For getting started see the `basic usage guide <https://pandas-visual-analysis.readthedocs.io/en/latest/#usage>`_.
 
