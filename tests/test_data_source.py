@@ -1,4 +1,5 @@
 import pytest
+import pandas as pd
 
 from pandas_visual_analysis import DataSource
 from pandas_visual_analysis.data_source import SelectionType
@@ -20,6 +21,49 @@ def small_df_index():
 @pytest.fixture(scope="module")
 def randint_df():
     return sample_dataframes.randint_df(df_size)
+
+
+@pytest.fixture(scope="module")
+def sample_csv_filepath(tmpdir_factory):
+    path = str(tmpdir_factory.mktemp("read_files").join("temp.csv"))
+    df = sample_dataframes.small_df()
+    df.to_csv(path)
+    yield path
+
+
+@pytest.fixture(scope="module")
+def sample_tsv_filepath(tmpdir_factory):
+    path = str(tmpdir_factory.mktemp("read_files").join("temp.tsv"))
+    df = sample_dataframes.small_df()
+    df.to_csv(path, sep="\t")
+    yield path
+
+
+@pytest.fixture(
+    scope="module", params=["split", "records", "index", "columns", "values"]
+)
+def sample_json_filepath(tmpdir_factory, request):
+    path = str(tmpdir_factory.mktemp("read_files").join("temp.json"))
+    orientation = request.param
+    df = sample_dataframes.small_df()
+    df.to_json(path, orient=orientation)
+    yield path, orientation
+
+
+@pytest.fixture(scope="module")
+def sample_xlsx_filepath(tmpdir_factory):
+    path = str(tmpdir_factory.mktemp("read_files").join("temp.xlsx"))
+    df = sample_dataframes.small_df()
+    df.to_excel(path)
+    yield path
+
+
+@pytest.fixture(scope="module")
+def sample_xls_filepath(tmpdir_factory):
+    path = str(tmpdir_factory.mktemp("read_files").join("temp.xls"))
+    df = sample_dataframes.small_df()
+    df.to_excel(path)
+    yield path
 
 
 class TestInit:
@@ -197,3 +241,95 @@ class TestSelectionType:
         ds.selection_type = SelectionType.SUBTRACTIVE
         ds.brushed_indices = [2, 3]
         assert ds.brushed_indices == {1}
+
+
+class TestReadMethods:
+    @pytest.mark.parametrize("header", [None, 0])
+    def test_read_csv(self, sample_csv_filepath, small_df, header):
+        ds = DataSource.read_csv(path=sample_csv_filepath, header=header)
+        assert isinstance(ds.data, pd.DataFrame)
+        assert (
+            len(ds.data) - 1 == len(small_df)
+            if header is None
+            else len(ds.data) == len(small_df)
+        )
+
+    @pytest.mark.parametrize("header", [None, 0])
+    def test_read_tsv(self, sample_tsv_filepath, small_df, header):
+        ds = DataSource.read_tsv(sample_tsv_filepath, header=header)
+        assert isinstance(ds.data, pd.DataFrame)
+        assert (
+            len(ds.data) - 1 == len(small_df)
+            if header is None
+            else len(ds.data) == len(small_df)
+        )
+
+    def test_read_json(self, sample_json_filepath, small_df):
+        path, orientation = sample_json_filepath
+        ds = DataSource.read_json(path, orient=orientation)
+        assert isinstance(ds.data, pd.DataFrame)
+        assert len(ds.data) == len(small_df)
+
+    @pytest.mark.parametrize("extension", ["xlsx", "xls", "html", "txt"])
+    def test_read_unsupported(self, extension):
+        with pytest.raises(ValueError):
+            DataSource.read("./path/to/file.%s" % extension)
+
+    @pytest.mark.parametrize("header", [None, 0])
+    def test_read_infer_csv(self, sample_csv_filepath, small_df, header):
+        ds = DataSource.read(sample_csv_filepath, header=header)
+        assert isinstance(ds.data, pd.DataFrame)
+        assert (
+            len(ds.data) - 1 == len(small_df)
+            if header is None
+            else len(ds.data) == len(small_df)
+        )
+
+    @pytest.mark.parametrize("header", [None, 0])
+    def test_read_infer_tsv(self, sample_tsv_filepath, small_df, header):
+        ds = DataSource.read(sample_tsv_filepath, header=header)
+        assert isinstance(ds.data, pd.DataFrame)
+        assert (
+            len(ds.data) - 1 == len(small_df)
+            if header is None
+            else len(ds.data) == len(small_df)
+        )
+
+    def test_read_infer_json(self, sample_json_filepath, small_df):
+        path, orientation = sample_json_filepath
+        ds = DataSource.read(path, orient=orientation)
+        assert isinstance(ds.data, pd.DataFrame)
+        assert len(ds.data) == len(small_df)
+
+
+class TestContextManager:
+    @pytest.mark.parametrize("header", [None, 0])
+    def test_read_context_csv(self, sample_csv_filepath, small_df, header):
+        with DataSource.read(sample_csv_filepath, header) as ds:
+            assert isinstance(ds.data, pd.DataFrame)
+            assert (
+                len(ds.data) - 1 == len(small_df)
+                if header is None
+                else len(ds.data) == len(small_df)
+            )
+
+    @pytest.mark.parametrize("header", [None, 0])
+    def test_read_context_tsv(self, sample_tsv_filepath, small_df, header):
+        with DataSource.read(sample_tsv_filepath, header) as ds:
+            assert isinstance(ds.data, pd.DataFrame)
+            assert (
+                len(ds.data) - 1 == len(small_df)
+                if header is None
+                else len(ds.data) == len(small_df)
+            )
+
+    def test_read_context_json(self, sample_json_filepath, small_df):
+        path, orientation = sample_json_filepath
+        with DataSource.read(path, orientation) as ds:
+            assert isinstance(ds.data, pd.DataFrame)
+            assert len(ds.data) == len(small_df)
+
+    def test_read_context_error(self):
+        with pytest.raises(FileNotFoundError):
+            with DataSource.read("./some/file.csv") as ds:
+                pass

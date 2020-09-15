@@ -1,7 +1,9 @@
+import os
 import typing
 from enum import Enum
 from blinker import Signal
 from pandas import DataFrame
+import pandas as pd
 
 import pandas_visual_analysis.utils.validation as validate
 from pandas_visual_analysis.utils.column_store import ColumnStore
@@ -14,7 +16,6 @@ class SelectionType(Enum):
 
 
 class DataSource:
-
     """
     The DataSource object provides the data itself to the plots and also manages the brushing between the plots.
     If the plots observe the brushed_indices property of this class, they can react to any change in the data.
@@ -178,3 +179,92 @@ class DataSource:
         :return: The DataFrame for this :class:`pandas_visual_analysis.data_source.DataSource` object.
         """
         return self._df
+
+    @staticmethod
+    def read_csv(path: str, header: typing.Union[int, None] = 0):
+        """
+        Read a comma-separated values (csv) file into DataSource.
+
+        :param path: Any valid string path is acceptable. The string could be a URL.
+            Valid URL schemes include http, ftp, s3, and file.
+        :param header: Row (0-indexed) to use for the column labels of the parsed DataFrame.
+            Use None if there is no header.
+        :return: The DataSource containing the data from the specified file.
+        """
+        df = pd.read_csv(path, header=header)
+        return DataSource(df)
+
+    @staticmethod
+    def read_tsv(path: str, header: typing.Union[int, None] = 0):
+        """
+        Read a tab-separated values (tsv) file into DataSource.
+
+        :param path: Any valid string path is acceptable. The string could be a URL.
+            Valid URL schemes include http, ftp, s3, and file.
+        :param header: Row (0-indexed) to use for the column labels of the parsed DataFrame.
+            Use None if there is no header.
+        :return: The DataSource containing the data from the specified file.
+        """
+        df = pd.read_table(path, header=header)
+        return DataSource(df)
+
+    @staticmethod
+    def read_json(path: str, orient: str):
+        """
+         Read a json file into a DataSource.
+
+        :param path: Any valid string path is acceptable. The string could be a URL.
+            Valid URL schemes include http, ftp, s3, and file.
+        :param orient: Indication of expected JSON string format produced by DataFrame.to_json()
+            with a corresponding orient value.
+        :return: The DataSource containing the data from the specified file.
+        """
+        df = pd.read_json(path, orient=orient)
+        return DataSource(df)
+
+    @staticmethod
+    def read(path: str, *args, **kwargs):
+        """
+        Reads the data specified by the path into a DataSource. Infers file type by extension.
+        Supported extensions are: .csv, .tsv and .json.
+
+        :param path: Any valid string path is acceptable. The string could be a URL.
+            Valid URL schemes include http, ftp, s3, and file.
+        :param args: Arguments passed to inferred methods.
+        :param kwargs: Keyword arguments passed to inferred methods.
+        :return: The DataSource containing the data from the specified file.
+        """
+        filename, extension = os.path.splitext(path)
+        supported_extensions = {".csv", ".tsv", ".json"}
+        if extension not in supported_extensions:
+            raise ValueError(
+                "The file extension %s is not supported. "
+                "Supported extensions are: .csv, .tsv, .json. "
+            )
+
+        if extension == ".csv":
+            return DataSource.read_csv(path, *args, **kwargs)
+        elif extension == ".tsv":
+            return DataSource.read_tsv(path, *args, **kwargs)
+        elif extension == ".json":
+            return DataSource.read_json(path, *args, **kwargs)
+
+    #  context manager
+    def __enter__(self):
+        """
+        Enters the context.
+
+        :return: Returns self to use as a resource.
+        """
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        """
+        Exits the context. No resources have to be freed and all Exceptions are delegated.
+
+        :param exc_type: Type of any raised Exception.
+        :param exc_value: Value of any raised Exception.
+        :param traceback: Traceback if an error occurred.
+        :return: None
+        """
+        pass  # delegate Exceptions
