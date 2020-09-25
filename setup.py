@@ -10,7 +10,7 @@ with (source_root / "README.rst").open(encoding="utf-8") as f:
 with (source_root / "requirements.txt").open(encoding="utf8") as f:
     requirements = f.readlines()
 
-version = "0.0.3"
+version = "0.0.4"
 
 with (source_root / "src" / "pandas_visual_analysis" / "version.py").open(
     "w", encoding="utf-8"
@@ -42,7 +42,7 @@ setup(
     },
     keywords="pandas data-science visualization data-analysis brushing linked-brushing python jupyter ipython",
     classifiers=[
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 4 - Beta",
         "Topic :: Scientific/Engineering :: Visualization",
         "License :: OSI Approved :: MIT License",
         "Environment :: Console",
