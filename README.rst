@@ -16,6 +16,65 @@ Status
 .. image:: https://codecov.io/gh/meffmadd/pandas-visual-analysis/branch/master/graph/badge.svg
     :target: https://codecov.io/gh/meffmadd/pandas-visual-analysis
 
+Pull requests
+Issues
+Marketplace
+Explore
+@rishigarg94
+Learn Git and GitHub without any code!
+
+Using the Hello World guide, you’ll start a branch, write comments, and open a pull request.
+rishigarg94 /
+pandas-visual-analysis
+forked from meffmadd/pandas-visual-analysis
+
+0
+0
+
+    1
+
+Code
+Pull requests
+Actions
+Projects
+Security
+Insights
+
+    Settings
+
+pandas-visual-analysis/
+
+1
+
+.. image:: https://github.com/meffmadd/pandas-visual-analysis/blob/master/docs/source/_static/assets/banner.jpeg?raw=true
+
+2
+
+   :width: 95%
+
+3
+
+   :alt: banner
+
+4
+
+   :align: center
+
+5
+
+​
+
+6
+
+​
+
+7
+
+Status
+
+8
+
+​
 .. image:: https://img.shields.io/badge/License-MIT-yellow.svg
     :alt: MIT License
     :target: https://opensource.org/licenses/MIT
@@ -162,7 +221,7 @@ Selection Types
 |
 
 By default a new selection replaces the old selection, however, it is also possible to add data points to the existing
-selection by selecting the `Additive` selection type. By choosing the `Subtractive` selection newly selected
+selection by selecting the `Additive` selection type. By choosing the `Subtractive` selection,newly selected
 data points are removed from the selection.
 
 
