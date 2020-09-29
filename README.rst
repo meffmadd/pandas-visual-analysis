@@ -201,7 +201,7 @@ The parameter is a list of rows, where each row is in turn a list specifying the
                 ["ParallelCoordinates"]]
     )
 
-Here, two scatter plots will share the first row while the second row only contains a parallel coordinates plot.
+Here, two scatter plots will share the first row while the second row only contains a parallel co-ordinates plot.
 In order to see all the possible options you can call the ``widgets`` class-method of ``VisualAnalysis``.
 
 .. code-block:: python
