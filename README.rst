@@ -16,65 +16,6 @@ Status
 .. image:: https://codecov.io/gh/meffmadd/pandas-visual-analysis/branch/master/graph/badge.svg
     :target: https://codecov.io/gh/meffmadd/pandas-visual-analysis
 
-Pull requests
-Issues
-Marketplace
-Explore
-@rishigarg94
-Learn Git and GitHub without any code!
-
-Using the Hello World guide, you’ll start a branch, write comments, and open a pull request.
-rishigarg94 /
-pandas-visual-analysis
-forked from meffmadd/pandas-visual-analysis
-
-0
-0
-
-    1
-
-Code
-Pull requests
-Actions
-Projects
-Security
-Insights
-
-    Settings
-
-pandas-visual-analysis/
-
-1
-
-.. image:: https://github.com/meffmadd/pandas-visual-analysis/blob/master/docs/source/_static/assets/banner.jpeg?raw=true
-
-2
-
-   :width: 95%
-
-3
-
-   :alt: banner
-
-4
-
-   :align: center
-
-5
-
-​
-
-6
-
-​
-
-7
-
-Status
-
-8
-
-​
 .. image:: https://img.shields.io/badge/License-MIT-yellow.svg
     :alt: MIT License
     :target: https://opensource.org/licenses/MIT
@@ -260,7 +201,7 @@ The parameter is a list of rows, where each row is in turn a list specifying the
                 ["ParallelCoordinates"]]
     )
 
-Here, two scatter plots will share the first row while the second row only contains a parallel co-ordinates plot.
+Here, two scatter plots will share the first row while the second row only contains a parallel coordinates plot.
 In order to see all the possible options you can call the ``widgets`` class-method of ``VisualAnalysis``.
 
 .. code-block:: python
