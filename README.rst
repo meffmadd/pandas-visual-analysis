@@ -110,6 +110,21 @@ and run:
     python setup.py install
 
 
+JupyterLab Support
+###################
+
+Run the following commands to install the necessary JupyterLab extensions:
+
+.. code-block::
+    # plotly.py renderer support
+    jupyter labextension install jupyterlab-plotly
+
+    # Jupyter widgets extension for plotly.py
+    jupyter labextension install @jupyter-widgets/jupyterlab-manager plotlywidget
+
+Note that this requires `node <https://nodejs.org/>`_ to be installed!
+
+
 .. installation-end
 
 ==================
@@ -162,7 +177,7 @@ Selection Types
 |
 
 By default a new selection replaces the old selection, however, it is also possible to add data points to the existing
-selection by selecting the `Additive` selection type. By choosing the `Subtractive` selection newly selected
+selection by selecting the `Additive` selection type. By choosing the `Subtractive` selection, newly selected
 data points are removed from the selection.
 
 
