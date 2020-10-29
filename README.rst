@@ -116,6 +116,7 @@ JupyterLab Support
 Run the following commands to install the necessary JupyterLab extensions:
 
 .. code-block::
+
     # plotly.py renderer support
     jupyter labextension install jupyterlab-plotly
 
