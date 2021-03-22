@@ -61,7 +61,7 @@ Generates an `interactive visual analysis <https://en.wikipedia.org/wiki/Interac
 It can display various different types of graphs with support for linked-brushing in interactive widgets.
 This allows data exploration and cognition to be simple, even with complex multivariate datasets.
 
-There is no need to create and style plots or interactivity - its all ready without any configuration.
+There is no need to create and style plots or interactivity - it's all ready without any configuration.
 
 |
 
@@ -156,7 +156,7 @@ you can just pass it to ``VisualAnalysis`` to display the default layout:
     from pandas_visual_analysis import VisualAnalysis
     VisualAnalysis(df)
 
-If you want to specify which columns of the ``DataFrame`` are categorical, just pass the ``categorical_columns`` option:
+If you want to explicitly specify which columns of the ``DataFrame`` are categorical, just pass the ``categorical_columns`` option:
 
 .. code-block:: python
 
