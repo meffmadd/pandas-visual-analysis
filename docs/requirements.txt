@@ -61,7 +61,7 @@ pre-commit==2.7.1
 prometheus-client==0.8.0
 prompt-toolkit==3.0.5
 ptyprocess==0.6.0
-py==1.9.0
+py==1.10.0
 Pygments==2.6.1
 pyparsing==2.4.7
 pyrsistent==0.16.0
